@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b6b8ca88.css",
+    "main.js": "/static/js/main.c9e48c09.js",
+    "static/css/116.ca14229a.chunk.css": "/static/css/116.ca14229a.chunk.css",
+    "static/js/116.3b7f45ec.chunk.js": "/static/js/116.3b7f45ec.chunk.js",
+    "static/js/149.132219ba.chunk.js": "/static/js/149.132219ba.chunk.js",
+    "static/js/300.95167001.chunk.js": "/static/js/300.95167001.chunk.js",
+    "static/js/899.d713b947.chunk.js": "/static/js/899.d713b947.chunk.js",
+    "static/js/106.c20ed02e.chunk.js": "/static/js/106.c20ed02e.chunk.js",
+    "static/css/908.5bf98d39.chunk.css": "/static/css/908.5bf98d39.chunk.css",
+    "static/media/logo.svg": "/static/media/logo.0403c3ba782edffd49ec6760800ab7cb.svg",
+    "static/media/404.svg": "/static/media/404.519729bbf17a61ecba788409cab78730.svg",
+    "static/media/deth.svg": "/static/media/deth.b6c42d1927876124f4bc899f67bb4c9f.svg",
+    "index.html": "/index.html",
+    "static/media/token.svg": "/static/media/token.d59f6b7b95a88b5a4aa57b69a7a6ed09.svg",
+    "static/media/menu-app.svg": "/static/media/menu-app.81323d2b6a7c16ed83f4c87063ff5d17.svg",
+    "static/media/clipboard.svg": "/static/media/clipboard.24234b146e19c85c710381b26f65ca67.svg",
+    "static/media/dao.svg": "/static/media/dao.c07702a2d0d8bf193da996078089632a.svg",
+    "static/media/swap.svg": "/static/media/swap.d3cbcb0382b832ece76d1ec74b8f02a0.svg",
+    "static/media/wallet.svg": "/static/media/wallet.1806b16d67bf2194fa29364f47d8bc59.svg",
+    "static/media/mess.svg": "/static/media/mess.624bb4005f1d3429bb3ff826e7ceaee0.svg",
+    "static/media/user.svg": "/static/media/user.133a1bb73776188c73f5c72ab8226c12.svg",
+    "static/media/find.svg": "/static/media/find.6de3071a420c9a7978698a850e9c4d3c.svg",
+    "static/media/split.svg": "/static/media/split.c1409acd11ed659450d5eaa21757806d.svg",
+    "static/media/down.svg": "/static/media/down.4d9c6c33de7db2c88559d434bdb1e0ff.svg",
+    "static/media/add.svg": "/static/media/add.84478f1596d8d93aef242201a227b42b.svg",
+    "static/media/eth.svg": "/static/media/eth.de8c9635279812a48a95f808b818e8b8.svg"
+  },
+  "entrypoints": [
+    "static/css/main.b6b8ca88.css",
+    "static/js/main.c9e48c09.js"
+  ]
+}

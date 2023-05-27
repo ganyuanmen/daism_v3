@@ -1,0 +1,7 @@
+{
+  "DOMAIN": "nngym.cn",
+  "PORT": "433",
+  "PRIVKEY_PATH": "cer/private.key",
+  "CERT_PATH": "cer/public.crt",
+  "CA_PATH": "cer/ca.crt"
+}

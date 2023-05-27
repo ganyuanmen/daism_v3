@@ -1,0 +1,21 @@
+{
+  "name": "aaa",
+  "version": "0.0.1",
+  "description": "daoNodeService",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.1.1",
+    "jszip": "^3.7.1",
+    "mysql": "^2.18.1",
+    "node-schedule": "^2.1.0",
+    "web3": "^1.6.1"
+  }
+}
