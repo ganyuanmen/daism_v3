@@ -21,7 +21,6 @@
 ## 3. 网站的启动：
    ### 3.1 网站配置：
        在根目录下的config.json文件中进行配置：
-       ```
        {
          "DOMAIN": "nngym.cn",     // 域名
          "PORT": "433",            // 端口号
@@ -29,7 +28,6 @@
          "CERT_PATH": "cer/public.crt",     // HTTPS证书公钥
          "CA_PATH": "cer/ca.crt"              // CA证书路径
        }
-       ```
    ### 3.2 数据库配置：
        打开根目录下的mysql_config.json文件，进行数据库连接配置。
   ### 3.3 启动网站：
