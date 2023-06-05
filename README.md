@@ -37,9 +37,8 @@ config 目录下
 
 ```
 
-::: tip HTTPS 配置说明
-设置HTTPS为0时，表示不使用https协议。网站无法与其它联邦宇宙软件通讯，因为其它联邦宇宙软件使用的是https协议，而https协议的网站是无法访问http协议的网站。使用http协议可以使用道易程和智能合约接口，但无法使用activityPub协议。如果要完整的使用网站的功能，建议使用https证书。
-:::
+> HTTPS 配置说明: 设置HTTPS为0时，表示不使用https协议。网站无法与其它联邦宇宙软件通讯，因为其它联邦宇宙软件使用的是https协议，而https协议的网站是无法访问http协议的网站。使用http协议可以使用道易程和智能合约接口，但无法使用activityPub协议。如果要完整的使用网站的功能，建议使用https证书。
+
 
 - mysql_config.json 连接数据库及其它参数配置
 
