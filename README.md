@@ -1,171 +1,40 @@
+# 道易程网站
+道易程网站是一个专注于道易程智能合约API使用和信息发布的平台。我们的合约API涵盖了道易程各种代币和兑换的功能，以及用户的各种统计信息，为用户提供便捷的交易和转换服务。同时，我们采用了activityPub协议来支持信息发布，这使得其他联邦软件可以方便地订阅并获取道易程发布的信息。我们致力于为用户提供高效、安全和便利的智能合约服务和信息共享平台。在道易程网站上，您可以轻松地使用智能合约API进行代币交易和兑换，并获取关于您的统计信息。我们的平台使用activityPub协议，让您的信息能够被其他联邦软件方便地订阅和获取。我们致力于为用户提供高效、安全和便利的智能合约服务和信息共享平台。
 
-#  道易程前端api（daoapi）
+## 网站的部署
 
-daoapi 是一个专门用于操作道易程dao 合约的api， 封装了与智能合约交互的操作过程。让用户以函数的方式直接调用以太坊的智能合约。
-
-## 安装 daoapi
-```js
-npm install daoapi --save
-或
-yarn add daoapi
-
-```
-
-## 安装依赖包
- > daoapi 依赖 ethers.js 和 jszip.js, 需要安装依赖包
-
-```js
-npm install ethers --save 或 yarn add ethers
-npm install jszip --save 或 yarn add jszip
-```
-
-## 引用
-
- ```js
- import { ethers } from "ethers";
- import { DaoApi } from "daoapi" 
- ```
+ #### 依赖软件安装
+###### 1 mysql 8.0
+###### 2 nodejs 18 
 
 
-使用ethers 连接到以太坊服务器后， 执行：
-```js
- const ethersProvider = new ethers.providers.Web3Provider(provider);
- let _network="goerli" // 允许取值goerli,ropsten,mainnet,local
- let daoapi = new Daoapi(ethers, ethersProvider,account,_network); //account 用户钱包地址
-```
+### 1. 数据库的部署：
+   我们支持MySQL 8.0及以上版本。请使用以下命令初始化数据库：`source data.sql`，其中data.sql文件位于根目录下。
 
-## webpack 项目使用示例
-```js
-import { ethers } from "ethers";
-import { DaoApi } from "daoapi"
-import Web3Modal from "web3modal";
+### 2. 智能合约操作的监听：
+   该模块的功能是为网站提供数据缓存功能，将道易程智能合约的操作数据缓存到本地数据库中，以方便网站展示和数据提取。由于监听基于公网，受网络环境等不确定因素的影响，服务需要定时重启。
 
+  ## 部署步骤如下：
+   ### 2.1 配置数据库连接：
+       打开daonodeservice目录下的sn.txt文件，进行连接数据库参数的配置。
+  ### 2.2 在Linux终端输入`crontab -e`，添加定时任务脚本命令：
+       5 * * * * /root/daonodeservice/start.sh
+       注意：这里要求使用绝对路径。
 
-//连接钱包
-async function connect() {
-  const providerOptions = {  // 空对象，默认使用metamask 
-     // walletconnect: {
-       //   package: WalletConnectProvider,
-       //   options: {
-        //      infuraId: "9676a35d629d488fb90d7eac1348c838"
-        //  }
-   //   }
-  };
+## 3. 网站的启动：
 
-  const web3Modal = new Web3Modal({
-      cacheProvider: false,
-      providerOptions,
-      disableInjectedProvider: false
-  });
+   ### 3.1 网站配置：
+       在根目录下的config.json文件中进行配置：
+       {
+         "DOMAIN": "nngym.cn",     // 域名
+         "PORT": "433",            // 端口号
+         "PRIVKEY_PATH": "cer/private.key",  // HTTPS证书私钥
+         "CERT_PATH": "cer/public.crt",     // HTTPS证书公钥
+         "CA_PATH": "cer/ca.crt"              // CA证书路径
+       }
+   ### 3.2 数据库配置：
+       打开根目录下的mysql_config.json文件，进行数据库连接配置。
+  ### 3.3 启动网站：
+       运行 ./start.sh 命令来启动网站。
 
-  const provider = await web3Modal.connect();
-  return provider;
-}
-
-async function onConnect() {
-    const provider=connect()
-    let account=provider.selectedAddress
-    let _network="goerli" // 允许取值goerli,ropsten,mainnet,local
-    let daoapi = new DaoApi(ethers, provider,account,_network)
-    console.log(daoapi.version)
- 
-  //修改地址：
-  //daoapi.Commulate.setAddress("0x.....")
-  //daoapi.UnitToken.setAddress("0x.....")
-
-  //修改api
-  //daoapi.Commulate.setAbi([])
-  //daoapi.UnitToken.setAbi([])
-
-  //获限tokenId 为1的代币余额
-  let result= await daoapi.dao_erc20s.balanceOf('1',account)
-  console.log(result);
-
-}
-
-onConnect()
-
-```
-## html 使用示例
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>daoapi demo</title>
-        <script src='./dist/daoApi.js'></script>  
-		<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"  type="application/javascript"></script>
-        <script>
-		  var Daoapi = window.Daoapi.default;	  
-		//连接钱包
-		async function connect() {
-		  const provider = new ethers.providers.Web3Provider(window.ethereum)
-		  provider.send("eth_requestAccounts", []).then(accounts=>{
-			  console.log(accounts[0])
-			  onConnect(provider,accounts[0])
-		  })
-		}
-
-		async function onConnect(provider,account) {
-      let _network="goerli" // 允许取值goerli,ropsten,mainnet,local
-			let daoapi = new Daoapi(ethers, provider,account,_network)
-			console.log(daoapi.version)
-		 
-		  //修改地址：
-		  //daoapi.Commulate.setAddress("0x.....")
-		  //daoapi.UnitToken.setAddress("0x.....")
-
-		  //修改api
-		  //daoapi.Commulate.setAbi([])
-		  //daoapi.UnitToken.setAbi([])
-
-          //获限tokenId 为1的代币余额
-		  let result= await daoapi.dao_erc20s.balanceOf('1',account)
-		  console.log(result);
-		}
-
-		window.addEventListener('load', async () => {
-			 connect()
-		});
-
-        </script>   
-    </head>
-    <body> 
-    </body> 
-</html>
-```
-## nodejs 使用示例
-```js
- const { ethers } = require("ethers");
- const { DaoApi } = require("DaoApi");
- let privateKey = "113d3edf949820b4c3b91d9311b31f903bb15d1e317b46efe29828f0e3fdb517";
-
- let provider = ethers.getDefaultProvider('goerli');
- let wallet = new ethers.Wallet(privateKey,provider);
- let _network="goerli" // 允许取值goerli,ropsten,mainnet,local
- let daoapi = new DaoApi(ethers, wallet,wallet.address,_network)
- console.log(daoapi.version)
-
-//修改地址：
-//daoapi.Commulate.setAddress("0x.....")
-//daoapi.UnitToken.setAddress("0x.....")
-
-//修改api
-//daoapi.Commulate.setAbi([])
-//daoapi.UnitToken.setAbi([])
-
-
- const getInfo=async (daoapi)=>{
-    let aa=await wallet.getBalance();
-    console.log(aa.toString())
-    //获限tokenId 为1的代币余额
-    let result= await daoapi.dao_erc20s.balanceOf('1',wallet.address)
-    console.log(result);
- }
-
- getInfo(daoapi)
- 
-```
-
-
+这些步骤将帮助您完成道易程网站的部署。请根据您的环境和需求进行相应的配置和操作。如有任何问题，请随时与我们联系。
