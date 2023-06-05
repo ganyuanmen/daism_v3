@@ -88,8 +88,32 @@ config 目录下
 
 ```
 
+## 挂载目录
 
- >  如果不希望更改配置文件，直接把daism 目录放在系统的根目录下，然后执行 docker compose 即可， 其中的config:配置文件目录， data: mysql数据库挂载目录，uploads： 网站图片挂载目录。uploads 下的 admin目录: 系统图片，news目录：新闻图片，events目录:活动图片，discussions目录：讨论图片。
+- mysql容器：  存放数据的目录/var/lib/mysql， 需要挂载到宿主机上
+- web 容器： 存放图片的目录/app/public/uploads， 需要挂载到宿主机上
 
+ >  注：uploads目录下要有这4个子目录： 1.admin目录: 系统图片，2.news目录：新闻图片，3.events目录:活动图片，4.discussions目录：讨论图片。
+
+- web 容器： 配置文件目录/app/config， 需要从宿主机上上读取
+- daoserver 容器： 配置文件目录/app/config， 需要从宿主机上上读取
+
+## mysql连接说明
+
+nodejs 连接mysql 需要用到  --default-authentication-plugin=mysql_native_password ，低版本的docker compose 可能不支持该选项，会产生错误:  ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; 
+
+解决方法： 进到容器内部，登录mysql, 执行alter user....： 
+
+```js
+
+docker exec -it 容器名 /bin/sh
+
+mysql -u root -p
+
+alter user 'root'@'%' identified with mysql_native_password by '密码';
+
+flush privileges;
+
+```
 
 这些步骤将帮助您完成道易程网站的部署。请根据您的环境和需求进行相应的配置和操作。如有任何问题，请随时与我们联系。
