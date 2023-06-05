@@ -1,0 +1,43 @@
+version: '3.0'
+services:
+  daism-redis:
+    image: redis:alpine
+    command: ["redis-server","--requirepass 222333"]
+    restart: always
+    networks:
+      - dev-network
+  daism-web:
+    image: fhtcgym123/web:v1
+    links:
+      - daism-redis
+      - daism-mysql
+    ports:
+      - 443:443
+    volumes:
+      - /daism/config:/app/config
+      - /daism/uploads:/app/public/uploads
+    restart: always
+    networks:
+      - dev-network
+  daism-daoserver:
+    image: fhtcgym123/daoserver:v1
+    volumes:
+      - /daism/config:/app/config
+    links:
+      - daism-mysql
+    restart: always
+    networks:
+      - dev-network
+  daism-mysql:
+    image: fhtcgym123/mysql:v1
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Dao..123'
+    volumes:
+      - /daism/data:/var/lib/mysql
+    restart: always
+    networks:
+      - dev-network
+networks:
+  dev-network:
+    driver: bridge
