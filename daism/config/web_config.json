@@ -1,8 +1,0 @@
-{
-  "HTTPS": "1",
-  "DOMAIN": "nngym.cn",
-  "PORT": "443",
-  "PRIVKEY_PATH": "config/private.key",
-  "CERT_PATH": "config/public.crt",
-  "CA_PATH": "config/ca.crt"
-}

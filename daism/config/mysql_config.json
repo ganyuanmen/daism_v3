@@ -1,9 +1,0 @@
-{
-  "host":"daism-mysql",
-  "user":"root",
-  "password":"Dao..123",
-  "database":"dao_db",
-  "port":"3306",
-  "network":"sepolia",
-  "debugger_level":"1"
-}
