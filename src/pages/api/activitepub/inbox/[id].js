@@ -81,8 +81,8 @@ async function createMess(postbody,name){ //对方的推送
 		let localUser=await getUser('actor_account',`${name}@${process.env.LOCAL_DOMAIN}`,'manager');
 		if(!localUser.manager) return;
 		let linkUrl=postbody.object.url || postbody.object.atomUri
-		let sql="INSERT INTO a_message(manager,message_id,actor_name,avatar,actor_account,actor_url,content,actor_inbox,receive_account,is_send,is_discussion,link_url,title,top_img) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-		let paras=[localUser.manager, message_id,strs[0],actor.avatar,actor.account,postbody.actor,content,actor.inbox,`${name}@${process.env.LOCAL_DOMAIN}`,0,0,linkUrl,title,imgpath]	
+		let sql="INSERT INTO a_message(manager,message_id,actor_name,avatar,actor_account,actor_url,content,actor_inbox,receive_account,is_send,is_discussion,link_url,title,top_img,send_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+		let paras=[localUser.manager, message_id,strs[0],actor.avatar,actor.account,postbody.actor,content,actor.inbox,`${name}@${process.env.LOCAL_DOMAIN}`,0,0,linkUrl,title,imgpath,1]	
 		execute(sql,paras).then(()=>{})
 	}
 	
