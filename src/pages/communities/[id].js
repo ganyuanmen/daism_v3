@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl'
 import Rmenu from '../../components/Rmenu'
 import MessagePage from '../../components/enki2/page/MessagePage';
 import { getOne } from '../../lib/mysql/message';
+import ShowErrorBar from '../../components/ShowErrorBar';
 
 //其它转过来的查看
 export default function Message({currentObj}) {
@@ -10,7 +11,9 @@ export default function Message({currentObj}) {
  
     return (
       <Rmenu>
-          <MessagePage t={t} currentObj={currentObj} />
+        {currentObj.id? <MessagePage t={t} currentObj={currentObj} />
+        :<ShowErrorBar errStr={t('noPostingText')} />
+        }
         </Rmenu>
     );
 }
@@ -18,6 +21,7 @@ export default function Message({currentObj}) {
 export const getServerSideProps =async ({locale,query }) => {
 
   const currentObj=await getOne(query.id)
+
     return {
       props: {
         messages: {

@@ -41,11 +41,11 @@ export default function Federation() {
   const createPost=()=>{setActiveTab(1);setCurrentObj(null);setEditCurrentObj(null);} //创建发文
   const searchCall=(obj)=>{setSearObj(obj); setActiveTab(3);setCurrentObj(null);setEditCurrentObj(null);setDaoObj({});} //查找后显示页面
 
-  const homeCall=()=>{setCurrentPageNum(1); setWhereType(0);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount(''); } //主页过滤
+  const homeCall=()=>{setCurrentPageNum(1); setWhereType(0);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');setV(actor?.actor_account); } //主页过滤
   const eventFilter=()=>{setCurrentPageNum(1);setWhereType(1);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //活动过滤
   const smartcommonClick=(obj)=>{setCurrentPageNum(1);setWhereType(2);setActiveTab(0);setV(obj.dao_id);setData([]);setRefresh(!refresh);setDaoObj(obj);setSearAccount(obj.actor_account);} //智能公器过滤选择
   const myBookFilter=()=>{setCurrentPageNum(1);setWhereType(3);setV(actor.id);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //我的收藏
-  const myFollowFilter=()=>{setCurrentPageNum(1);setWhereType(4);setV(actor?.actor_account);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //我的发布
+  const myFollowFilter=()=>{setCurrentPageNum(1);setWhereType(4);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //我的发布
 
   useEffect(()=>{setData(data.concat(messageData.rows))},[messageData])  //发文数据追加
   useEffect(()=>{let a=window.location.hash.substring(1); setActiveTab(parseInt(a?a:0));},[setActiveTab])  //根据hash 显示选择项
@@ -67,7 +67,7 @@ export default function Federation() {
           <EnkiTools t={t} tc={tc} actor={actor} createPost={createPost} homeCall={homeCall} user={user} eventFilter={eventFilter} smartcommonClick={smartcommonClick} daoObj={daoObj} myBookFilter={myBookFilter} myFollowFilter={myFollowFilter} searchCall={searchCall} />
           {activeTab === 0 && <Main errors={messageData.error} total={messageData.total} status={messageData.status} t={t} tc={tc} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} data={data} setData={setData} currentPageNum={currentPageNum} setCurrentPageNum={setCurrentPageNum} />}
           {activeTab === 1 && <EnkiCreateMessage user={user} daoObj={daoObj} actor={actor} t={t} tc={tc} addCallBack={mainCallBack} currentObj={editCurrentObj}  afterEditCall={afterEditCall}/>}
-          {activeTab === 2 && <MessagePage actor={actor} currentObj={currentObj}  t={t} tc={tc}  delCallBack={mainCallBack} preEditCall={preEditCall} />}   
+          {activeTab === 2 && <MessagePage actor={actor} currentObj={currentObj}  t={t} tc={tc}  delCallBack={mainCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}   
           {activeTab === 3 && <SearchPage searObj={searObj} t={t} homeCall={homeCall} actor={actor} />}   
         </Container> 
       </PageLayout>

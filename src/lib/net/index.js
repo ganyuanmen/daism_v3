@@ -7,12 +7,12 @@ export async function signAndSend(url,name,domain,message,privkey) {
     const myURL = new URL(url);
     let targetDomain = myURL.hostname;
     let inboxFragment = url.replace('https://'+targetDomain,'');
+        
     const digestHash = crypto.createHash('rsa-sha256').update(JSON.stringify(message)).digest('base64');
     const signer = crypto.createSign('rsa-sha256');
     let d = new Date();
     let stringToSign = `(request-target): post ${inboxFragment}\nhost: ${targetDomain}\ndate: ${d.toUTCString()}\ndigest: SHA-256=${digestHash}\ncontent-type: application/activity+json`;
-   
-    
+       
     signer.update(stringToSign);
     signer.end();
     const signature = signer.sign(privkey);
@@ -44,7 +44,7 @@ export async function signAndSend(url,name,domain,message,privkey) {
 }
   
  export function httpGet(url, headers={},method='GET') {
-    if(process.env.IS_DEBUGGER==='1') console.info([url,headers,method])
+     if(process.env.IS_DEBUGGER==='1') console.info('request: ',url)
     return new Promise(function (resolve, reject) { request({url,headers,method,json: true}, 
         function (error, response){
         if (error) {
@@ -52,7 +52,7 @@ export async function signAndSend(url,name,domain,message,privkey) {
           resolve({code:(response&&response.statusCode)?response.statusCode:500});
         }
         else 
-        if( process.env.IS_DEBUGGER==='1') console.info(response.statusCode,response.body)
+        // if( process.env.IS_DEBUGGER==='1') console.info(response.statusCode,response.body)
         resolve({code:response.statusCode,message:response.body});
       });});
   }

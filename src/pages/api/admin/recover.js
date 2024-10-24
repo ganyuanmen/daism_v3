@@ -34,15 +34,12 @@ export default withSession(async (req, res) => {
   let sql="call recover_follow(?,?)";
   let paras=[newAccount,oldAccount];
   await execute(sql,paras);
-  console.log('22222222')
-  // 广播
+    // 广播
 
   broadcast({type:'recover',domain,user:{account:newAccount},actor:{account:oldAccount},followId:'0'})  //广播信息
-  console.log('33333333')
-  
+    
   let re1=await httpGet(`https://${oldDomain}/api/getUserMwssage?newAccount=${newAccount}&oldAccount=${oldAccount}`, {'content-type': 'application/activity+json'});
-  console.log("re1",re1)
-  let avatar=`https://${domain}/user.svg`;
+    let avatar=`https://${domain}/user.svg`;
   let actor_desc='';
   if(re1 && re1.code===200) {
     avatar=re1.message.avatar;
@@ -69,7 +66,7 @@ export default withSession(async (req, res) => {
       pi++
     }
     
-    console.log('4444444444')
+    
   }
   else {
     let sql='UPDATE a_message SET actor_name=?,actor_url=?,actor_inbox=?,actor_account=? WHERE actor_account=?'

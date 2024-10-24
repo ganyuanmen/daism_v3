@@ -16,6 +16,7 @@
     "iron-session": "^6.3.1",
     "jodit": "^4.2.27",
     "jodit-react": "^4.1.2",
+    "lru-cache": "^11.0.1",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.2",
     "next": "^14.2.15",

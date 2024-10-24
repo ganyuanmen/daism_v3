@@ -2,17 +2,15 @@ import { getData,execute,getPageData } from './common'
 import { httpGet } from "../net"; 
 import { getUser } from './user';
 
-
-
  
 //所有发文
 export async function messagePageData({ps,pi,w,v})
 {
-    let where='send_type=0'; 
+    let where=`send_type=0 or receive_account='${v}'`; 
     if(w==1) where="_type=1"  //活动发文
     else if(w==2) where=`dao_id=${v} and send_type=0` //智能公器
     else if(w==3) where=`id in(select pid from a_bookmark where cid=${v})`  //我的收藏
-    else if(w==4) where=`actor_account='${v}' or receive_account='${v}'`  //我的发布
+    else if(w==4) where=`actor_account='${v}'`  //我的发布
     let re= await getPageData('messageview',ps,pi,'id','desc',where);
     return re 
 }
@@ -146,7 +144,7 @@ export async function getLocalInboxFromAccount(account) {
 export async function getLocalInboxFromUrl(url){
 	let obj={name:'',domain:'',inbox:'',account:'',url:'',pubkey:'',avatar:''}
 	let user=await getUser('actor_url',url,'actor_account,avatar,pubkey');
-	if( process.env.IS_DEBUGGER==='1') { console.info("user",user)	}
+	// if( process.env.IS_DEBUGGER==='1') { console.info("user",user)	}
 	if(!user['actor_account']) return obj;
 	const [userName,domain]=user.actor_account.split('@');
 

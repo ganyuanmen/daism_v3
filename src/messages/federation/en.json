@@ -94,7 +94,7 @@
     "mybookTap":"My Bookmarks",
     "eventPost":"Event Posting",
     "smartcommonText":"Community List",
-    "myPostText":"My Posting/Receiving",
+    "myPostText":"My Posting",
     "bookmastText":"bookmark",
     "follow":"Follow",
     "alreadysubmitText":"Submitted",
@@ -113,7 +113,8 @@
     "origlText":"Original link",
     "groupAccount":"Group account",
     "exceedAmount":"Exceeding the maximum registration limit set by the administrator",
-    "selfAccount":"Personal Account"
+    "selfAccount":"Personal Account",
+    "noPostingText":"The post does not exist or has been deleted."
 
   }
 }

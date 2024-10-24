@@ -11,11 +11,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setTipText,setMessageText} from '../../../data/valueData';
 import EnKiHeart from "../form/EnKiHeart";
 import EnKiBookmark from "../form/EnKiBookmark";
+import { ExitSvg } from "../../../lib/jssvg/SvgCollection";
 
 /**
  * 单个信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
  */
-export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCall}) {  
+export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCall,setActiveTab}) {  
     const [replyObj,setReplyObj]=useState(null)
     const [replyData,setReplyData]=useState([]) //回复数据集合
     const [replyPageNum, setReplyPageNum] = useState(1); //回复的当前页
@@ -39,6 +40,9 @@ export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCa
 
     return (
         <>
+        <div className="mt-2 mb-2" >
+            <Button onClick={e=>{ setActiveTab(0)}} ><ExitSvg size={24} />  {t('esctext')}</Button>
+        </div>
             {currentObj?.top_img && 
              <div className="mt-2 mb-2" style={{ position:'relative', textAlign:'center'}} >
                 <img src={currentObj?.top_img} alit='' style={{maxHeight:'200px'}} />
