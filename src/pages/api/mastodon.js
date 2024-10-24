@@ -24,9 +24,21 @@ export default withSession(async (req, res) => {
     let rows=await getData("select dao_id,domain,actor_name,avatar,actor_url,actor_inbox,actor_account from v_account where manager=?",[sessionUser.did])
     let sql='INSERT INTO a_message(_type,message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,is_send,is_discussion,top_img,video_url,dao_id,actor_inbox) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     jsonData.orderedItems.forEach( async item => {
-          let paras=[0,item.object.id,sessionUser.did,rows[0].actor_name,rows[0].avatar,rows[0].actor_account,rows[0].actor_url,
-          `mastodon ${item.object.published}`,item.object.content,0,0,'','',0,rows[0].actor_inbox];
-          await execute(sql,paras)
+      let contentText=item.object.content;
+      if(item.object.attachment && item.object.attachment.length){
+        const myURL = new URL(item.actor);
+        const targetDomain = myURL.hostname;
+        item.object.attachment.forEach( async imgobj => {
+          if(imgobj.mediaType.startsWith('image')){
+            const url=`https://${targetDomain}/system/${imgobj.url}`
+            contentText=`${contentText}<hr/><img src=${url} alt='' /> `
+          }
+            
+        })
+      }
+      let paras=[0,item.object.id,sessionUser.did,rows[0].actor_name,rows[0].avatar,rows[0].actor_account,rows[0].actor_url,
+      `mastodon ${item.object.published}`,contentText,0,0,'','',0,rows[0].actor_inbox];
+      await execute(sql,paras)
     })
     
     res.status(200).json({ msg: `Complete import` }); 

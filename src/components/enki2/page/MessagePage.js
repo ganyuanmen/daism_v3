@@ -58,15 +58,15 @@ export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCa
             <div dangerouslySetInnerHTML={{__html: currentObj?.content}}></div>
         </Card.Body>
         <Card.Footer style={{padding:0}} >
-            {currentObj?.link_url?<div className="mt-2 mb-2" style={{textAlign:'center'}}>
-            <a  href={currentObj?.link_url} >{t('origlText')}......</a>
-            </div>: 
-                <div className="d-flex justify-content-between align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:'4px 8px'}}  >
-                    <MessageReply isd={currentObj?.is_discussion} actor={actor} pid={currentObj?.id}  t={t} tc={tc} total={messageData.total} addReplyCallBack={callBack} replyObj={replyObj}  afterEditcall={afterEditcall} ref={repluBtn} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-                    <EnKiHeart t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-                    <EnKiBookmark t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+            <div className="d-flex justify-content-between align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:'4px 8px'}}  >
+                <MessageReply isd={currentObj?.is_discussion} actor={actor} pid={currentObj?.id}  t={t} tc={tc} total={messageData.total} addReplyCallBack={callBack} replyObj={replyObj}  afterEditcall={afterEditcall} ref={repluBtn} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                <EnKiHeart t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                <EnKiBookmark t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
             
-                </div>
+            </div>
+            {currentObj?.link_url && <div className="mt-2 mb-2" style={{textAlign:'center'}}>
+                    <a  href={currentObj?.link_url} >{t('origlText')}......</a>
+                    </div> 
             }
         
             {replyData.map((obj,idx)=><ReplyItem key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} />)}
