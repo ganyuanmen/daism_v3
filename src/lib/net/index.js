@@ -67,11 +67,15 @@ export async function signAndSend(url,name,domain,message,privkey) {
        try{
          let url=`https://${element.domain}/api/broadcast`;
          let message
-         if(type==='follow') message={type,domain,user,actor,followId}
+         if(type==='follow') { 
+          if(user?.domain===element.domain || actor?.domain===element.domain) return false;
+          message={type,domain,user,actor,followId} 
+        }
          else if(type==='removeFollow')  message={type,followId} //取消关注
          else if(type==='addType') message={type,_desc:actor._desc,_type:actor._type}
          else if(type==='recover') message={type,user,actor} //转移关注
          else return false
+        if(user?.domain!==element.domain && user?.domain!==element.domain ) 
          request({url,headers: {'content-type': 'application/activity+json'},
            method: 'POST',json: true,body: message	}, function (error, response){
            if (error) {
@@ -81,6 +85,7 @@ export async function signAndSend(url,name,domain,message,privkey) {
              if(process.env.IS_DEBUGGER==='1') console.info(`broadcast follow Code:${response?.statusCode}, Response:${response?.body?.error}`);
            }
            });
+
        }catch(e1){ console.error('broadcast follow',e1)}
      });
    })

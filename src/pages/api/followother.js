@@ -41,23 +41,15 @@ export default async function handler(req, res) {
   
 
     let followjson={
-  '@context': 'https://www.w3.org/ns/activitystreams',
-  id: 'https://test.daism.io/'+uuidv4(),
-  type: 'Follow',
-  actor: 'https://test.daism.io/api/activitepub/users/communities',
-  object: re.id
-}
+        '@context': 'https://www.w3.org/ns/activitystreams',
+        id: 'https://test.daism.io/'+uuidv4(),
+        type: 'Follow',
+        actor: 'https://test.daism.io/api/activitepub/users/communities',
+        object: re.id
+    }   
 
-
-const localUser= await getUser('dao_id',2,'privkey,LOWER(account) account')
- 
-    let strs=localUser.account.split('@') //strs[0]->name strs[1]->domain
-      
-            signAndSend(re.inbox,strs[0],strs[1],followjson,localUser.privkey);
-
-   
-          
-       
-
+    const localUser= await getUser('dao_id',2,'privkey,LOWER(account) account')
+    let strs=localUser.account.split('@') //strs[0]->name strs[1]->domain 
+    signAndSend(re.inbox,strs[0],strs[1],followjson,localUser.privkey);
   }
 

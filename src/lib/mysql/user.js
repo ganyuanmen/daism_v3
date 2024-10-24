@@ -7,9 +7,9 @@ export async function updateActor({account,actorDesc,path} )
     [actorDesc,path,account]);
 }
 
-export async function getUser (findFiled,findValue,selectFields) {
-  let re=await getData(`select ${selectFields} from a_account where ${findFiled}=?`,
-  [findValue]);
+export async function getUser(findFiled,findValue,selectFields) {
+  let re=await getData(`select ${selectFields} from a_account where LOWER(${findFiled})=?`,
+  [(findValue+'').toLowerCase()]);
   return re.length?re[0]:{};
 }
 

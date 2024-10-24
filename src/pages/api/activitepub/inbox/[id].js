@@ -18,7 +18,7 @@ const options = {max: 64,maxSize: 5000,
 	},
   
 	// how long to live in ms
-	ttl: 1000 * 60 * 5,
+	ttl: 1000 * 60 * 35,
 	allowStale: false,
 	updateAgeOnGet: false,
 	updateAgeOnHas: false,
@@ -41,40 +41,50 @@ export default async function handler(req, res) {
 	if (req.method.toUpperCase()!== 'POST')  return res.status(405).json({errMsg:'Method Not Allowed'})
 	let postbody
 	try {
-	if(typeof req.body==='string') postbody=JSON.parse(req.body)
-	else postbody=req.body 
+		if(typeof req.body==='string') postbody=JSON.parse(req.body)
+		else postbody=req.body 
 	} catch (error) {
-	console.error("inbox error ",error,req.body)
-	console.error(error)
+		console.error("inbox error ",error,req.body)
 	}
-	// if( process.env.IS_DEBUGGER==='1' && postbody.type.toLowerCase()!=='delete') { 
-	// console.info("-----------inbox post infomation-----------------------------------------------")
-	// console.info(postbody)
-	// console.info("----------------------------------------------------------")
-	// }
-	if(typeof(postbody)!=='object' || !postbody.type) return res.status(405).json({errMsg:'body json error'})
+	
+	if(typeof(postbody)!=='object') return res.status(405).json({errMsg:'body json error'})
+	if(!postbody.type || !postbody.actor) return res.status(404).json({errMsg:'Invalid JSON'})	
+	const _type=postbody.type.toLowerCase();
 	const name = req.query.id;
+	console.log(`inbox-----${name}-${_type}-${postbody.actor}`);
+	if(_type!=='follow' && _type!=='accept' && _type!=='undo' && _type!=='create' ) return res.status(200).json({errMsg:'No need to handle'});
+	
 	let actor = cache.get(postbody.actor);
 	if (actor) {
 		console.log("命中..............")
 	} else {
 		console.log(`begin getInboxFromUrl from ${name}:`,postbody.actor)
-	  	actor=await getInboxFromUrl(postbody.actor); 
-		if(!cache.get(postbody.actor)){
-			console.log("setting time:",new Date().getTime())
-	  		cache.set(postbody.actor, actor); // 将新数据存入缓存
+		try {
+		    actor=await getInboxFromUrl(postbody.actor); 
+			if(!cache.get(postbody.actor)){
+				console.log("setting time:",new Date().getTime())
+				cache.set(postbody.actor, actor); // 将新数据存入缓存
+			}
+		} catch (error) {
+			return res.status(500).json({errMsg:error.message})	
 		}
+	  	
 
 	}
 
+	if(!actor || !actor.pubkey || !actor.account) return res.status(404).json({errMsg:'actor not found'})
+
 	let inboxFragment = `/api/activitepub/inbox/${name}`;
+	if(!req.headers.host || !req.headers.date || !req.headers.digest || !req.headers['signature']) 
+		return res.status(403).json({errMsg:'signature error'});
 	let stringToSign = `(request-target): post ${inboxFragment}\nhost: ${req.headers.host}\ndate: ${req.headers.date}\ndigest: ${req.headers.digest}\ncontent-type: application/activity+json`;
 
 	const verify = crypto.createVerify('RSA-SHA256');
 	verify.update(stringToSign);
 	verify.end();
-	let _a=req.headers['signature'].split(",");
-	const jsonObj = stringToJson(_a[_a.length-1]);
+
+	let tempAr=req.headers['signature'].split(",");
+	const jsonObj = stringToJson(tempAr[tempAr.length-1]);
 	const isVerified = verify.verify(actor.pubkey, jsonObj.signature, 'base64'); // 验证签名
 	if(!isVerified) return res.status(403).json({errMsg:'signature error'});
 
@@ -168,9 +178,9 @@ async function undo(postbody){  //别人取消关注
 async function accept(postbody,domain,actor) //我关注他人的确认
 {
 	// let actor=await getInboxFromUrl(postbody.actor); 
-	if( process.env.IS_DEBUGGER==='1') console.info("accept actor",actor)
+	// if( process.env.IS_DEBUGGER==='1') console.info("accept actor",actor)
 	let user=await getLocalInboxFromUrl(postbody.object.actor);
-	if( process.env.IS_DEBUGGER==='1') console.info("accept user",actor)
+	// if( process.env.IS_DEBUGGER==='1') console.info("accept user",actor)
 	let re= await saveFollow({actor,user,followId:postbody.object.id})  //关注他人的确认
 	broadcast({type:'follow',domain,user,actor,followId:postbody.object.id})  //广播信息
 	return "accept handle ok"
@@ -197,7 +207,7 @@ async function follow(postbody,name,domain,actor) //别人的关注
 	console.info("已关注"); //已关注
 	await removeFollow(follow['follow_id'])
 	} 
-
+	
 	let lok=await saveFollow({actor:user,user:actor,followId:postbody.id});// 被他人关注 
 	if(lok)
 	{
