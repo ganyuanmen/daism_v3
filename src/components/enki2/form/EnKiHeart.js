@@ -4,8 +4,8 @@ import { Heart } from '../../../lib/jssvg/SvgCollection';
 import { useGetHeartAndBook } from "../../../hooks/useMessageData";
 import { client } from "../../../lib/api/client";
 
-//点赞按钮
-export default function EnKiHeart({t,tc,pid,loginsiwe,actor,showTip,closeTip,showClipError})
+//点赞按钮 isd 是否允许
+export default function EnKiHeart({isd,t,tc,pid,loginsiwe,actor,showTip,closeTip,showClipError})
 {
     const [refresh,setRefresh]=useState(false)
     const data=useGetHeartAndBook({cid:actor?.id,pid,refresh,table:'heart'})
@@ -20,7 +20,7 @@ export default function EnKiHeart({t,tc,pid,loginsiwe,actor,showTip,closeTip,sho
     //data.pid>0 已点赞
     return(
         <>
-            {loginsiwe?
+            {(loginsiwe && isd)?
                 <div>
                     {data.pid>0?
                         <Button onClick={e=>{submit(0)}}  variant="light">

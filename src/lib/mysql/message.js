@@ -109,27 +109,32 @@ export async function fromAccount({actor_account,user_account}){
 }
 
 export async function getInboxFromAccount(account) {
-	//  account='gym@daotodon.me'
-	let strs=account.split('@')
-	let obj={name:strs[0],domain:strs[1],inbox:''}
-	let re=await httpGet(`https://${strs[1]}/.well-known/webfinger?resource=acct:${account}`)
-	// let re=await httpGet(`http://${strs[1]}/.well-known/webfinger?resource=acct:${account}`)
-	if(re.code!==200) return obj;
-	re=re.message;
-	if(!re) return obj;
-	let url,type;
-	for(let i=0;i<re.links.length;i++)
-	{
-		if(re.links[i].rel==='self')
+	let reobj={name:'',domain:'',inbox:'',account:'',url:'',pubkey:'',avatar:''}
+	try {
+		let strs=account.split('@')
+		let obj={name:strs[0],domain:strs[1],inbox:''}
+		let re=await httpGet(`https://${strs[1]}/.well-known/webfinger?resource=acct:${account}`)
+		// let re=await httpGet(`http://${strs[1]}/.well-known/webfinger?resource=acct:${account}`)
+		if(re.code!==200) return obj;
+		re=re.message;
+		if(!re) return obj;
+		let url,type;
+		for(let i=0;i<re.links.length;i++)
 		{
-			url=re.links[i].href;
-			type=re.links[i].type
-			break;
+			if(re.links[i].rel==='self')
+			{
+				url=re.links[i].href;
+				type=re.links[i].type
+				break;
+			}
 		}
+		reobj=await getInboxFromUrl1(url,type);
+	}catch(e){
+		console.error(e)
+	}finally{
+		return reobj;
 	}
-	// url='http://localhost:3000/api/activitepub/users/gym'
-	let reobj=await getInboxFromUrl1(url,type);
-	return reobj;
+
 }
 
 export async function getLocalInboxFromAccount(account) {

@@ -24,15 +24,7 @@ export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCa
         
     }, []);
 
-    const checkDomain=(account,dao_id)=>{  //同域名可以修改 dao_id=0  非dao选择
-       
-        if(dao_id===0) return true;  
-        if(account && account.includes('@')){
-            const [name,domain]=account.split('@');
-            return domain===daoAddress['sys_domain'] 
-        }
-        return false;
-    }
+ 
 
     const checkDao=()=>{ 
         if(!actor?.actor_account || !actor?.actor_account.includes('@')) return false;
@@ -49,7 +41,7 @@ export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCa
             <EnKiFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} /> }
             
             <div>
-                {isMess && checkDomain(messageObj.actor_account,messageObj.dao_id) && loginsiwe && (
+                {isMess && loginsiwe && (
                     (messageObj.manager && actor?.manager?.toLowerCase()===messageObj.manager?.toLowerCase()) || 
                     (actor?.manager?.toLowerCase()===daoAddress['administrator'].toLowerCase())|| 
                     checkDao()
@@ -62,3 +54,4 @@ export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCa
     );
 }
 
+// checkDomain(messageObj.actor_account,messageObj.dao_id) &&

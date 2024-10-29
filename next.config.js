@@ -1,4 +1,5 @@
-/** @type {import('next').NextConfig} */
+
+
 module.exports = {
   i18n: {
     locales: ['en', 'zh'],
@@ -11,6 +12,7 @@ experimental: {
   serverActions: {
     bodySizeLimit: '20mb',
   },
+ 
 },
 
   async redirects() {

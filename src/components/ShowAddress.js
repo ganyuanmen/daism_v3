@@ -10,7 +10,7 @@ export default function ShowAddress({address,isb=false}) {  //isb 字体是否�
     const t = useTranslations('Common')
     const [show, setShow] = useState(false); //显示提示
     const target = useRef(null);
-    var delayTime; //延迟控制
+    let delayTime; //延迟控制
 
     //生成地址格式
     function getAccount()

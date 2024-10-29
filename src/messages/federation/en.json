@@ -114,7 +114,10 @@
     "groupAccount":"Group account",
     "exceedAmount":"Exceeding the maximum registration limit set by the administrator",
     "selfAccount":"Personal Account",
-    "noPostingText":"The post does not exist or has been deleted."
+    "noPostingText":"The post does not exist or has been deleted.",
+    "shareText":"share",
+    "noHandleText": "Please log in to the {domain} domain to perform the operation",
+    "linkText":"Link Address"
 
   }
 }

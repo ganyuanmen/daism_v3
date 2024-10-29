@@ -12,6 +12,7 @@ import {setTipText,setMessageText} from '../../../data/valueData';
 import EnKiHeart from "../form/EnKiHeart";
 import EnKiBookmark from "../form/EnKiBookmark";
 import { ExitSvg } from "../../../lib/jssvg/SvgCollection";
+import EnkiShare from "../form/EnkiShare";
 
 /**
  * 单个信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
@@ -23,6 +24,7 @@ export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCa
     const [refresh,setRefresh]=useState(false);
     const messageData = useReply({account:currentObj.actor_account,dao_id:currentObj.dao_id,replyPageNum,refresh,pid:currentObj.id}) 
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
+    const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
@@ -37,6 +39,18 @@ export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCa
         alert('ookk')
         repluBtn.current.show();}
     const afterEditcall=(obj)=>{setReplyObj(null);callBack();}
+
+    const ableChange=(flag)=>{  // true 回复，
+        let re= flag?currentObj?.is_discussion:1;  //非回复都允许点击
+       
+        if(re) //允许回复条件 再判断
+            if(currentObj.actor_account && currentObj.actor_account.includes('@')){
+                const [name,domain]=currentObj.actor_account.split('@');
+                re=(domain===daoAddress['sys_domain']);
+            }
+
+        return re?1:0;
+    }
 
     return (
         <>
@@ -59,10 +73,10 @@ export default function MessagePage({t,tc,currentObj,actor,delCallBack,preEditCa
         </Card.Body>
         <Card.Footer style={{padding:0}} >
             <div className="d-flex justify-content-between align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:'4px 8px'}}  >
-                <MessageReply isd={currentObj?.is_discussion} actor={actor} pid={currentObj?.id}  t={t} tc={tc} total={messageData.total} addReplyCallBack={callBack} replyObj={replyObj}  afterEditcall={afterEditcall} ref={repluBtn} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-                <EnKiHeart t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-                <EnKiBookmark t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-            
+                <MessageReply isd={ableChange(true)} actor={actor} pid={currentObj?.id}  t={t} tc={tc} total={messageData.total} addReplyCallBack={callBack} replyObj={replyObj}  afterEditcall={afterEditcall} ref={repluBtn} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                <EnKiHeart isd={ableChange(false)} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                <EnKiBookmark isd={ableChange(false)} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} pid={currentObj?.id} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                <EnkiShare currentObj={currentObj} t={t} daoAddress={daoAddress} tc={tc} />
             </div>
             {currentObj?.link_url && <div className="mt-2 mb-2" style={{textAlign:'center'}}>
                     <a  href={currentObj?.link_url} >{t('origlText')}......</a>

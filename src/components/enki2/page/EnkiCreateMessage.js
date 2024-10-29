@@ -49,6 +49,7 @@ export default function EnkiCreateMessage({t,tc,user,daoObj,actor,addCallBack,cu
         return
       }
       
+      //处理 内容，有链接的替换成卡片
       // const videoUrl=videoRef.current.getData()
       // if(videoUrl && !/^((https|http)?:\/\/)[^\s]+/.test(videoUrl)){
       //     videoRef.current.notValid(t('uriValidText'))
@@ -64,6 +65,7 @@ export default function EnkiCreateMessage({t,tc,user,daoObj,actor,addCallBack,cu
       }
     
       showTip(t('submittingText'))  
+
       const formData = new FormData();
       formData.append('id', currentObj?currentObj.id:0);  
       formData.append('title', titleText);  //标题

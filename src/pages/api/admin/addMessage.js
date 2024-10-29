@@ -2,7 +2,9 @@ import withSession from "../../../lib/session";
 import formidable from 'formidable';
 import { executeID,getData,execute } from "../../../lib/mysql/common";
 import { send } from "../../../lib/utils/send";
-import { saveImage } from "../../../lib/utils";
+import { saveImage,findFirstURI,getTootContent } from "../../../lib/utils";
+
+
 const { v4: uuidv4 } = require("uuid");
 
 export const config = {
@@ -21,6 +23,13 @@ export default withSession(async (req, res) => {
     const [fields, files] = await form.parse(req);
     const {_type,id,account,did,title,content,isSend,isDiscussion,videoUrl,startTime,endTime,eventUrl,eventAddress,fileType,time_event} = fields
     const imgPath=saveImage(files,fileType[0])
+    const furl=findFirstURI(content[0])
+    if(furl){
+      let tootContent=await getTootContent(furl,process.env.LOCAL_DOMAIN)
+      if(tootContent){
+        content[0]=`${content[0]} \n\n${tootContent}`
+      }
+    }
     let path=imgPath?`https://${process.env.LOCAL_DOMAIN}/${process.env.IMGDIRECTORY}/${imgPath}`:''
     if(id[0]=='0'){ //增加
       let message_id=uuidv4()
@@ -70,4 +79,3 @@ export default withSession(async (req, res) => {
       return;
   }
 });
-

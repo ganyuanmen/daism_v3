@@ -34,12 +34,12 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
    
     return (
    
-        <Card className='m-2' style={{ width: '400px',height:'360px',overflow:'hidden' }}>
+        <Card className='m-2' onClick={(e)=>{setCurrentObj(messageObj);setActiveTab(2);e.preventDefault();e.stopPropagation();}} style={{ width: '400px',height:'360px',overflow:'hidden' }}>
             <Card.Header>
             <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isMess={false}  />    {/* '不检测关注' 不修改不删除 */}
             </Card.Header>
             
-        <Card.Body className="daism-click" onClick={()=>{setCurrentObj(messageObj);setActiveTab(2);}} >
+        <Card.Body className="daism-click"  >
             
             {messageObj._type===1?  <div style={{position:'relative'}}>
                 {messageObj.top_img && <div style={{textAlign:'center'}} ><img src={messageObj.top_img} alt='' style={{maxHeight:'100px'}} /></div> }
@@ -53,9 +53,11 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
             </>}
 
            <h2 style={aStyle} >{messageObj.title} </h2>
-           <div dangerouslySetInnerHTML={{__html:convertHTML(messageObj)}}></div>
+           <div dangerouslySetInnerHTML={{__html:messageObj.content}}></div>
         </Card.Body>
     </Card>
 
     );
 }
+
+// <div dangerouslySetInnerHTML={{__html:convertHTML(messageObj)}}></div>

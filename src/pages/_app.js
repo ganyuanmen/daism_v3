@@ -39,12 +39,15 @@ export default function App({ Component, pageProps }) {
     <>
       <Head>
        <title>{pageProps.messages?.Common?.title}</title>
+       <meta content='width=device-width, initial-scale=1' name='viewport' />
        <link rel="preconnect" href={`https://daism.io/${pageProps.locale}`}></link>
        <meta name="description" content={pageProps.messages?.Common?.titleDesc} />
+       <meta content="daism" property="og:site_name" />
+       <meta content="article" property="og:type" />
       </Head>
    
     <Provider store={store}>
-    <IntlProvider messages={pageProps.messages} locale={pageProps.locale}>
+    <IntlProvider messages={pageProps.messages} locale={pageProps.locale}  timeZone="Europe/Vienna">
       <Component {...pageProps} />
     </IntlProvider>
     </Provider>
@@ -53,3 +56,21 @@ export default function App({ Component, pageProps }) {
 }
 
 
+// import {NextIntlClientProvider} from 'next-intl';
+// import {useRouter} from 'next/router';
+ 
+// export default function App({Component, pageProps}) {
+//   const router = useRouter();
+ 
+//   return (
+//     <Provider store={store}>
+//     <NextIntlClientProvider
+//       locale={router.locale}
+//       timeZone="Europe/Vienna"
+//       messages={pageProps.messages}
+//     >
+//       <Component {...pageProps} />
+//     </NextIntlClientProvider>
+//     </Provider>
+//   );
+// }

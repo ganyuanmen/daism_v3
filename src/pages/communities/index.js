@@ -28,8 +28,9 @@ export default function Federation() {
 	const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
 	const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
   const dispatch = useDispatch();
+  const [searAccount,setSearAccount]=useState('') //用于从其它域名下载数据
 
-  const messageData = useMessage({ currentPageNum,refresh,whereType,v}) //分布获取发文记录
+  const messageData = useMessage({account:searAccount, currentPageNum,refresh,whereType,v}) //分布获取发文记录
 	const tc = useTranslations('Common')
 	const t = useTranslations('ff')
 
@@ -39,14 +40,15 @@ export default function Federation() {
   const createPost=()=>{setActiveTab(1);setCurrentObj(null);setEditCurrentObj(null);} //创建发文
   const searchCall=(obj)=>{setSearObj(obj); setActiveTab(3);setCurrentObj(null);setEditCurrentObj(null);setDaoObj({});} //查找后显示页面
 
-  const homeCall=()=>{setCurrentPageNum(1); setWhereType(0);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setV(actor?.actor_account); } //主页过滤
-  const eventFilter=()=>{setCurrentPageNum(1);setWhereType(1);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});} //活动过滤
-  const smartcommonClick=(obj)=>{setCurrentPageNum(1);setWhereType(2);setActiveTab(0);setV(obj.dao_id);setData([]);setRefresh(!refresh);setDaoObj(obj);} //智能公器过滤选择
-  const myBookFilter=()=>{setCurrentPageNum(1);setWhereType(3);setV(actor.id);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});} //我的收藏
-  const myFollowFilter=()=>{setCurrentPageNum(1);setWhereType(4);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setV(actor?.actor_account);} //我的发布
+  const homeCall=()=>{setCurrentPageNum(1); setWhereType(0);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setV(actor?.actor_account);setSearAccount(''); } //主页过滤
+  const eventFilter=()=>{setCurrentPageNum(1);setWhereType(1);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //活动过滤
+  const smartcommonClick=(obj)=>{setCurrentPageNum(1);setWhereType(2);setActiveTab(0);setV(obj.dao_id);setData([]);setRefresh(!refresh);setDaoObj(obj);setSearAccount(obj.actor_account);} //智能公器过滤选择
+  const myBookFilter=()=>{setCurrentPageNum(1);setWhereType(3);setV(actor.id);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setSearAccount('');} //我的收藏
+  const myFollowFilter=()=>{setCurrentPageNum(1);setWhereType(4);setActiveTab(0);setData([]);setRefresh(!refresh);setDaoObj({});setV(actor?.actor_account);setSearAccount(actor?.actor_account);} //我的关注发布
 
   useEffect(()=>{setData(data.concat(messageData.rows))},[messageData])  //发文数据追加
   useEffect(()=>{let a=window.location.hash.substring(1); setActiveTab(parseInt(a?a:0));},[setActiveTab])  //根据hash 显示选择项
+  
   
 
   //下载所有已注册的smart common 用于过滤

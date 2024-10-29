@@ -1,19 +1,21 @@
 import { useEffect,useState } from 'react';
 import {client} from '../lib/api/client'
 
-export function useMessage({currentPageNum,refresh,whereType,v}) {
+
+  export function useMessage({account,currentPageNum,refresh,whereType,v}) {
     const [data, setData] = useState({rows:[],pages:0,total:0,status:'pending',error:''}); 
 
+    //account 用于从其它域名拉取数据
     useEffect(() => {
         let ignore = false;
-        client.get(`/api/getData?ps=12&pi=${currentPageNum}&w=${whereType}&v=${v}`,'messagePageData').then(res =>{ 
+        client.get(`/api/getData?ps=12&pi=${currentPageNum}&w=${whereType}&v=${v}&account=${account}`,'messagePageData').then(res =>{ 
             if (!ignore) 
             if (res.status===200) setData({...res.data,status:'succeeded',error:''})
             else setData({rows:[],pages:0,total:0,status:'failed',error:res.statusText})
         });
         return () => {ignore = true}
         
-    }, [currentPageNum,refresh,whereType,v]);
+    }, [currentPageNum,refresh,whereType,v,account]);
 
     return data;
   }

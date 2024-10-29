@@ -114,7 +114,10 @@
     "groupAccount":"组帐号",
     "exceedAmount":"超过管理员设置的最大限制注册数",
     "selfAccount":"个人帐号",
-    "noPostingText":"该发文不存在或已被删除。"
+    "noPostingText":"该发文不存在或已被删除。",
+    "shareText":"分享",
+    "noHandleText": "请登录到{domain}域名下进行操作",
+    "linkText":"链接地址"
 
   }
 }
