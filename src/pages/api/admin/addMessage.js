@@ -82,7 +82,7 @@ export default withSession(async (req, res) => {
 async function addLink(content,insertId){
   const furl=findFirstURI(content)
   if(furl){
-    let tootContent=await getTootContent(furl)
+    let tootContent=await getTootContent(furl,process.env.LOCAL_DOMAIN)
     if(tootContent){
       let sql="update a_message set content=? where id=?"
       await executeID(sql,[`${content} \n\n${tootContent}`,insertId]);

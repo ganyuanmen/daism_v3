@@ -65,7 +65,7 @@ export  function findFirstURI(html) {
     
   export  async function getTootContent(tootUrl,domain) {
       try {
-         const myURL = new URL(url);
+         const myURL = new URL(tootUrl);
          let targetDomain = myURL.hostname;
         const response = await axios.get(tootUrl);
         const html = response.data;
