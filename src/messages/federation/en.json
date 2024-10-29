@@ -117,7 +117,9 @@
     "noPostingText":"The post does not exist or has been deleted.",
     "shareText":"share",
     "noHandleText": "Please log in to the {domain} domain to perform the operation",
-    "linkText":"Link Address"
+    "linkText":"Link Address",
+    "copyText":"copy",
+    "copyLinkText":"copy link"
 
   }
 }

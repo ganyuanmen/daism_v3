@@ -24,7 +24,7 @@ export default function Message({currentObj,domain}) {
         <meta content={currentObj.title} name='description' />
         <meta content={currentObj.title} property="og:description" />
         <meta content="summary" property="twitter:card"/>
-        <meta content={currentObj.top_img}  property="og:image" />
+        <meta content={currentObj.top_img?currentObj.top_img:currentObj.avatar}  property="og:image" />
       </Head>
     
       <Rmenu>

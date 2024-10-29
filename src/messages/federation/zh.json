@@ -117,7 +117,10 @@
     "noPostingText":"该发文不存在或已被删除。",
     "shareText":"分享",
     "noHandleText": "请登录到{domain}域名下进行操作",
-    "linkText":"链接地址"
+    "linkText":"链接地址",
+    "copyText":"复制",
+    "copyLinkText":"复制链接"
+  
 
   }
 }

@@ -18,7 +18,7 @@ export default function Main({t,setCurrentObj,setActiveTab,data,currentPageNum,s
                 (status==='failed'?<ShowErrorBar errStr={errors} />
                     :<>
                     {
-                        data.length<total && <div><Button size='sm' onClick={()=>setCurrentPageNum(()=>currentPageNum+1)}  variant='light'>fetch more ...</Button></div>
+                        data.length<total && <div><Button size='sm' onClick={()=>setCurrentPageNum(()=>currentPageNum+1)}  variant='light'>fetch more ...${data.length}--${total}</Button></div>
                     }
                     </>
                 )       

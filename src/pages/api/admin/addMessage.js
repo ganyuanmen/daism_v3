@@ -23,13 +23,7 @@ export default withSession(async (req, res) => {
     const [fields, files] = await form.parse(req);
     const {_type,id,account,did,title,content,isSend,isDiscussion,videoUrl,startTime,endTime,eventUrl,eventAddress,fileType,time_event} = fields
     const imgPath=saveImage(files,fileType[0])
-    const furl=findFirstURI(content[0])
-    if(furl){
-      let tootContent=await getTootContent(furl,process.env.LOCAL_DOMAIN)
-      if(tootContent){
-        content[0]=`${content[0]} \n\n${tootContent}`
-      }
-    }
+   
     let path=imgPath?`https://${process.env.LOCAL_DOMAIN}/${process.env.IMGDIRECTORY}/${imgPath}`:''
     if(id[0]=='0'){ //增加
       let message_id=uuidv4()
@@ -50,6 +44,10 @@ export default withSession(async (req, res) => {
           if( process.env.IS_DEBUGGER==='1') console.info("message send --->",[account[0],path,insertId,title[0]])
             send(account[0],content[0],path,insertId,`《${title[0]}》`,path)   
         }
+
+       setTimeout(async() => {
+       await addLink(content[0],insertId)
+       }, 1);
         res.status(200).json({msg:'handle ok',id:insertId});
       } else res.status(500).json({errMsg: 'fail'});
     }else{ //修改
@@ -79,3 +77,16 @@ export default withSession(async (req, res) => {
       return;
   }
 });
+
+
+async function addLink(content,insertId){
+  const furl=findFirstURI(content)
+  if(furl){
+    let tootContent=await getTootContent(furl)
+    if(tootContent){
+      let sql="update a_message set content=? where id=?"
+      await executeID(sql,[`${content} \n\n${tootContent}`,insertId]);
+ 
+    }
+  }
+}

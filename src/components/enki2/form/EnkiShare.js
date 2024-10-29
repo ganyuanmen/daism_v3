@@ -11,7 +11,7 @@ export default function EnkiShare({currentObj,t,daoAddress,tc})
     const router = useRouter();
     const target1 = useRef(null);
     const target2 = useRef(null);
-    const aref=useRef(null);
+    // const aref=useRef(null);
     const url=`https://${daoAddress.sys_domain}${router.asPath}/${currentObj.id}`;
     // const dlogo=`https://${daoAddress.sys_domain}/logo.svg`
     let delayTime=null;
@@ -53,12 +53,12 @@ export default function EnkiShare({currentObj,t,daoAddress,tc})
                     setShowOver1(true); //显示提示
                     if(delayTime) return; //提示未到时间，不做处理
                     delayTime=setTimeout(() => { setShowOver1(false);delayTime=null;}, 1000);}
-                    }  ref={target1}  > <img src='/clipboard.svg' alt=""/>  复制</Button> </div>
+                    }  ref={target1}  > <img src='/clipboard.svg' alt=""/>  {t('copyText')}</Button> </div>
            
             </div>
             <div dangerouslySetInnerHTML={{__html: uc}}></div>
             <div style={{textAlign:'right',padding:'16px'}} >
-            <Button  ref={target2} variant="light" size="sm" onClick={getHtml} > <img src='/clipboard.svg' alt=""/> 复制链接html</Button>
+            <Button  ref={target2} variant="light" size="sm" onClick={getHtml} > <img src='/clipboard.svg' alt=""/> {t('copyLinkText')}html</Button>
             </div>
         
 

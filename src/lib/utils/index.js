@@ -64,8 +64,9 @@ export  function findFirstURI(html) {
 
     
   export  async function getTootContent(tootUrl,domain) {
-    console.log(tootUrl)
       try {
+         const myURL = new URL(url);
+         let targetDomain = myURL.hostname;
         const response = await axios.get(tootUrl);
         const html = response.data;
         const $ = cheerio.load(html);
@@ -78,7 +79,6 @@ export  function findFirstURI(html) {
         const desc = $('meta[name="description"]').attr('content');
         let content = $('meta[property="og:description"]').attr('content'); //.replaceAll('\n','  ');
         const name=$('meta[property="profile:username"]').attr('content');
-        console.log( { content, title, image,user,desc,name })
         if(!image && name){
           let actor=await getInboxFromAccount(name); 
           image=actor.avatar;
@@ -102,9 +102,9 @@ export  function findFirstURI(html) {
             <img src='${image?image:localimg}' alt="" style="background-position:50%;background-size:cover;display:block;height:100%;margin:0;object-fit:cover;width:100%;border-radius:8px 0 0 8px;">
         </div>
         <div  >
-            <div style="padding:2px 8px 2px 8px" >${domain}</div>
+            <div style="padding:2px 8px 2px 8px" >${targetDomain}</div>
             <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 1;overflow: hidden;" >${user?user:title}</div>
-            <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;" > ${content?content:desc}</div>	
+            <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;" > ${content?content:(desc?desc:targetDomain)}</div>	
         </div>
         </a>` ;
 
