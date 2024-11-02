@@ -3,7 +3,6 @@
 
 import Card from "react-bootstrap/Card";
 import EnkiMemberItem from "./EnkiMemberItem";
-import {convertHTML} from "../utils"
 
 export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj}) {
     const months=t('monthText').split(',')
@@ -34,9 +33,9 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
    
     return (
    
-        <Card className='m-2' onClick={(e)=>{setCurrentObj(messageObj);setActiveTab(2);e.preventDefault();e.stopPropagation();}} style={{ width: '400px',height:'360px',overflow:'hidden' }}>
+        <Card className='mb-1' onClick={(e)=>{setCurrentObj(messageObj);setActiveTab(2);e.preventDefault();e.stopPropagation();}} style={{width:'100%',maxHeight:'360px',overflow:'hidden' }}>
             <Card.Header>
-            <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isMess={false}  />    {/* '不检测关注' 不修改不删除 */}
+            <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isEdit={false}  />    {/* '不检测关注' 不修改不删除 */}
             </Card.Header>
             
         <Card.Body className="daism-click"  >
@@ -59,5 +58,3 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
 
     );
 }
-
-// <div dangerouslySetInnerHTML={{__html:convertHTML(messageObj)}}></div>

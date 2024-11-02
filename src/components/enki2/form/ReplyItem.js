@@ -4,7 +4,7 @@ import EnkiEditItem from "./EnkiEditItem"
 import { useSelector } from 'react-redux';
 
 //关注内容 
-export default function ReplyItem({t,paccount,replyObj,actor,delCallBack,preEditCall}) {
+export default function ReplyItem({t,paccount,replyObj,actor,delCallBack,preEditCall,sctype}) {
     const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
 
@@ -26,7 +26,7 @@ export default function ReplyItem({t,paccount,replyObj,actor,delCallBack,preEdit
                 <EnkiMember messageObj={replyObj} isLocal={false} hw={32} />
                 <div  >
                     {checkDomain() && loginsiwe && (replyObj?.manager && actor?.manager?.toLowerCase()===replyObj?.manager?.toLowerCase() || actor?.manager?.toLowerCase()===daoAddress['administrator'].toLowerCase()) && 
-                        <EnkiEditItem  messageObj={replyObj}  t={t} delCallBack={delCallBack} preEditCall={editCallBack} type={1} />
+                        <EnkiEditItem  messageObj={replyObj}  t={t} delCallBack={delCallBack} preEditCall={editCallBack} type={1} sctype={sctype} />
                     } 
                     <TimesItem times={replyObj.times} t={t} />
                 </div>

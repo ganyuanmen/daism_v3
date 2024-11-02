@@ -4,23 +4,33 @@ import { BookTap } from '../../../lib/jssvg/SvgCollection';
 import { useGetHeartAndBook } from "../../../hooks/useMessageData";
 import { client } from "../../../lib/api/client";
 
-//isd 是否允许
-export default function EnKiBookmark({isd,t,tc,pid,loginsiwe,actor,showTip,closeTip,showClipError})
+
+export default function EnKiBookmark({t,tc,currentObj,domain,loginsiwe,actor,showTip,closeTip,showClipError})
 {
     const [refresh,setRefresh]=useState(false)
-    const data=useGetHeartAndBook({cid:actor?.id,pid,refresh,table:'bookmark'})
+    const data=useGetHeartAndBook({cid:actor?.id,pid:currentObj?.id,refresh,table:'bookmark',sctype:currentObj.dao_id>0?'sc':''})
 
     const submit=async (flag)=>{ //0 取消收藏  1 收藏
         showTip(t('submittingText')) 
-        let res=await client.post('/api/postwithsession','handleHeartAndBook',{cid:actor.id,pid,flag,table:'bookmark'})
+        let res=await client.post('/api/postwithsession','handleHeartAndBook',{cid:actor.id,pid:currentObj.id,flag,table:'bookmark'
+            ,sctype:currentObj.dao_id>0?'sc':''})
         if(res.status===200) setRefresh(!refresh) 
         else showClipError(`${tc('dataHandleErrorText')}!${res.statusText}\n ${res.data.errMsg?res.data.errMsg:''}`)
         closeTip()
     }
     //data.pid>0 已点赞
+    const ableChange=()=>{ 
+
+        if(!loginsiwe || !actor?.actor_account) return false; 
+        //发布帐号，用于判断是否本域名
+        const _account=currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account;
+        const [name,messDomain]=_account?.split('@');
+        return domain===messDomain; //本域名发布，可以回复
+        
+      }
     return(
         <>
-            {(loginsiwe && isd)?
+            {ableChange()?
                 <div>
                     {data.pid>0?
                         <Button onClick={e=>{submit(0)}}  variant="light">

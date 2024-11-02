@@ -119,7 +119,12 @@
     "noHandleText": "Please log in to the {domain} domain to perform the operation",
     "linkText":"Link Address",
     "copyText":"copy",
-    "copyLinkText":"copy link"
+    "copyLinkText":"copy link",
+    "lastText":"Latest",
+    "eventText":"Events",
+    "publishText":"Publish Something",
+    "noRegisterText":"You haven't registered a community account yet",
+    "loginDomainText":"This account needs to log in to {domain} to publish articles"
 
   }
 }

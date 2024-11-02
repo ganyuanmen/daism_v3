@@ -1,15 +1,19 @@
 {
   "Navigation": {
-    "home": "Smart Commons",
     "iadd": "DEX",
-    "info": "Communities",
-    "nft": "Honor Tokens",
-    "my": "Workroom",
-    "switchLocale": "简体中文",
+    "home": "Smart Commons",
+    "nft":"Honor Tokens",
+    "my": "My Workroom",
+    "social":"Social",
+    "college":"College",
     "doc":"Documentation",
-    "daism":"Learn",
-    "profile":"Profile"
+    "daism":"Overview",
+    "myCommunity":"My Community",
+    "publicCommunities":"Public Communities",
+    "personalSocial":"Personal Social",
+    "switchLocale": "简体中文"
   },
+
   "Common":{
     "about":"about",
     "title":"DEX-DAism",

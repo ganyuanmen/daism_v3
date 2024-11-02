@@ -76,11 +76,11 @@ export function useReply({account,replyPageNum,refresh,pid,dao_id}) {
   }
 
   //点赞或收藏
-export  function useGetHeartAndBook({cid,pid,refresh,table}) {
+export  function useGetHeartAndBook({cid,pid,refresh,table,sctype}) {
     const [data, setData] = useState({}); 
     useEffect(() => {
         let ignore = false;
-        client.get(`/api/getData?cid=${cid}&pid=${pid}&table=${table}`,'getHeartAndBook').then(res =>{  
+        client.get(`/api/getData?cid=${cid}&pid=${pid}&table=${table}&sctype=${sctype}`,'getHeartAndBook').then(res =>{  
             if (!ignore) 
                 if (res.status===200) setData(res.data[0])
                 else console.error(res.statusText)

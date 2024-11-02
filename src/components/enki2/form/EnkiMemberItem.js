@@ -6,8 +6,8 @@ import { useState,useEffect } from "react";
 import { client } from "../../../lib/api/client";
 import { useSelector } from 'react-redux';
 
-//isMess 是否可修改的
-export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCall,showTip,closeTip,showClipError,isMess}) {
+//isEdit 是否可修改的
+export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCall,showTip,closeTip,showClipError,isEdit}) {
     const [isFollow,setIsFollow]=useState(true) //默认已关注
     const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const daoActor=useSelector((state) => state.valueData.daoActor)
@@ -41,12 +41,12 @@ export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCa
             <EnKiFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} /> }
             
             <div>
-                {isMess && loginsiwe && (
+                {isEdit && loginsiwe && (
                     (messageObj.manager && actor?.manager?.toLowerCase()===messageObj.manager?.toLowerCase()) || 
                     (actor?.manager?.toLowerCase()===daoAddress['administrator'].toLowerCase())|| 
                     checkDao()
                 ) && 
-                    <EnkiEditItem messageObj={messageObj}  t={t} delCallBack={delCallBack} preEditCall={preEditCall} />
+                    <EnkiEditItem messageObj={messageObj}  t={t} delCallBack={delCallBack} preEditCall={preEditCall} sctype={messageObj.dao_id>0?'sc':''} />
                 } 
                 <TimesItem times={messageObj.times} t={t} />
             </div>

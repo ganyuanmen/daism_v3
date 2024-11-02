@@ -8,7 +8,7 @@ import {setTipText,setMessageText} from '../../../data/valueData';
 import { useSelector } from 'react-redux';
 
 //type 默认是 发文 1-> 是回复 preEditCall 修改前操作  delCallBack 删除后回调  
-export default function EnkiEditItem({tc,t,messageObj,delCallBack,preEditCall,type=0})
+export default function EnkiEditItem({tc,t,messageObj,delCallBack,preEditCall,sctype,type=0})
 {
     const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const dispatch = useDispatch();
@@ -50,7 +50,7 @@ export default function EnkiEditItem({tc,t,messageObj,delCallBack,preEditCall,ty
         } 
     }
     const deldiscussions=()=>{
-        handle('messageDel',{id:messageObj.id,type})
+        handle('messageDel',{id:messageObj.id,type,sctype})
         setShow(false)
         
     }

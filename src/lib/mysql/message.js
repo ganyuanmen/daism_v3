@@ -3,19 +3,57 @@ import { httpGet } from "../net";
 import { getUser } from './user';
 
  
-//所有发文
-export async function messagePageData({ps,pi,w,v})
+////pi,sctype,daoid,w,actorid:发文人ID,account,order,eventnum
+export async function messagePageData({pi,sctype,daoid,w,actorid,account,order,eventnum})
 {
-    let where=`send_type=0 or receive_account='${v}'`; 
-    if(w==1) where="_type=1"  //活动发文
-    else if(w==2) where=`dao_id=${v} and send_type=0` //智能公器
-    else if(w==3) where=`id in(select pid from a_bookmark where cid=${v})`  //我的收藏
-    else if(w==4) where=`actor_account='${v}'`  //我的发布
-    let re= await getPageData('messageview',ps,pi,'id','desc',where);
-    return re 
+	let re;
+	let where='';
+	let sql='';
+	if(sctype==='sc')
+	{
+		if(daoid.includes(',')) where=`where dao_id in(${daoid})`;else where=`where dao_id=${daoid}`;
+		if(parseInt(eventnum)===1) where=`${where} and _type=1`;
+		if(w) where=`${where} and title like '%${w}%'`;
+		sql=`select * from v_messagesc ${where} order by ${order} desc limit ${pi*12},12`
+
+	}else { //eventnum 1:首页 2:我的嗯文 3:我的收藏 4:我的接收嗯文 
+		switch(parseInt(eventnum))
+		{
+			case 2: //我的嗯文
+				where=`where actor_account='${account}'`;
+				break;
+			case 3: //我的收藏
+				where=`where id in(select pid from a_bookmark where cid=${actorid})`;
+				break;
+			case 4: //我的接收嗯文
+				where=`where receive_account='${account}'`;
+				break;
+		}
+		if(w) {
+			if(parseInt(eventnum)===1)  where=`where title like '%${w}%'`; //首页，查所有
+			else where=`${where} and title like '%${w}%'`;
+		}
+		sql=`select * from v_message ${where} order by ${order} desc limit ${pi*12},12`
+	}
+
+	re=await getData(sql,[]);
+	if(!sctype && parseInt(eventnum)===3){ //从sc取出收藏
+		sql=`select * from v_messagesc where id in(select pid from a_bookmarksc where cid=${actorid}) order by ${order} desc limit ${pi*12},12`;
+		const re1=await getData(sql,[]);
+		re=[...re,...re1]
+		re.sort((a, b) => {
+			return b.reply_time.localeCompare(a.reply_time); 
+			// return a.reply_time < b.reply_time; 
+		  });
+	}
+
+	return re; 
 }
 
-//关注插入
+
+//关注插入  id:自动ID ,
+//element.user_account--->receive_account
+//`https://${process.env.LOCAL_DOMAIN}/communities/${messageId}`--->linkUrl
 export async function insertMessage(id,account,linkUrl)
 {
 	let re=await getData("SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,top_img,dao_id,start_time,end_time,event_url,event_address,time_event,_type,actor_inbox FROM a_message where id=?"
@@ -29,19 +67,30 @@ export async function insertMessage(id,account,linkUrl)
 
 	await execute(sql,paras)
 }
- 
-//所有回复
-export async function replyPageData({ps,pi,pid})
+ //获取回复总数
+export async function getReplyTotal({sctype,pid})
 {
-    let re= await getPageData('replyview',ps,pi,'id','desc',`pid=${pid}`);
-    return re 
+	let sql=`select count(*) as total from a_message${sctype}_commont where pid=?`
+	let re=await getData(sql,[pid])
+	return re[0].total
+
+}
+
+
+//所有回复
+export async function replyPageData({pi,pid,sctype})
+{
+
+	let sql=`select * from v_message${sctype}_commont where pid=? order by id desc limit ${pi*20},20`
+	let re=await getData(sql,[pid]);
+	return re; 
 }
 
 //删除
-export async function messageDel({id,type})
+export async function messageDel({id,type,sctype})
 {
-    if(type=='0') return await execute('delete from a_message where id=?',[id]);
-    else return await execute('delete from a_message_commont where id=?',[id]);
+    if(type=='0') return await execute(`delete from a_message${sctype} where id=?`,[id]);
+    else return await execute(`delete from a_message${sctype}_commont where id=?`,[id]);
 }
 
 //获取所有已注册的dao
@@ -53,19 +102,19 @@ export async function getAllSmartCommon()
 
 
 //获取点赞数量及是否已点赞heart  获取收藏数量及是否已收藏bookmark  cid:人id pid:发文id
-export async function getHeartAndBook({pid,cid,table})
+export async function getHeartAndBook({pid,cid,table,sctype})
 {
-    let sql=`SELECT a.total,IFNULL(b.pid,0) pid FROM (SELECT COUNT(*) total FROM a_${table} WHERE pid=?) a LEFT JOIN (SELECT pid FROM a_${table} WHERE pid=? and cid=?) b ON 1=1`
+    let sql=`SELECT a.total,IFNULL(b.pid,0) pid FROM (SELECT COUNT(*) total FROM a_${table}${sctype} WHERE pid=?) a LEFT JOIN (SELECT pid FROM a_${table}${sctype} WHERE pid=? and cid=?) b ON 1=1`
     let re= await getData(sql,[pid,pid,cid]);
     return re || []
 }
 
 
 //点赞、取消点赞 heart  收藏、取消收藏 bookmark  cid:人id pid:发文id
-export async function handleHeartAndBook({cid,pid,flag,table})
+export async function handleHeartAndBook({cid,pid,flag,table,sctype})
 {
-    if(flag==0)  return await execute(`delete from a_${table} where pid=? and cid=?`,[pid,cid]);
-    else return await execute(`insert into a_${table}(cid,pid) values(?,?)`,[cid,pid]);
+    if(flag==0)  return await execute(`delete from a_${table}${sctype} where pid=? and cid=?`,[pid,cid]);
+    else return await execute(`insert into a_${table}${sctype}(cid,pid) values(?,?)`,[cid,pid]);
 }
 
 

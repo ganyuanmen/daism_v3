@@ -4,7 +4,7 @@ import {signAndSend} from '../net'
 import {createMessage} from '../activity/createMessage'
 import { insertMessage } from '../mysql/message';
 
-
+//messageId 增加后的自增ID
 export function send(account,content,fileName,messageId,title,imgpath) 
 {
 

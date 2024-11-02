@@ -119,7 +119,12 @@
     "noHandleText": "请登录到{domain}域名下进行操作",
     "linkText":"链接地址",
     "copyText":"复制",
-    "copyLinkText":"复制链接"
+    "copyLinkText":"复制链接",
+    "lastText":"最新",
+    "eventText":"活动",
+    "publishText":"发布内容",
+    "noRegisterText":"你还没有注册社区帐号",
+    "loginDomainText":"该帐号需要登录到{domain}才能发布嗯文"
   
 
   }
