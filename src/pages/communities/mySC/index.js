@@ -9,6 +9,8 @@ import { Nav } from 'react-bootstrap';
 import Main from '../../../components/enki2/page/Main';
 import EnkiCreateMessage from '../../../components/enki2/page/EnkiCreateMessage';
 import MessagePage from '../../../components/enki2/page/MessagePage';
+import iaddStyle from '../../../styles/iadd.module.css'
+import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
 
 export default function mySC({ domain }) {
     const [fetchWhere, setFetchWhere] = useState({
@@ -16,7 +18,8 @@ export default function mySC({ domain }) {
         daoid: '',  //所有'1,2,..', 单个'1' 方便sql in(${daoid})
         actorid: 0, account: '', 
         where: '', //查询条件
-        sctype: 'sc', 
+        menutype: 1,
+        v:0, 
         order: 'reply_time', //排序
         eventnum: 0  //0 活动 1 非活动
      });
@@ -43,29 +46,20 @@ export default function mySC({ domain }) {
         }
     }, [daoData, actor])
 
-    const handleSelect = (eventKey) => {
-        switch (eventKey) {
-            case "latest":
-                setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'reply_time', account: '', eventnum: 0, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
-                setActiveTab(0);
-                break;
-            case "events":
-                setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'id', account: '', eventnum: 1, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
-                setActiveTab(0);
-                break;
-            case "create":
-                setCurrentObj(null);
-                setActiveTab(1);
-                break;
-            default:
-                const daoid = parseInt(eventKey)
-                if (daoid > 0) setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'id', eventnum: 0, where: '', daoid, account: daoData.filter(obj => obj.dao_id == daoid)[0]['actor_account'] })
-                setActiveTab(0);
-                break;
-
-        }
-
+    const latestHandle=()=>{
+        //account: '' 从本地读取
+        setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'reply_time', account: '', eventnum: 0, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
+        setActiveTab(0);
     }
+
+    const eventHandle=()=>{
+        //account: '' 从本地读取
+        setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'id', account: '', eventnum: 1, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
+        setActiveTab(0);
+    }
+
+    const publishHandle=()=>{setCurrentObj(null);setActiveTab(1);}
+    
 
     const refreshCallBack = () => {  setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'reply_time', account: '', eventnum: 0, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') });
      setActiveTab(0); } //刷新数据,从0页开始
@@ -75,8 +69,8 @@ export default function mySC({ domain }) {
     return (
         <PageLayout>
 
-            <div style={{ width: '100%' }} className="clearfix">
-                <div className="scleft">
+            <div className="clearfix">
+                {/* <div className="scleft">
 
                     {user.connected !== 1 ? <>
                         <ShowErrorBar errStr={tc('noConnectText')} />
@@ -87,7 +81,7 @@ export default function mySC({ domain }) {
                             <EnkiMember messageObj={actor} isLocal={true} hw={64} />
                             {daoData.length > 0 ?
                                 <Nav onSelect={handleSelect} defaultActiveKey="/home" className="flex-column">
-                                    <Nav.Link eventKey="latest">{t('lastText')}</Nav.Link>
+                                    <Nav.Link eventKey="latest">{t('latestText')}</Nav.Link>
                                     <Nav.Link eventKey="events">{t('eventText')}</Nav.Link>
                                     <Nav.Link eventKey="create">{t('publishText')}</Nav.Link>
                                     {daoData.map((obj) => <Nav.Link key={obj.dao_id} eventKey={obj.dao_id}>
@@ -103,8 +97,36 @@ export default function mySC({ domain }) {
                         </>}
                     </>
                     }
+                </div> */}
+                  <div className={iaddStyle.scsidebar}>
+                    <div className='mb-3' >
+                        {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
+                        {!loginsiwe && <Loginsign user={user} tc={tc} />}
+                    </div>
+                    {loginsiwe &&<>
+                        {Array.isArray(daoData) && daoData.length > 0 ?
+                        <ul >
+                            <li><a href="#" onClick={latestHandle} >{t('latestText')}</a></li>
+                            <li><a href="#" onClick={eventHandle} >{t('eventText')}</a></li>
+                            <li><a href="#" onClick={publishHandle} >{t('publishText')}</a></li>
+                            {daoData.map((obj, idx) => <li key={obj.dao_id} className={iaddStyle.scli}>
+                                <a href="#" onClick={e=>{
+                                    setFetchWhere({ ...fetchWhere, currentPageNum:0,order:'id',eventnum:0,where:'',daoid:obj.dao_id,account:obj.actor_account})
+                                    }} >
+                                    <div style={{overflow:'hidden',display:'flex',alignItems:'center'}}>
+                                    <img src={obj.dao_logo} alt={obj.actor_account} height={24} width={24} style={{marginRight:'10px'}} />{obj.actor_account}
+                                    </div>
+                                </a>
+                                </li>)
+                            }
+                        </ul>
+                        : <ShowErrorBar errStr={t('noRegisterText')} />
+                        }
+                    </>
+                    }
                 </div>
-                {daoData.length > 0 && <div className="scright">
+
+                {daoData.length > 0 && <div className={iaddStyle.sccontent}>
 
                     {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage domain={domain} daoData={daoData} actor={actor} t={t} tc={tc} addCallBack={refreshCallBack} currentObj={currentObj} afterEditCall={afterEditCall} />}
@@ -121,7 +143,7 @@ export default function mySC({ domain }) {
     )
 }
 
-export const getStaticProps = ({ locale }) => {
+export const getServerSideProps = ({ locale }) => {
 
 
     return {

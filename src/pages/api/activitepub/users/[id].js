@@ -22,9 +22,9 @@ export default async function handler(req, res) {
     else
     { 
         if(localUser.dao_id>0)
-            res.redirect(`/communities/daoinfo/${localUser['dao_id']}`);
+            res.redirect(`/smartcommons/daoinfo/${localUser['dao_id']}`);
         else 
-            res.redirect(`/communities/actor/${localUser['id']}`);
+            res.redirect(`/smartcommons/actor/${localUser['id']}`);
 
     }
 

@@ -1,5 +1,5 @@
 import {getUser,getIsDaoMember, getEipTypes, getDappVersion, getDividend,getDappOwner,getProsData,getMynft, getSelfAccount,getDaoVote,getLastPro, getDaosData,getPrice,getToekn,getMyPros,getLogsData,getMyDaos,getMyTokens,getMyDaoDetail } from "../../lib/mysql/daism";
-import { messagePageData,replyPageData,getAllSmartCommon,getHeartAndBook,fromAccount,getReplyTotal } from "../../lib/mysql/message";
+import { messagePageData,replyPageData,getAllSmartCommon,getHeartAndBook,fromAccount,getReplyTotal,daoPageData } from "../../lib/mysql/message";
 import { getFollowers,getFollowees,getFollow,getFollow0,getFollow1 } from "../../lib/mysql/folllow";
 import { httpGet } from "../../lib/net";
 
@@ -35,6 +35,7 @@ const methods={
     getIsDaoMember, //是否dao成员
     getUser, //获取avatar 和desc
     getReplyTotal, //获取回复总数
+    daoPageData, //获取注册dao帐号列表
 
 }
 
@@ -47,13 +48,12 @@ export default async function handler(req, res) {
     try{
         //向原帐号所在域名请求，公器的首页和活动，account为空，只向本地获取
         if(req.headers.method==='messagePageData' && req.query.account && req.query.account.includes('@') ){  
-           const {pi,sctype,daoid,actorid,w,order,account,eventnum}=req.query;
+           const {pi,menutype,daoid,actorid,w,order,account,eventnum,v}=req.query;
            const [name,domain]=account.split('@');
            if(domain===process.env.LOCAL_DOMAIN) //本地
                 res.status(200).json(await methods[req.headers.method](req.query))
            else { //其它域名
-                //此处account为空，表示吸向本地获取
-                let response=await httpGet(`https://${domain}?pi=${pi}&sctype=${sctype}&daoid=${daoid}&actorid=${actorid}&w=${w}&order=${order}&eventnum=${eventnum}&account=`,{'Content-Type': 'application/json',method:'messagePageData'})
+                let response=await httpGet(`https://${domain}?pi=${pi}&menutype=${menutype}&daoid=${daoid}&actorid=${actorid}&w=${w}&order=${order}&eventnum=${eventnum}&account=${account}&v=${v}`,{'Content-Type': 'application/json',method:'messagePageData'})
                 if(response?.message) res.status(200).json(response.message)
                 else  res.status(500).json({errMsg: 'fail'});
            }

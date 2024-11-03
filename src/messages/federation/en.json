@@ -94,7 +94,6 @@
     "mybookTap":"My Bookmarks",
     "eventPost":"Event Posting",
     "smartcommonText":"Community List",
-    "myPostText":"My Posting",
     "bookmastText":"bookmark",
     "follow":"Follow",
     "alreadysubmitText":"Submitted",
@@ -120,11 +119,18 @@
     "linkText":"Link Address",
     "copyText":"copy",
     "copyLinkText":"copy link",
-    "lastText":"Latest",
-    "eventText":"Events",
     "publishText":"Publish Something",
     "noRegisterText":"You haven't registered a community account yet",
-    "loginDomainText":"This account needs to log in to {domain} to publish articles"
+    "loginDomainText":"This account needs to log in to {domain} to publish articles",
+    "latestText":"Latest",
+    "eventText":"Events",
+    "followCommunity":"Followed Communities",
+    "searchText":"Search community...",
+    "scHomeText":"Home",
+    "createPostText":"Create",
+    "myPostText":"My",
+    "followManText":"Followed",
+    "myBookText":"Bookmarks"
 
   }
 }

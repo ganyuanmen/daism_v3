@@ -31,7 +31,7 @@ export default function User({user,daoAddress,loginsiwe,t,...props}) {
           router.push(`/workroom/walletinfo`, { scroll: false })
           break;
         case "2":
-          router.push(`/communities/actor`, { scroll: false })
+          router.push(`/smartcommons/actor`, { scroll: false })
           break;
         case "3":
           router.push(`/smartcommons/mySC`, { scroll: false })

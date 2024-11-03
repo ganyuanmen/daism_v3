@@ -25,8 +25,7 @@ const ableChange=()=>{
 
     if(!loginsiwe || !actor?.actor_account) return false; 
     //发布帐号，用于判断是否本域名
-    const _account=currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account;
-    const [name,messDomain]=_account?.split('@');
+    const [name,messDomain]=currentObj?.actor_account?.split('@');
     return domain===messDomain; //本域名发布，可以回复
     
   }

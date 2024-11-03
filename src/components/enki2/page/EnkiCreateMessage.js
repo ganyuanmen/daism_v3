@@ -37,16 +37,21 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
     const selectRef = useRef()
 
     useEffect(() => { //为select 设默认值 
-        let selectDao = daoData.filter(obj => obj.domain === domain);
-        if (selectDao.length > 0) setSelectedDaoid(selectDao[0].dao_id);
+        if(Array.isArray(daoData)){
+            let selectDao = daoData.filter(obj => obj.domain === domain);
+            if (selectDao.length > 0) setSelectedDaoid(selectDao[0].dao_id);
+        }
+
     }, [daoData])
 
     //是活动，打开活动面版
     useEffect(() => { if (currentObj && currentObj.start_time) setShowEvent(true); }, [currentObj])
 
     const submit = async () => {
-        if (errorSelect) return showClipError(t('loginDomainText', { domain: loginDomain }));
-        if (!selectedDaoid) return showClipError('没有选择发布的社区！')
+        if(!currentObj?.id) {
+            if (errorSelect) return showClipError(t('loginDomainText', { domain: loginDomain }));
+            if (!selectedDaoid) return showClipError('没有选择发布的社区！')
+        }
 
         const titleText = titleRef.current.getData()
         if (!titleText || titleText.length > 256) {
@@ -71,7 +76,16 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
         showTip(t('submittingText'))
 
         const formData = new FormData();
-        formData.append('id', currentObj ? currentObj.id : 0);
+        if(currentObj?.id){  //修改
+            formData.append('id', currentObj.id);
+
+        } else { //新增
+            formData.append('id', 0);
+            let selectDao = daoData.filter(obj => obj.dao_id === parseInt(selectedDaoid))[0]
+            formData.append('account', selectDao.actor_account); //社交帐号
+        }
+      
+
         if (showEvent) { //活动参数
             formData.append('startTime', startDateRef.current.getData());
             formData.append('endTime', endDateRef.current.getData());
@@ -81,10 +95,6 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
         }
         formData.append('actorid', actor.id);
         formData.append('daoid', selectedDaoid);
-
-        let selectDao = daoData.filter(obj => obj.dao_id === parseInt(selectedDaoid))[0]
-        formData.append('account', selectDao.actor_account); //社交帐号
-
         formData.append('_type', showEvent ? 1 : 0);  //活动还是普通 
         formData.append('title', titleText);  //标题
         formData.append('content', contentText); //，内容
@@ -128,12 +138,14 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
     };
 
     return (
-        <Card>
+        <Card className='mb-3 mt-3' >
             <Card.Body>
                 <DaismImg title={t('selectTopImg')} defaultValue={currentObj ? currentObj.top_img : ''} ref={imgstrRef} maxSize={1024 * 500} fileTypes='svg,jpg,jpeg,png,gif,webp' />
+             
                 <InputGroup className="mb-3">
                     <InputGroup.Text>发布社区:</InputGroup.Text>
-                    <Form.Select ref={selectRef} value={selectedDaoid} onChange={handleSelectChange}
+                    {currentObj?.id ?<Form.Control readOnly={true} disabled={true} defaultValue={currentObj.actor_account} />
+                    :<Form.Select ref={selectRef} value={selectedDaoid} onChange={handleSelectChange}
                         isInvalid={errorSelect ? true : false} onFocus={e => { setErrorSelect(false) }}>
                         <option value=''>请选择</option>
                         {daoData.map((option) => (
@@ -141,11 +153,12 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
                                 {option.actor_account}
                             </option>
                         ))}
-                    </Form.Select>
+                    </Form.Select>}
                     <Form.Control.Feedback type="invalid">
                         {t('loginDomainText', { domain: loginDomain })}
                     </Form.Control.Feedback>
                 </InputGroup>
+                
 
                 <DaismInputGroup title={t('titileText')} defaultValue={currentObj ? currentObj.title : ''} ref={titleRef} horizontal={true} />
                 <RichTextEditor defaultValue={currentObj ? currentObj.content : ''} title={t('contenText')} editorRef={editorRef} />

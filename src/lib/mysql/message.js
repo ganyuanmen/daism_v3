@@ -1,43 +1,44 @@
-import { getData,execute,getPageData } from './common'
+import { getData,execute } from './common'
 import { httpGet } from "../net"; 
 import { getUser } from './user';
 
  
-////pi,sctype,daoid,w,actorid:发文人ID,account,order,eventnum
-export async function messagePageData({pi,sctype,daoid,w,actorid,account,order,eventnum})
+////pi,menutype,daoid,w,actorid:发文人ID,account,order,eventnum
+// menutype 1 我的社区，2 公区社区 3 个人社区
+//eventnum 社区: 0 非活动，1活动, 个人：1:首页 2:我的嗯文 3:我的收藏 4:我的接收嗯文 
+// v: 1 我关注的社区
+export async function messagePageData({pi,menutype,daoid,w,actorid,account,order,eventnum,v})
 {
-	let re;
 	let where='';
-	let sql='';
-	if(sctype==='sc')
+	let sctype='';
+	switch(parseInt(menutype))
 	{
-		if(daoid.includes(',')) where=`where dao_id in(${daoid})`;else where=`where dao_id=${daoid}`;
-		if(parseInt(eventnum)===1) where=`${where} and _type=1`;
-		if(w) where=`${where} and title like '%${w}%'`;
-		sql=`select * from v_messagesc ${where} order by ${order} desc limit ${pi*12},12`
-
-	}else { //eventnum 1:首页 2:我的嗯文 3:我的收藏 4:我的接收嗯文 
-		switch(parseInt(eventnum))
-		{
-			case 2: //我的嗯文
-				where=`where actor_account='${account}'`;
-				break;
-			case 3: //我的收藏
-				where=`where id in(select pid from a_bookmark where cid=${actorid})`;
-				break;
-			case 4: //我的接收嗯文
-				where=`where receive_account='${account}'`;
-				break;
-		}
-		if(w) {
-			if(parseInt(eventnum)===1)  where=`where title like '%${w}%'`; //首页，查所有
-			else where=`${where} and title like '%${w}%'`;
-		}
-		sql=`select * from v_message ${where} order by ${order} desc limit ${pi*12},12`
+		case 1: //我的社区
+			if(daoid.includes(',')) where=`where dao_id in(${daoid})`;else where=`where dao_id=${daoid}`;
+			if(parseInt(eventnum)===1) where=`${where} and _type=1`;
+			sctype='sc'
+			break;
+		case 2: //公区社区
+			if(parseInt(daoid)>0) where=`where dao_id=${daoid}`; //单个dao
+			else if(parseInt(eventnum)===1) where="where _type=1"; //活动
+			else if(parseInt(v)===1) where=`WHERE actor_account IN(SELECT actor_account FROM a_follow WHERE user_account='${account}')`; //我关注的社区
+			sctype='sc';
+			break;
+		default:
+			if(parseInt(eventnum)===1) where='';  //首页，查所有
+			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'`; //我发布的嗯文
+			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where cid=${actorid})`; //我的收藏
+			// else if(parseInt(eventnum)===4) where=`where receive_account='${account}'`; //我的接收嗯文
+			break;
 	}
+	if(w) where=where?`${where} and title like '%${w}%'`:`where title like '%${w}%'`;
+	let sql=`select * from v_message${sctype} ${where} order by ${order} desc limit ${pi*12},12`;
+	console.log("-------------------------------------")
+	console.log(sql)
+	console.log("-------------------------------------")
 
-	re=await getData(sql,[]);
-	if(!sctype && parseInt(eventnum)===3){ //从sc取出收藏
+	let re=await getData(sql,[]);
+	if(parseInt(menutype)===3 && parseInt(eventnum)===3){ //从sc取出收藏
 		sql=`select * from v_messagesc where id in(select pid from a_bookmarksc where cid=${actorid}) order by ${order} desc limit ${pi*12},12`;
 		const re1=await getData(sql,[]);
 		re=[...re,...re1]
@@ -50,6 +51,16 @@ export async function messagePageData({pi,sctype,daoid,w,actorid,account,order,e
 	return re; 
 }
 
+
+//dao 注册帐号列表
+export async function daoPageData({pi,w})
+{
+	let sql
+	if(w) sql=`SELECT dao_id,actor_account,avatar FROM a_account WHERE dao_id>0 and actor_name like '%${w}%' order by id limit ${pi*10},10`;
+	else sql=`SELECT dao_id,actor_account,avatar FROM a_account WHERE dao_id>0 order by id limit ${pi*10},10`;
+	let re=await getData(sql,[]);
+	return re; 
+}
 
 //关注插入  id:自动ID ,
 //element.user_account--->receive_account
@@ -119,9 +130,9 @@ export async function handleHeartAndBook({cid,pid,flag,table,sctype})
 
 
 //获取一条发文
-export async function getOne(id)
+export async function getOne(id,sctype)
 {
-    let re= await getData('select * from v_message where id=?',[id]);
+    let re= await getData(`select * from v_message${sctype} where id=?`,[id]);
     return  re[0] || {}
 }
 

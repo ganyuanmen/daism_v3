@@ -94,7 +94,6 @@
     "mybookTap":"我的收藏",
     "eventPost":"活动发文",
     "smartcommonText":"社区列表",
-    "myPostText":"我的发布",
     "bookmastText":"收藏",
     "follow":"关注" ,
     "alreadysubmitText":"已提交" ,
@@ -120,11 +119,22 @@
     "linkText":"链接地址",
     "copyText":"复制",
     "copyLinkText":"复制链接",
-    "lastText":"最新",
-    "eventText":"活动",
     "publishText":"发布内容",
     "noRegisterText":"你还没有注册社区帐号",
-    "loginDomainText":"该帐号需要登录到{domain}才能发布嗯文"
+    "loginDomainText":"该帐号需要登录到{domain}才能发布嗯文",
+    "latestText":"最新",
+    "eventText":"活动",
+    "followCommunity":"关注的社区",
+    "searchText":"搜索社区...",
+    "scHomeText":"首页",
+    "createPostText":"创建嗯文",
+    "myPostText":"我的嗯文",
+    "followManText":"关注的嗯人",
+    "myBookText":"我的书签"
+    
+
+
+
   
 
   }

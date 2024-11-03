@@ -156,42 +156,14 @@
   }
 
   .wlanguage a:hover {font-weight: normal !important; }
-
- .clearfix::after {
-    content: "";
-    display: block;
-    overflow: hidden;
-    clear: both;
-   }
-
- .scleft {
-  
-    /* width: 400px; */
-    float: left;
-    width: 300px;
-    height:calc(100vh - 62px);
-    background-color: #f4f4f4;
-    padding: 20px;
-    overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    position: sticky;    /*对右边的内容使用粘性定位*/
-    top: 60px;
-   }
- .scright {
-    width: calc(100% - 300px); 
-    float: right;
-    padding-left: 20px;
-    padding-top: 0px;
-  }
   .sctop {
     width: 100%;
     height: 60px;
     z-index: 500;
-    /* border: 1px solid white; */
     background-color: #F8F8F8;
     padding-top: 4px;
     position: sticky;    /*对右边的内容使用粘性定位*/
     top: 53px;
     margin: 0px 0px 8px 0px;
-    /* padding-bottom: 10px; */
   }
+  

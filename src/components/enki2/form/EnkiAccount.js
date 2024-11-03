@@ -25,7 +25,7 @@ export default function EnkiAccount({t})
             <>
                 {actor?.actor_account?  //已注册
                     <EnkiMember messageObj={actor} hw={64} isLocal={true} />
-                    :<div>  {/*  //未注册*/}
+                    :<div onClick={e=>{setShow(false)}} >  {/*  //未注册*/}
                         <div ref={target}> <User1Svg size={64}  /></div>
                         <Overlay show={show} target={target.current} placement="right" containerPadding={4}>
                             <Popover id="popover-contained">

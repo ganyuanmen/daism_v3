@@ -1,17 +1,18 @@
 
 import { useTranslations } from 'next-intl'
-import Rmenu from '../../components/Rmenu'
-import MessagePage from '../../components/enki2/page/MessagePage';
-import { getOne } from '../../lib/mysql/message';
-import ShowErrorBar from '../../components/ShowErrorBar';
+import MessagePage from '../../../components/enki2/page/MessagePage';
+import { getOne } from '../../../lib/mysql/message';
+import ShowErrorBar from '../../../components/ShowErrorBar';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
+import PageLayout from '../../../components/PageLayout'
 
 //其它转过来的查看
 export default function Message({currentObj,domain}) {
   const router = useRouter();
 
-  let t = useTranslations('ff')
+  let t = useTranslations('ff');
+  const tc = useTranslations('Common');
   
     return (
       <>
@@ -27,25 +28,24 @@ export default function Message({currentObj,domain}) {
         <meta content={currentObj.top_img?currentObj.top_img:currentObj.avatar}  property="og:image" />
       </Head>
     
-      <Rmenu>
-        {currentObj?.id? <MessagePage t={t} currentObj={currentObj} />
+      <PageLayout>
+        {currentObj?.id? <MessagePage t={t} tc={tc} currentObj={currentObj} domain={domain} />
         :<ShowErrorBar errStr={t('noPostingText')} />
         }
-        </Rmenu>
+        </PageLayout>
         </>
     );
 }
 
 export const getServerSideProps =async ({locale,query }) => {
-// console.log(req.headers)
-  const currentObj=await getOne(query.id)
-  
 
+  const currentObj=await getOne(query.id,'sc')
+  
     return {
       props: {
         messages: {
-          ...require(`../../messages/shared/${locale}.json`),
-          ...require(`../../messages/federation/${locale}.json`),
+          ...require(`../../../messages/shared/${locale}.json`),
+          ...require(`../../../messages/federation/${locale}.json`),
         },
         currentObj,locale,domain:process.env.LOCAL_DOMAIN
       }

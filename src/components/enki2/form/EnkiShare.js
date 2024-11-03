@@ -1,18 +1,19 @@
 import { Button,Modal,Overlay, Tooltip, Col } from "react-bootstrap";
 import { useState,useRef } from "react";
 import { LocationSvg  } from '../../../lib/jssvg/SvgCollection';
-import {useRouter} from 'next/router';
+// import {useRouter} from 'next/router';
 //点赞按钮 isd 是否允许
 export default function EnkiShare({currentObj,t,domain,tc})
 {
     const [show,setShow]=useState(false)
     const [showOver1,setShowOver1]=useState(false)
     const [showOver2,setShowOver2]=useState(false)
-    const router = useRouter();
+    // const router = useRouter();
     const target1 = useRef(null);
     const target2 = useRef(null);
     // const aref=useRef(null);
-    const url=`https://${domain}${router.asPath}/${currentObj.id}`;
+    const path=currentObj.dao_id>0?'mySC':'me';
+    const url=`https://${domain}/communities/${path}/${currentObj.id}`;
     
     // const dlogo=`https://${domain}/logo.svg`
     let delayTime=null;
