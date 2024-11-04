@@ -72,6 +72,15 @@ export default async function handler(req, res) {
                  if(response?.message) res.status(200).json(response.message)
                  else  res.status(500).json({errMsg: 'fail'});
             }
+        }else if((req.headers.method==='getFollow0' || req.headers.method==='getFollow1')  && req.query.account && req.query.account.includes('@')) {
+          const [name,domain]=req.query.account.split('@');
+          if(domain===process.env.LOCAL_DOMAIN) //本地或smar common 
+               res.status(200).json(await methods[req.headers.method](req.query))
+          else { //其它域名
+               let response=await httpGet(`https://${domain}/api/getData?account=${req.query.account}`,{'Content-Type': 'application/json',method:req.headers.method})
+               if(response?.message) res.status(200).json(response.message)
+               else  res.status(500).json({errMsg: 'fail'});
+          }
         }
         else {
           res.status(200).json(await methods[req.headers.method](req.query))

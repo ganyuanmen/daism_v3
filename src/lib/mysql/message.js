@@ -27,7 +27,7 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 		default: //个人
 			if(parseInt(eventnum)===1) where='where send_type=0';  //首页，查本地，
 			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'and send_type=0`; //我发布的嗯文
-			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where cid=${actorid})`; //我的收藏
+			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where account='${account}')`; //我的收藏
 			else if(parseInt(eventnum)===4) where=`where receive_account='${account}'`; //我的接收嗯文
 			break;
 	}
@@ -39,7 +39,7 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 
 	let re=await getData(sql,[]);
 	if(parseInt(menutype)===3 && parseInt(eventnum)===3){ //从sc取出收藏
-		sql=`select * from v_messagesc where id in(select pid from a_bookmarksc where cid=${actorid}) order by ${order} desc limit ${pi*12},12`;
+		sql=`select * from v_messagesc where id in(select pid from a_bookmarksc where account='${account}') order by ${order} desc limit ${pi*12},12`;
 		const re1=await getData(sql,[]);
 		re=[...re,...re1]
 		re.sort((a, b) => {
@@ -111,20 +111,20 @@ export async function getAllSmartCommon()
 }
 
 
-//获取点赞数量及是否已点赞heart  获取收藏数量及是否已收藏bookmark  cid:人id pid:发文id
-export async function getHeartAndBook({pid,cid,table,sctype})
+//获取点赞数量及是否已点赞heart  获取收藏数量及是否已收藏bookmark  account:人id pid:发文id
+export async function getHeartAndBook({pid,account,table,sctype})
 {
-    let sql=`SELECT a.total,IFNULL(b.pid,0) pid FROM (SELECT COUNT(*) total FROM a_${table}${sctype} WHERE pid=?) a LEFT JOIN (SELECT pid FROM a_${table}${sctype} WHERE pid=? and cid=?) b ON 1=1`
-    let re= await getData(sql,[pid,pid,cid]);
+    let sql=`SELECT a.total,IFNULL(b.pid,0) pid FROM (SELECT COUNT(*) total FROM a_${table}${sctype} WHERE pid=?) a LEFT JOIN (SELECT pid FROM a_${table}${sctype} WHERE pid=? and account=?) b ON 1=1`
+    let re= await getData(sql,[pid,pid,account]);
     return re || []
 }
 
 
-//点赞、取消点赞 heart  收藏、取消收藏 bookmark  cid:人id pid:发文id
-export async function handleHeartAndBook({cid,pid,flag,table,sctype})
+//点赞、取消点赞 heart  收藏、取消收藏 bookmark  account:人id pid:发文id
+export async function handleHeartAndBook({account,pid,flag,table,sctype})
 {
-    if(flag==0)  return await execute(`delete from a_${table}${sctype} where pid=? and cid=?`,[pid,cid]);
-    else return await execute(`insert into a_${table}${sctype}(cid,pid) values(?,?)`,[cid,pid]);
+    if(flag==0)  return await execute(`delete from a_${table}${sctype} where pid=? and account=?`,[pid,account]);
+    else return await execute(`insert into a_${table}${sctype}(account,pid) values(?,?)`,[account,pid]);
 }
 
 
