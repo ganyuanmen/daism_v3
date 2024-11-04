@@ -90,8 +90,8 @@ export default function me({ domain }) {
         setActiveTab(0);
     }
     
-    //首页刷新数据
-    const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:2 }); setActiveTab(0); } 
+    //首页刷新数据 直接跳到我的发文
+    // const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:2 }); setActiveTab(0); } 
     const preEditCall = () => { setActiveTab(1); } //修改前回调
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
@@ -135,11 +135,11 @@ export default function me({ domain }) {
                     {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
                         fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
 
-                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={refreshCallBack}
+                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle}
                         currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} />}
 
                     {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain}
-                        currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
+                        currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                     {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} />}
                 </div>

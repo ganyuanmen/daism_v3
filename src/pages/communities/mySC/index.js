@@ -5,12 +5,15 @@ import PageLayout from '../../../components/PageLayout'
 import ShowErrorBar from '../../../components/ShowErrorBar';
 import EnkiMember from '../../../components/enki2/form/EnkiMember';
 import Loginsign from '../../../components/Loginsign';
-import { Nav } from 'react-bootstrap';
 import Main from '../../../components/enki2/page/Main';
 import EnkiCreateMessage from '../../../components/enki2/page/EnkiCreateMessage';
 import MessagePage from '../../../components/enki2/page/MessagePage';
 import iaddStyle from '../../../styles/iadd.module.css'
 import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
+
+/**
+ * 我的社区
+ */
 
 export default function mySC({ domain }) {
     const [fetchWhere, setFetchWhere] = useState({
@@ -26,6 +29,7 @@ export default function mySC({ domain }) {
 
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
+    const [daoData, setDaoData] = useState([]) //所属个人的社区列表
 
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
@@ -33,8 +37,8 @@ export default function mySC({ domain }) {
     const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
     const daoActor = useSelector((state) => state.valueData.daoActor)  //dao社交帐号列表
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
-    const [daoData, setDaoData] = useState([]) //所属个人的社区列表
-
+    
+    //生成我管理的公器ID 集合
     useEffect(() => { if (Array.isArray(daoActor)) setDaoData(daoActor.filter(obj => obj.actor_account)) }, [daoActor])
 
     useEffect(() => {
@@ -46,18 +50,19 @@ export default function mySC({ domain }) {
         }
     }, [daoData, actor])
 
-    const latestHandle=()=>{
+    const latestHandle=()=>{ //最新
         //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'reply_time', account: '', eventnum: 0, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
         setActiveTab(0);
     }
 
-    const eventHandle=()=>{
+    const eventHandle=()=>{ //活动
         //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, order: 'id', account: '', eventnum: 1, where: '', daoid: daoData.map((item) => { return item.dao_id }).join(',') })
         setActiveTab(0);
     }
 
+    //发布
     const publishHandle=()=>{setCurrentObj(null);setActiveTab(1);}
     
 
@@ -70,34 +75,6 @@ export default function mySC({ domain }) {
         <PageLayout>
 
             <div className="clearfix">
-                {/* <div className="scleft">
-
-                    {user.connected !== 1 ? <>
-                        <ShowErrorBar errStr={tc('noConnectText')} />
-                    </> : <>
-                        {!loginsiwe ? <div>
-                            <Loginsign user={user} tc={tc} />
-                        </div> : <>
-                            <EnkiMember messageObj={actor} isLocal={true} hw={64} />
-                            {daoData.length > 0 ?
-                                <Nav onSelect={handleSelect} defaultActiveKey="/home" className="flex-column">
-                                    <Nav.Link eventKey="latest">{t('latestText')}</Nav.Link>
-                                    <Nav.Link eventKey="events">{t('eventText')}</Nav.Link>
-                                    <Nav.Link eventKey="create">{t('publishText')}</Nav.Link>
-                                    {daoData.map((obj) => <Nav.Link key={obj.dao_id} eventKey={obj.dao_id}>
-                                        <div style={{ display: 'flex' }} >
-                                            <img alt={obj.dao_name} width={24} height={24} src={obj.dao_logo} />
-                                            <span>{obj.actor_account}</span>
-                                        </div>
-                                    </Nav.Link>)}
-                                </Nav>
-                                : <ShowErrorBar errStr={t('noRegisterText')} />
-                            }
-
-                        </>}
-                    </>
-                    }
-                </div> */}
                   <div className={iaddStyle.scsidebar}>
                     <div className='mb-3' >
                         {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
@@ -111,7 +88,8 @@ export default function mySC({ domain }) {
                             <li><a href="#" onClick={publishHandle} >{t('publishText')}</a></li>
                             {daoData.map((obj, idx) => <li key={obj.dao_id} className={iaddStyle.scli}>
                                 <a href="#" onClick={e=>{
-                                    setFetchWhere({ ...fetchWhere, currentPageNum:0,order:'id',eventnum:0,where:'',daoid:obj.dao_id,account:obj.actor_account})
+                                    setFetchWhere({ ...fetchWhere, currentPageNum:0,order:'id',eventnum:0,where:'',daoid:obj.dao_id,account:obj.actor_account});
+                                    setActiveTab(0);
                                     }} >
                                     <div style={{overflow:'hidden',display:'flex',alignItems:'center'}}>
                                     <img src={obj.dao_logo} alt={obj.actor_account} height={24} width={24} style={{marginRight:'10px'}} />{obj.actor_account}

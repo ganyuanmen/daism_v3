@@ -103,7 +103,7 @@
     "nickName":"nickname",
     "registerText":"register",
     "reRegisterText":"Re register",
-    "cancelRegister":"Cancel Follow",
+    "cancelRegister":"Unfollow",
     "noEmptyle4":"Cannot be empty or less than 4 characters",
     "replyContent":"Reply content",
     "noFindText":"Can't find",
@@ -129,7 +129,8 @@
     "scHomeText":"Home",
     "createPostText":"Create",
     "myPostText":"My",
-    "followManText":"Followed",
+    "followManText0":"Follow",
+    "followManText1":"Be followed",
     "myBookText":"Bookmarks",
     "myReceiveText":"My Receive",
     "emprtyData":"No data found!"

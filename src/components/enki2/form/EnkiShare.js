@@ -1,29 +1,37 @@
-import { Button,Modal,Overlay, Tooltip, Col } from "react-bootstrap";
+import { Button,Modal,Overlay, Tooltip } from "react-bootstrap";
 import { useState,useRef } from "react";
 import { LocationSvg  } from '../../../lib/jssvg/SvgCollection';
-// import {useRouter} from 'next/router';
-//点赞按钮 isd 是否允许
+
+/**
+ * 分享 显示链接 和 html 内容
+ */
 export default function EnkiShare({currentObj,t,domain,tc})
 {
     const [show,setShow]=useState(false)
     const [showOver1,setShowOver1]=useState(false)
     const [showOver2,setShowOver2]=useState(false)
-    // const router = useRouter();
+
     const target1 = useRef(null);
     const target2 = useRef(null);
-    // const aref=useRef(null);
+
     const path=currentObj.dao_id>0?'mySC':'me';
     const url=`https://${domain}/communities/${path}/${currentObj.id}`;
     
-    // const dlogo=`https://${domain}/logo.svg`
     let delayTime=null;
-   
+    let localDomain='';
+   try{
+    const myURL = new URL(currentObj.actor_url);
+    localDomain= myURL.hostname;
+
+   }catch(e){}
+    
+
     const uc=`<a href="${url}" target="_blank" style="align-items:center;border:1px solid #ccc;font-size:1rem; color: currentColor;border-radius:8px;display:flex;text-decoration:none" >
         <div style="aspect-ratio:1;flex:0 0 auto;position:relative;width:120px;border-radius:8px 0 0 8px;" >
-            <img src='${currentObj.top_img?currentObj.top_img:currentObj.avatar}' alt="" style="background-position:50%;background-size:cover;display:block;height:100%;margin:0;object-fit:cover;width:100%;border-radius:8px 0 0 8px;">
+            <img src='${currentObj.top_img || currentObj.avatar}' alt="" style="background-position:50%;background-size:cover;display:block;height:100%;margin:0;object-fit:cover;width:100%;border-radius:8px 0 0 8px;">
         </div>
         <div  >
-            <div style="padding:2px 8px 2px 8px" >${domain}</div>
+            <div style="padding:2px 8px 2px 8px" >${localDomain}</div>
             <div style="padding:2px 8px 2px 8px" >${currentObj.actor_name} (${currentObj.actor_account})</div>
             <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;" > ${currentObj.title}</div>	
         </div>

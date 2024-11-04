@@ -7,7 +7,9 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import PageLayout from '../../../components/PageLayout'
 
-//其它转过来的查看
+/**
+ * 个人社区 单个发文信息
+ */
 export default function Message({currentObj,domain}) {
   const router = useRouter();
 
@@ -16,7 +18,6 @@ export default function Message({currentObj,domain}) {
   
     return (
       <>
-    
         <Head>
         <meta content={`${currentObj.actor_name} (${currentObj.actor_account})`} property="og:title" />
         <meta content={`https://${domain}${router.asPath}`} property="og:url" />

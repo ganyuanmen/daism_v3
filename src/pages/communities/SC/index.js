@@ -13,6 +13,9 @@ import iaddStyle from '../../../styles/iadd.module.css'
 import { client } from '../../../lib/api/client';
 import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
 
+/**
+*公共社区
+ */
 export default function SC({ domain }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  ///当前页
@@ -25,12 +28,10 @@ export default function SC({ domain }) {
         eventnum: 0  //0 活动 1 非活动
      });
 
-     const [daoWhere,setDaoWhere]=useState({currentPageNum:0,where:''}); //dao 下载
-
-     const [data, setData] = useState([]);
-     const [isLoading, setIsLoading] = useState(false);
-     const [hasMore, setHasMore] = useState(true);
-
+    const [daoWhere,setDaoWhere]=useState({currentPageNum:0,where:''}); //dao 下载
+    const [data, setData] = useState([]);  //公器列表
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
 
@@ -39,8 +40,7 @@ export default function SC({ domain }) {
     const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
     const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
-    // const [daoData, setDaoData] = useState([]) //所属个人的社区列表
-
+    
     useEffect(() => {
         // console.log("dao=========>",daoWhere)
         const fetchData = async () => {
@@ -65,19 +65,19 @@ export default function SC({ domain }) {
     const preEditCall = () => { setActiveTab(1); } //修改前回调
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
-    const latestHandle=()=>{
+    const latestHandle=()=>{ // 最新
         //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:'',eventnum:0,where:'',daoid:0,v:0})
         setActiveTab(0);
     }
 
-    const eventHandle=()=>{
+    const eventHandle=()=>{ //活动
         //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:'',eventnum:1,where:'',daoid:0,v:0})
         setActiveTab(0);
     }
 
-    const myFollowHandle=()=>{
+    const myFollowHandle=()=>{ //我关注的社区
         //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:actor?.actor_account,eventnum:0,where:'',daoid:0,v:1})
         setActiveTab(0);
@@ -85,7 +85,6 @@ export default function SC({ domain }) {
   
     return (
         <PageLayout>
-
             <div className={iaddStyle.clearfix}>
                 <div className={iaddStyle.scsidebar}>
                     <div className='mb-3' >
@@ -103,13 +102,15 @@ export default function SC({ domain }) {
                             }
                         }  />
                     </div>
-
                     <ul >
                         <li><a href="#" onClick={latestHandle} >{t('latestText')}</a></li>
                         <li><a href="#" onClick={eventHandle} >{t('eventText')}</a></li>
                         {actor?.actor_account && <li><a href="#" onClick={myFollowHandle}>{t('followCommunity')}</a></li>} 
                         {Array.isArray(data) && data.map((obj, idx) => <li key={obj.dao_id} className={iaddStyle.scli}>
-                            <a href="#" onClick={e=>{setFetchWhere({...fetchWhere,daoid:obj.dao_id,currentPageNum:0,where:'',eventnum:0,v:0,account:obj.actor_account})}} >
+                            <a href="#" onClick={e=>{
+                                setFetchWhere({...fetchWhere,daoid:obj.dao_id,currentPageNum:0,where:'',eventnum:0,v:0,account:obj.actor_account});
+                                setActiveTab(0);
+                                }} >
                                 <div style={{overflow:'hidden',display:'flex',alignItems:'center'}}>
                                 <img src={obj.avatar} alt={obj.actor_account} height={24} width={24} style={{marginRight:'10px'}} />{obj.actor_account}
                                 </div>
@@ -133,9 +134,6 @@ export default function SC({ domain }) {
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                 </div>
-
-
-
             </div>
 
         </PageLayout>
@@ -143,7 +141,6 @@ export default function SC({ domain }) {
 }
 
 export const getServerSideProps = ({ locale }) => {
-
 
     return {
         props: {

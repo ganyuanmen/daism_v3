@@ -144,9 +144,9 @@ async function createMess(postbody,name,actor){ //对方的推送
 }
 
 async function genePost(postbody,replyType,actor){
-	let content=(postbody?.object?.content?new String(postbody.object.content).toString():' ')
-	let title=(postbody?.object?.title?new String(postbody.object.title).toString():' ')
-	let imgpath=(postbody?.object?.imgpath?new String(postbody.object.imgpath).toString():' ')
+	let content=(postbody?.object?.content?new String(postbody.object.content).toString():'')
+	let title=(postbody?.object?.title?new String(postbody.object.title).toString():'')
+	let imgpath=(postbody?.object?.imgpath?new String(postbody.object.imgpath).toString():'')
 
 	//先从数据库中查找
 	// let actor=await getData('SELECT actor_account account,actor_url url,actor_avatar avatar,actor_inbox inbox FROM a_follow WHERE actor_url=?',[postbody.actor]);

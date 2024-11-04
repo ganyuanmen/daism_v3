@@ -25,7 +25,6 @@ export default function FollowCollection({t,method,account}) {
                 const res = await client.get(`/api/getData?account=${account}`,method);
                 if(res.status===200){
                     if(Array.isArray(res.data)){
-                        console.log("follow data",res.data)
                         setData(res.data);
                         setErr('');
                     } else { 
