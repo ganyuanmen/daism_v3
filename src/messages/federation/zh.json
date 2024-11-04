@@ -129,7 +129,8 @@
     "scHomeText":"首页",
     "createPostText":"创建嗯文",
     "myPostText":"我的嗯文",
-    "followManText":"关注的嗯人",
+    "followManText0":"正在关注的嗯人",
+    "followManText1":"关注我的嗯人",
     "myBookText":"我的书签",
     "myReceiveText":"我接收的嗯文",
     "emprtyData":"没找到数据!"

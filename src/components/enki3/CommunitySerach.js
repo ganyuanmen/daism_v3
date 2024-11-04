@@ -2,6 +2,10 @@
 import React,{ useRef } from "react"
 import { InputGroup,Form,Button } from "react-bootstrap"
 
+/**
+ * 社区搜索
+ */
+
 const CommunitySerach = React.memo(({searchPlace,setFetchWhere,fetchWhere}) => {
     const searRef=useRef()
  

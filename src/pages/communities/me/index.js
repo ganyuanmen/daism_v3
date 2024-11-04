@@ -15,8 +15,11 @@ import SearchInput from '../../../components/enki2/form/SearchInput'
 import ShowErrorBar from '../../../components/ShowErrorBar';
 import EnKiFollow from '../../../components/enki2/form/EnKiFollow';
 import EnKiUnFollow from '../../../components/enki2/form/EnKiUnFollow'
+import FollowCollection from '../../../components/enki3/FollowCollection';
 
-//
+/**
+ * 个人社区
+ */
 export default function me({ domain }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  //当前页
@@ -31,8 +34,13 @@ export default function me({ domain }) {
     
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
-    const [searObj,setSearObj]=useState(null) //查找到的对象
-    const [findErr,setFindErr]=useState(false) //没找到
+    const [followMethod,setFollowMethod]=useState('getFollow0') //默认显示我关注谁
+    const [searObj,setSearObj]=useState(null) //查找到帐号的对象
+    const [findErr,setFindErr]=useState(false) //搜索帐号没找到
+
+    const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
+    const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
+    const loginsiwe = useSelector((state) => state.valueData.loginsiwe) //是否签名登录
 
     const dispatch = useDispatch();
     function showTip(str) { dispatch(setTipText(str)) }
@@ -40,46 +48,50 @@ export default function me({ domain }) {
     function showClipError(str) { dispatch(setMessageText(str)) }
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
-    const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
-    const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
-    const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
-    
-    // useEffect(() => { if (actor?.actor_account) setFetchWhere({ ...fetchWhere, actorid: actor.id, account: actor.actor_account }) }, [actor])
 
-    const homeHandle=()=>{
+    const homeHandle=()=>{ //首页
          //account: '' 从本地读取
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: '' })
         setActiveTab(0);
     }
 
-    const createHandle=()=>{
+    const createHandle=()=>{ //创建发文
         const [name,localdomain]=actor.actor_account.split('@');
         if(domain!==localdomain) return showClipError(t('loginDomainText',{domain:localdomain}));
         setCurrentObj(null);
         setActiveTab(1);
     }
 
-    const myPostHandle=()=>{
+    const myPostHandle=()=>{ //我的发文
         //account: '' 从源地读取
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 2,account: actor?.actor_account })
         setActiveTab(0);
     }
  
-    const myReceiveHandle=()=>{
+    const myReceiveHandle=()=>{ //接收到的发文
             //account: '' 从源地读取
             setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 4,account: actor?.actor_account })
             setActiveTab(0);
     }
-    const followManHandle=()=>{
 
+    const followManHandle0=()=>{ //我关注谁
+        setFollowMethod('getFollow0');
+        setActiveTab(3);
     }
 
-    const myBookHandle=()=>{
+    
+    const followManHandle1=()=>{ //谁关注我
+        setFollowMethod("getFollow1");
+        setActiveTab(3);
+    }
+
+    const myBookHandle=()=>{ //我的书签
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 3,actorid:actor?.id,account: actor?.actor_account })
         setActiveTab(0);
     }
     
-    const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:2 }); setActiveTab(0); } //刷新数据,从0页开始
+    //首页刷新数据
+    const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:2 }); setActiveTab(0); } 
     const preEditCall = () => { setActiveTab(1); } //修改前回调
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
@@ -98,8 +110,10 @@ export default function me({ domain }) {
                             <li><a href="#" onClick={createHandle} >{t('createPostText')}</a></li>
                             <li><a href="#" onClick={myPostHandle} >{t('myPostText')}</a></li>
                             <li><a href="#" onClick={myReceiveHandle} >{t('myReceiveText')}</a></li>
-                            <li><a href="#" onClick={followManHandle} >{t('followManText')}</a></li>
                             <li><a href="#" onClick={myBookHandle} >{t('myBookText')}</a></li>
+                            <li><a href="#" onClick={followManHandle0} >{t('followManText0')}</a></li>
+                            <li><a href="#" onClick={followManHandle1} >{t('followManText1')}</a></li>
+                            
                         </>}
                     </ul>
                     {loginsiwe && actor?.actor_account &&<div>
@@ -127,6 +141,7 @@ export default function me({ domain }) {
                     {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain}
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
+                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} />}
                 </div>
             </div>
 

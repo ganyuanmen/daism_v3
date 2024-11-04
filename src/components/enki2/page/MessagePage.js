@@ -15,8 +15,8 @@ import EnkiShare from "../form/EnkiShare";
 import { client } from "../../../lib/api/client";
 
 /**
- * 单个信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
- * isEdit 我的社区和个人社区 允许修改， 公共社区不可修改
+ * 单登个发文信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
+ * isEdit 是否允许修改
  */
 export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delCallBack,preEditCall,setActiveTab}) { 
     const[fetchWhere, setFetchWhere] = useState({currentPageNum:0
@@ -148,12 +148,6 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delC
             }
         
             {data.map((obj,idx)=><ReplyItem key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />)}
-          
-                {/* {isLoading?<Loadding />
-                : hasMore && <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
-                }
-                {err && <ShowErrorBar errStr={err} /> } */}
-         
             { footerdiv()}
         </Card.Footer>
         </Card>

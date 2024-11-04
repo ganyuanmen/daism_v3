@@ -5,6 +5,9 @@ import EnKiUnFollow from './EnKiUnFollow'
 import {useSelector, useDispatch} from 'react-redux';
 import {setTipText,setMessageText} from '../../../data/valueData';
 
+/**
+ * 我关注谁的item
+ */
 export default function FollowItem0({messageObj,t}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}

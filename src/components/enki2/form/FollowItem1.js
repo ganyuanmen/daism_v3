@@ -8,6 +8,9 @@ import {setTipText,setMessageText} from '../../../data/valueData';
 import { useState,useEffect } from "react";
 import { client } from "../../../lib/api/client";
 
+/**
+ * 谁关注我的item  
+ */
 export default function FollowItem1({messageObj,t}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
