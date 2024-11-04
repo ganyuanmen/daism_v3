@@ -41,6 +41,9 @@ const methods={
 
 export default async function handler(req, res) {
 
+  console.log("req.headers.method------------:",req.headers.method)
+  console.log("req.query:",req.query)
+  
     if (req.method.toUpperCase()!== 'GET')  return res.status(405).json({errMsg:'Method Not Allowed'})
   //client.get(`/api/getData?
 //&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=
@@ -53,7 +56,8 @@ export default async function handler(req, res) {
            if(domain===process.env.LOCAL_DOMAIN) //本地
                 res.status(200).json(await methods[req.headers.method](req.query))
            else { //其它域名
-                let response=await httpGet(`https://${domain}?pi=${pi}&menutype=${menutype}&daoid=${daoid}&actorid=${actorid}&w=${w}&order=${order}&eventnum=${eventnum}&account=${account}&v=${v}`,{'Content-Type': 'application/json',method:'messagePageData'})
+                let response=await httpGet(`https://${domain}/api/getData?pi=${pi}&menutype=${menutype}&daoid=${daoid}&actorid=${actorid}&w=${w}&order=${order}&eventnum=${eventnum}&account=${account}&v=${v}`,{'Content-Type': 'application/json',method:'messagePageData'})
+              console.log("response",response)
                 if(response?.message) res.status(200).json(response.message)
                 else  res.status(500).json({errMsg: 'fail'});
            }
@@ -61,7 +65,7 @@ export default async function handler(req, res) {
         else if(req.headers.method==='replyPageData' && req.query.account && req.query.account.includes('@')) {
             const {pi,pid,account,sctype}=req.query;
             const [name,domain]=account.split('@');
-            if(domain===process.env.LOCAL_DOMAIN || parseInt(dao_id)===0) //本地或smar common 
+            if(domain===process.env.LOCAL_DOMAIN) //本地或smar common 
                  res.status(200).json(await methods[req.headers.method](req.query))
             else { //其它域名
                  let response=await httpGet(`https://${domain}/api/getData?pi=${pi}&pid=${pid}&sctype=${sctype}&account=`,{'Content-Type': 'application/json',method:'replyPageData'})
@@ -69,9 +73,9 @@ export default async function handler(req, res) {
                  else  res.status(500).json({errMsg: 'fail'});
             }
         }
-        else 
-        
-        res.status(200).json(await methods[req.headers.method](req.query))
+        else {
+          res.status(200).json(await methods[req.headers.method](req.query))
+        }
     }
     catch(err)
     {

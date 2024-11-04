@@ -23,7 +23,7 @@
  }
 
 .sccontent {
-  width: calc(100% - 300px); 
+  width: calc(100% - 340px); 
   float: right;
   padding-left: 20px;
   padding-top: 0px;
@@ -31,7 +31,7 @@
 
 .scsidebar {
 float: left;
-width: 300px;
+width: 340px;
 height:calc(100vh - 62px);
 background-color: #f4f4f4;
 padding: 20px;

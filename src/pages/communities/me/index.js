@@ -10,7 +10,11 @@ import Main from '../../../components/enki2/page/Main';
 import MeCreate from '../../../components/enki2/page/MeCreate';
 import MessagePage from '../../../components/enki2/page/MessagePage';
 import { useDispatch } from 'react-redux';
-import { setMessageText } from '../../../data/valueData'
+import {setTipText,setMessageText } from '../../../data/valueData'
+import SearchInput from '../../../components/enki2/form/SearchInput'
+import ShowErrorBar from '../../../components/ShowErrorBar';
+import EnKiFollow from '../../../components/enki2/form/EnKiFollow';
+import EnKiUnFollow from '../../../components/enki2/form/EnKiUnFollow'
 
 //
 export default function me({ domain }) {
@@ -24,9 +28,15 @@ export default function me({ domain }) {
         order: 'reply_time', //排序
         eventnum: 1  //0 活动 1 非活动
     });
-    const dispatch = useDispatch();
+    
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
+    const [searObj,setSearObj]=useState(null) //查找到的对象
+    const [findErr,setFindErr]=useState(false) //没找到
+
+    const dispatch = useDispatch();
+    function showTip(str) { dispatch(setTipText(str)) }
+    function closeTip() { dispatch(setTipText('')) }
     function showClipError(str) { dispatch(setMessageText(str)) }
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
@@ -55,16 +65,21 @@ export default function me({ domain }) {
         setActiveTab(0);
     }
  
+    const myReceiveHandle=()=>{
+            //account: '' 从源地读取
+            setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 4,account: actor?.actor_account })
+            setActiveTab(0);
+    }
     const followManHandle=()=>{
 
     }
 
     const myBookHandle=()=>{
-        setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 3,account: actor?.actor_account })
+        setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 3,actorid:actor?.id,account: actor?.actor_account })
         setActiveTab(0);
     }
-
-    const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:1 }); setActiveTab(0); } //刷新数据,从0页开始
+    
+    const refreshCallBack = () => { setFetchWhere({ ...fetchWhere, currentPageNum: 0,eventnum:2 }); setActiveTab(0); } //刷新数据,从0页开始
     const preEditCall = () => { setActiveTab(1); } //修改前回调
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
@@ -72,24 +87,6 @@ export default function me({ domain }) {
         <PageLayout>
 
             <div style={{ width: '100%' }} className="clearfix">
-                {/* <div className="scleft">
-                    {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
-                    {!loginsiwe && <Loginsign user={user} tc={tc} />}
-                    <div className='mt-3'>
-                        <Nav onSelect={handleSelect} className="flex-column">
-                            <Nav.Link eventKey="1">首页</Nav.Link>
-                            {loginsiwe && actor.actor_account && <>
-                                <Nav.Link eventKey="9">创建嗯文</Nav.Link>
-                                <Nav.Link eventKey="2">我的嗯文</Nav.Link>
-                                <Nav.Link eventKey="3">我的收藏</Nav.Link>
-                                <Nav.Link eventKey="4">我的接收嗯文</Nav.Link>
-                                <Nav.Link eventKey="5">关注我的嗯人</Nav.Link>
-                                <Nav.Link eventKey="6">我关注的嗯人</Nav.Link></>}
-                        </Nav>
-                    </div>
-
-
-                </div> */}
                   <div className={iaddStyle.scsidebar}>
                     <div className='mb-3' >
                         {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
@@ -97,14 +94,28 @@ export default function me({ domain }) {
                     </div>
                     <ul >
                         <li><a href="#" onClick={homeHandle} >{t('scHomeText')}</a></li>
-                        {loginsiwe && actor.actor_account && <>
+                        {loginsiwe && actor?.actor_account && <>
                             <li><a href="#" onClick={createHandle} >{t('createPostText')}</a></li>
                             <li><a href="#" onClick={myPostHandle} >{t('myPostText')}</a></li>
+                            <li><a href="#" onClick={myReceiveHandle} >{t('myReceiveText')}</a></li>
                             <li><a href="#" onClick={followManHandle} >{t('followManText')}</a></li>
                             <li><a href="#" onClick={myBookHandle} >{t('myBookText')}</a></li>
                         </>}
                     </ul>
-                 
+                    {loginsiwe && actor?.actor_account &&<div>
+                    <SearchInput setSearObj={setSearObj} setFindErr={setFindErr} actor={actor} t={t} />
+                    {searObj && <div className='mt-3' >
+                        <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} />
+                        <div className='mb-3 mt-3'>
+                        {searObj.id>0?<EnKiUnFollow t={t} searObj={searObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                        :<EnKiFollow  t={t} searObj={searObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
+                        }
+                        </div>
+                    </div>
+                    }
+                    {findErr && <ShowErrorBar errStr={t('noFindText')} />}
+                    </div>
+                    }
                 </div>
                 <div className={iaddStyle.sccontent}>
                     {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}

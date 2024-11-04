@@ -24,11 +24,11 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 			else if(parseInt(v)===1) where=`WHERE actor_account IN(SELECT actor_account FROM a_follow WHERE user_account='${account}')`; //我关注的社区
 			sctype='sc';
 			break;
-		default:
-			if(parseInt(eventnum)===1) where='';  //首页，查所有
-			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'`; //我发布的嗯文
+		default: //个人
+			if(parseInt(eventnum)===1) where='where send_type=0';  //首页，查本地，
+			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'and send_type=0`; //我发布的嗯文
 			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where cid=${actorid})`; //我的收藏
-			// else if(parseInt(eventnum)===4) where=`where receive_account='${account}'`; //我的接收嗯文
+			else if(parseInt(eventnum)===4) where=`where receive_account='${account}'`; //我的接收嗯文
 			break;
 	}
 	if(w) where=where?`${where} and title like '%${w}%'`:`where title like '%${w}%'`;
@@ -64,17 +64,16 @@ export async function daoPageData({pi,w})
 
 //关注插入  id:自动ID ,
 //element.user_account--->receive_account
-//`https://${process.env.LOCAL_DOMAIN}/communities/${messageId}`--->linkUrl
+//`https://${process.env.LOCAL_DOMAIN}/communities/${sctype}/${id}`--->linkUrl
 export async function insertMessage(id,account,linkUrl)
 {
-	let re=await getData("SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,top_img,dao_id,start_time,end_time,event_url,event_address,time_event,_type,actor_inbox FROM a_message where id=?"
+	let re=await getData("SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM a_message where id=?"
 	,[id]);
 
 	// if(re[0]) return
-	re=re[0]
-	let sql="insert into a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,top_img,dao_id,start_time,end_time,event_url,event_address,time_event,_type,receive_account,actor_inbox,is_send,is_discussion,send_type,link_url) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-	let paras=[re.message_id,re.manager,re.actor_name,re.avatar,re.actor_account,re.actor_url,re.title,re.content,re.top_img,re.dao_id
-	,re.start_time,re.end_time,re.event_url,re.event_address,re.time_event,re._type,account,re.actor_inbox,0,0,1,linkUrl]
+   re=re[0]//
+	let sql="INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,link_url,title,content,is_send,is_discussion,top_img,receive_account,send_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	let paras=[re.message_id,re.manager,re.actor_name,re.avatar,re.actor_account,re.actor_url,re.actor_inbox,linkUrl,re.title,re.content,0,1,re.top_img,account,1]
 
 	await execute(sql,paras)
 }

@@ -20,7 +20,7 @@ import { client } from "../../../lib/api/client";
  */
 export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delCallBack,preEditCall,setActiveTab}) { 
     const[fetchWhere, setFetchWhere] = useState({currentPageNum:0
-        ,account:currentObj.actor_account 
+        ,account:currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account 
         ,sctype:currentObj.dao_id>0?'sc':''
         ,pid:currentObj.id});
     const [data, setData] = useState([]);
@@ -104,6 +104,12 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delC
     //         window.removeEventListener('scroll', handleScroll);
     //     };
     // }, [fetchWhere, hasMore]);
+    const footerdiv=()=>{
+        if(isLoading) return <Loadding /> 
+        else if(err) return <ShowErrorBar errStr={err} />
+        // else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
+        else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
+    }
     
     return (
         <div className="mt-3" style={{width:'100%'}}>
@@ -143,12 +149,12 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delC
         
             {data.map((obj,idx)=><ReplyItem key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />)}
           
-                {isLoading?<Loadding />
+                {/* {isLoading?<Loadding />
                 : hasMore && <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
                 }
-                {err && <ShowErrorBar errStr={err} /> }
+                {err && <ShowErrorBar errStr={err} /> } */}
          
-
+            { footerdiv()}
         </Card.Footer>
         </Card>
        

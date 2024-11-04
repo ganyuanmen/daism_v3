@@ -68,6 +68,13 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
     //     };
     // }, [fetchWhere, hasMore]);
 
+    const footerdiv=()=>{
+        if(isLoading) return <Loadding /> 
+        else if(err) return <ShowErrorBar errStr={err} />
+        else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
+        else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
+    }
+
     return (
         <>
             <CommunitySerach searchPlace='Search...' setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
@@ -75,13 +82,8 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
                 {Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
             </div>
             <div className="mt-3 mb-3" style={{textAlign:'center'}}  >
-                {isLoading?<Loadding />
-                : hasMore && <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
-                }
-                {err && <ShowErrorBar errStr={err} /> }
+                {footerdiv()}
             </div>
-
-
         </>
 
     );

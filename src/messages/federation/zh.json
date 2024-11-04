@@ -85,8 +85,8 @@
     "weekText":"星期一,星期二,星期三,星期四,星期五,星期六,星期天",
     "timeText":"定时事件",
     "noSmartCommon":"无",
-    "followingText":"正在关注3人",
-    "followedText":"被3人关注",
+    "followingText":"正在关注{num}人",
+    "followedText":"被{num}人关注",
     "registerTips":"注册提示",
     "registerShow":"从下拉菜单的 '我的帐号' 注册",
     "createPost":"创建发文",
@@ -107,7 +107,7 @@
     "noEmptyle4":"不能为空或小于4个字符",
     "replyContent":"回复内容",
     "noFindText":"没找到",
-    "findandaddressText":"搜索或输入网址",
+    "findandaddressText":"搜索帐号",
     "noregisterText":"你还没有注册个人帐号。个人帐号需要保存在链上。",
     "origlText":"原文链接",
     "groupAccount":"组帐号",
@@ -130,7 +130,9 @@
     "createPostText":"创建嗯文",
     "myPostText":"我的嗯文",
     "followManText":"关注的嗯人",
-    "myBookText":"我的书签"
+    "myBookText":"我的书签",
+    "myReceiveText":"我接收的嗯文",
+    "emprtyData":"没找到数据!"
     
 
 

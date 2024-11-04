@@ -4,7 +4,7 @@ import {client} from '../../../lib/api/client'
 import { useDispatch} from 'react-redux';
 import {setTipText} from '../../../data/valueData'
 
-const SearchInput = ({t,searchCall,actor}) => {
+const SearchInput = ({t,setSearObj,actor,setFindErr}) => {
   const [query, setQuery] = useState('');
 
   const dispatch = useDispatch();
@@ -19,14 +19,17 @@ const SearchInput = ({t,searchCall,actor}) => {
     }
   };
 
-  const performSearch = () => {
+  const performSearch = (e) => {
     showTip(t('submittingText'))   
     client.get(`/api/getData?actor_account=${query.trim()}&user_account=${actor?.actor_account}`,'fromAccount').then(res =>{ 
+      console.log(res)
       if(res.status===200) {
         if(res.data.account){ //找到帐号
-          searchCall(res.data)
+          setSearObj(res.data);
+          setFindErr("");
         }else { //没找到
-          searchCall({desc:`<h3 style="color:red;"> ${noFindText} </h3>`})
+          setSearObj(null);
+          setFindErr(true);
         }
       }
       else console.error(res.statusText)
@@ -35,13 +38,14 @@ const SearchInput = ({t,searchCall,actor}) => {
   };
 
   return (
-    <InputGroup style={{minWidth:'300px'}}>
+    <InputGroup style={{width:'100%'}}>
       <Form.Control 
         type="text"
         placeholder={t('findandaddressText')}
         value={query}
+        onClick={e=>{setSearObj(null);setFindErr(false)}}
         onChange={(e) => setQuery(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
       />
     </InputGroup>
   );

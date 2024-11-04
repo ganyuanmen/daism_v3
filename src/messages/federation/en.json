@@ -85,8 +85,8 @@
     "timeText":"Time event",
     "noSmartCommon":"non",
     "DomainDescText":"Smart common requires binding a domain name in order to provide social functions based on the activityPub protocol. This domain name must support the HTTPS protocol.",
-    "followingText":"Following 3 people",
-    "followedText":"Followed by 3 people",
+    "followingText":"Following {num} people",
+    "followedText":"Followed by {num} people",
     "registerTips":"Registration Tips",
     "registerShow":"Register from the 'My Account' dropdown menu",
     "createPost":"Create a post",
@@ -107,7 +107,7 @@
     "noEmptyle4":"Cannot be empty or less than 4 characters",
     "replyContent":"Reply content",
     "noFindText":"Can't find",
-    "findandaddressText":"Search or enter website address",
+    "findandaddressText":"Search account",
     "noregisterText":"You haven't registered a personal account yet. Personal accounts need to be saved on the chain.",
     "origlText":"Original link",
     "groupAccount":"Group account",
@@ -130,7 +130,9 @@
     "createPostText":"Create",
     "myPostText":"My",
     "followManText":"Followed",
-    "myBookText":"Bookmarks"
+    "myBookText":"Bookmarks",
+    "myReceiveText":"My Receive",
+    "emprtyData":"No data found!"
 
   }
 }

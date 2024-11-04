@@ -99,12 +99,12 @@ export default function ActorMember({t,tc,user,actor,domain,accountTotal}){
       
       {actor?.actor_account &&
         <Tabs defaultActiveKey="follow0" className="mb-3 mt-3" >
-            <Tab eventKey="follow0" title={`${t('followingText').replace('3',follow0.data.length)}`}>
+            <Tab eventKey="follow0" title={t('followingText',{num:follow0.data.length})}>
               <div>
                 {follow0.data.map((obj)=> <FollowItem0 key={obj.id}  messageObj={obj} t={t}  />)}
               </div>
             </Tab>
-            <Tab eventKey="follow1" title={`${t('followedText').replace('3',follow1.data.length)}`}>
+            <Tab eventKey="follow1" title={t('followedText',{num:follow1.data.length})}>
               <div>
                 {follow1.data.map((obj)=> <FollowItem1 key={obj.id} messageObj={obj} t={t} />)}
               </div>

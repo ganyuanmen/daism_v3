@@ -8,7 +8,7 @@ import { Card,Row,Col } from "react-bootstrap"
 export default function DaoItem({t,record}){
 
   return (
-  <Link className='daism-a' href={`/communities/daoinfo/[id]`} as={`/communities/daoinfo/${record.dao_id}`}>
+  <Link className='daism-a' href={`/smartcommons/daoinfo/[id]`} as={`/smartcommons/daoinfo/${record.dao_id}`}>
     <Card className="mb-1" >
     <Card.Body>
         <Row>
