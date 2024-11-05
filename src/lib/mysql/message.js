@@ -67,7 +67,8 @@ export async function daoPageData({pi,w})
 //`https://${process.env.LOCAL_DOMAIN}/communities/${sctype}/${id}`--->linkUrl
 export async function insertMessage(id,account,linkUrl,pathtype)
 {
-	let re=await getData("SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM a_message where id=?"
+	let sctype=pathtype==='me'?'':'sc';
+	let re=await getData(`SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM v_message${sctype} where id=?`
 	,[id]);
 
 	// if(re[0]) return

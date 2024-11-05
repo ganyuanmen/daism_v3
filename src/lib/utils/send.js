@@ -16,7 +16,7 @@ export function send(account,content,fileName,id,title,imgpath,pathtype)
             data.forEach(element => {
                 try{
                   if(element.user_inbox.startsWith(`https://${process.env.LOCAL_DOMAIN}`)){
-                    insertMessage(id,element.user_account,`https://${process.env.LOCAL_DOMAIN}/communities/${pathtype}/${id}`).then(()=>{})
+                    insertMessage(id,element.user_account,`https://${process.env.LOCAL_DOMAIN}/communities/${pathtype}/${id}`,pathtype).then(()=>{})
                   }else {
                     signAndSend(element.user_inbox,localUser.actor_name,localUser.domain,thebody,localUser.privkey);
                   }
