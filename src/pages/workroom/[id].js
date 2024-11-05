@@ -286,7 +286,8 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
                 <b>{record.dao_name}({record.dao_symbol})</b> {'  '}
                 {ismember && <Button  style={{marginLeft:30}} variant="primary" onClick={e=>{setChangeLogo(true)}} >{t('logoChangeText')}</Button>}
             </div>
-            <div className='mb-3 p-1' style={bStyle}  >
+
+           {record.sctype=='dapp' && <div className='mb-3 p-1' style={bStyle}  >
                 {t('execText')}:<ShowAddress  address={record.creator} />  {'  '} 
                 {ismember &&  user.account.toLowerCase()===record.dao_manager.toLowerCase() &&
                     <Button  style={{marginLeft:30}} onClick={e=>{  setUpdateCreator(true);}}  variant='primary'> <EditSvg size={16} /> {t('updateText')}</Button>
@@ -295,6 +296,8 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
                      <Button variant="success">{t('versionText')}</Button>
                  </OverlayTrigger>
             </div>
+            }
+
             <div className='mb-3 p-1' style={bStyle} >
                 {t('managerText')}:<ShowAddress  address={record.dao_manager} />  {'  '} 
                 {ismember && <Button  style={{marginLeft:30}} onClick={e=>{if(checkPro())  setChangeManager(true);}}  variant='primary'> <EditSvg size={16} /> {t('updateManagerText')}</Button>}
