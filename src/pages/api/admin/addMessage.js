@@ -29,21 +29,21 @@ export default withSession(async (req, res) => {
         let paras;
         const sctype = daoid ? 'sc' : '';
         if (id[0] == '0') { //增加
+            let message_id = uuidv4()
             if (daoid) { //mysc
-                paras = [actorid[0], daoid[0], title[0], content[0], isSend[0], isDiscussion[0], path, _type[0]]
+                paras = [message_id,actorid[0], daoid[0], title[0], content[0], isSend[0], isDiscussion[0], path, _type[0]]
 
                 if (_type[0] == '1') { //活动发文
-                    sql = 'INSERT INTO a_messagesc(actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type,start_time,end_time,event_url,event_address,time_event) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)'
+                    sql = 'INSERT INTO a_messagesc(message_id,actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type,start_time,end_time,event_url,event_address,time_event) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
                     paras = paras.concat([startTime[0], endTime[0], eventUrl[0], eventAddress[0], time_event[0]])
                 }
                 else {  //普通发文
-                    sql = 'INSERT INTO a_messagesc(actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type) VALUES(?,?,?,?,?,?,?,?)';
+                    sql = 'INSERT INTO a_messagesc(message_id,actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type) VALUES(?,?,?,?,?,?,?,?,?)';
                 }
 
             } else  //个人
             {
                 sql = "INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,is_send,is_discussion,top_img,actor_inbox) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-                let message_id = uuidv4()
                 let rows = await getData("select actor_name,avatar,actor_url,actor_inbox,manager from v_account where actor_account=?", [account[0]])
                 paras = [message_id, rows[0].manager, rows[0].actor_name, rows[0].avatar, account[0], rows[0].actor_url, title[0], content[0], isSend[0], isDiscussion[0], path, rows[0].actor_inbox]
             }
