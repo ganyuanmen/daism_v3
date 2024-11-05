@@ -11,7 +11,7 @@ import { client } from "../../../lib/api/client";
 /**
  * 谁关注我的item  
  */
-export default function FollowItem1({messageObj,t}) {
+export default function FollowItem1({messageObj,t,domain}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
@@ -24,10 +24,10 @@ export default function FollowItem1({messageObj,t}) {
 
     useEffect(()=>{
         let ignore = false; 
-        if(actor?.actor_account){
+        if(actor?.actor_account.includes('@')){
             client.get(`/api/getData?actorAccount=${messageObj.account}&userAccount=${actor?.actor_account}`,'getFollow').then(res =>{ 
                 if (!ignore) 
-                    if (res.status===200) setIsFollow(!!res.data.id)
+                    if (res.status===200) setIsFollow(!!res.data.id || domain!=actor.actor_account.split('@')[1])
                     else console.error(res.statusText)
             });
         }else{

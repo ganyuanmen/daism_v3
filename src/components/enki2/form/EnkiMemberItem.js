@@ -7,22 +7,25 @@ import { client } from "../../../lib/api/client";
 import { useSelector } from 'react-redux';
 
 //isEdit 是否可修改的
-export default function EnkiMemberItem({t,actor,messageObj,delCallBack,preEditCall,showTip,closeTip,showClipError,isEdit}) {
+export default function EnkiMemberItem({t,actor,messageObj,domain,delCallBack,preEditCall,showTip,closeTip,showClipError,isEdit}) {
     const [isFollow,setIsFollow]=useState(true) //默认已关注
     const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const daoActor=useSelector((state) => state.valueData.daoActor)
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
+
     useEffect(() => {
         let ignore = false; //getFollow, //获某一关注 {actorAccount,userAccount} userAccount 关注  actorAccount
-        if(actor?.actor_account)
+        if(actor?.actor_account && actor.actor_account.includes('@'))
         client.get(`/api/getData?actorAccount=${messageObj.actor_account}&userAccount=${actor?.actor_account}`,'getFollow').then(res =>{  
             if (!ignore) 
-                if (res.status===200) setIsFollow(!!res.data.id)
+                if (res.status===200) {  //用户不在注册地登录的，设为已注册，不需要显示关注的按钮
+                    setIsFollow(!!res.data.id || domain!=actor.actor_account.split('@')[1]);
+                }
                 else console.error(res.statusText)
         });
         return () => {ignore = true}
         
-    }, []);
+    }, [actor]);
 
  
 

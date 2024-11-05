@@ -124,7 +124,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,domain,delC
         <h1>{currentObj?.title}</h1>
         <Card className="mb-3" >
             <Card.Header>
-                <EnkiMemberItem t={t} messageObj={currentObj} actor={actor}  delCallBack={delCallBack} preEditCall={preEditCall} showTip={showTip} closeTip={closeTip} showClipError={showClipError} isEdit={currentObj.send_type===0} />
+                <EnkiMemberItem t={t} messageObj={currentObj} domain={domain} actor={actor}  delCallBack={delCallBack} preEditCall={preEditCall} showTip={showTip} closeTip={closeTip} showClipError={showClipError} isEdit={currentObj.send_type===0} />
                {/* 活动 */}
                {currentObj?._type===1 && <EventItem t={t} currentObj={currentObj} /> }
             </Card.Header>

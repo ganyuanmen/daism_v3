@@ -65,7 +65,7 @@ export async function daoPageData({pi,w})
 //关注插入  id:自动ID ,
 //element.user_account--->receive_account
 //`https://${process.env.LOCAL_DOMAIN}/communities/${sctype}/${id}`--->linkUrl
-export async function insertMessage(id,account,linkUrl)
+export async function insertMessage(id,account,linkUrl,pathtype)
 {
 	let re=await getData("SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM a_message where id=?"
 	,[id]);

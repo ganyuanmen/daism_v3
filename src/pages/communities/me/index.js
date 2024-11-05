@@ -116,7 +116,7 @@ export default function me({ domain }) {
                             
                         </>}
                     </ul>
-                    {loginsiwe && actor?.actor_account &&<div>
+                    {loginsiwe && actor?.actor_account.includes('@') && domain===actor.actor_account.split('@')[1] && <div>
                     <SearchInput setSearObj={setSearObj} setFindErr={setFindErr} actor={actor} t={t} />
                     {searObj && <div className='mt-3' >
                         <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} />
@@ -141,7 +141,7 @@ export default function me({ domain }) {
                     {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} />}
+                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={domain} />}
                 </div>
             </div>
 
