@@ -60,7 +60,7 @@ export default function PageLayout({children}) {
             </Navbar.Collapse>
         </Container>
         </Navbar>
-        <Container className="daism-content" style={{padding:route.includes('/communities')?'50px 0px 0px 0px !important':'60px 0px 0px 0px !important'}} >
+        <Container className="daism-content" >
             {children}
         </Container>
         </Container>

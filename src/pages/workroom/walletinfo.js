@@ -61,6 +61,7 @@ export default function ShowWalletInfo() {
 
     return (
         <PageLayout>
+          <div style={{marginTop:"10px"}} >
         {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />:
             <Table striped bordered hover style={{width:'100%',marginTop:'4px'}} >
                     <tbody>
@@ -80,6 +81,7 @@ export default function ShowWalletInfo() {
                       
                     </tbody>
             </Table>}
+            </div>
             </PageLayout>
     );
 }

@@ -120,10 +120,10 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
           return
         }
 
-        if ( _vote <4 ) {
-            voteRef.current.notValid(t('noVote'))
-          return
-        }
+        // if ( _vote <4 ) {
+        //     voteRef.current.notValid(t('noVote'))
+        //   return
+        // }
 
         let _member=record.child.find((obj)=>{return obj.member_address.toLowerCase()===_address.toLowerCase()})
         if(_member) {
@@ -131,7 +131,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
             return
         }
         setShow(false)
-        upPro(_address,_vote,'') 
+        upPro(_address,_vote,'',9) 
 
     }
  
@@ -143,26 +143,26 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
           return
         }
 
-        if ( _vote <4 ) {
-            modifyVoteRef.current.notValid(t('noVote'))
-          return
-        }
+        // if ( _vote <4 ) {
+        //     modifyVoteRef.current.notValid(t('noVote'))
+        //   return
+        // }
         setShowmodify(false)
-        upPro(modifyAccountRef.current.innerHTML,_vote,'') 
+        upPro(modifyAccountRef.current.innerHTML,_vote,'',9) 
        
     }
 
     //删除成员
    const delMember=()=>{
         setShowDel(false)
-        upPro(delMemberRef.current,0,'') 
+        upPro(delMemberRef.current,0,'',9) 
     }
 
     //修改dao描述
     const modifyDesc=()=>{
         let _desc=descRef.current.getData()
         setChangeDesc(false)
-        upPro(record.dao_manager,2,_desc) 
+        upPro(record.dao_manager,2,_desc,2) 
     }
 
   
@@ -192,14 +192,14 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
         if(!_member) {managerRef.current.notValid(t('onlyMemberText'));return;}
         if(_address.toLowerCase()===record.dao_manager.toLowerCase()) {managerRef.current.notValid(t('alreadyManagerText'));return;}
         setChangeManager(false)
-        upPro(_address,3,'') 
+        upPro(_address,3,'',3) 
     }
       //修改类型
     const typeEdit=()=>{
         let _type=typeRef.current.getData()
         if(!_type) {typeRef.current.notValid(t('noEmpty'));return;}
         setShowType(false)
-        upPro('0x1000000000000000000000000000000000000000',4,_type) 
+        upPro('0x1000000000000000000000000000000000000000',4,_type,4) 
     }
 
     //修改dao creator
@@ -217,9 +217,9 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
     }
 
     //提交提案
-    const upPro=(_address,_vote,_desc)=>{
+    const upPro=(_address,_vote,_desc,proposalType)=>{
         showTip(t('submitingProText'));
-        window.daismDaoapi.Dao.addProposal(record.delegator,_address,_vote,parseInt(new Date().getTime()/1000),0,0,_desc).then((e) => {
+        window.daismDaoapi.Dao.addProposal(record.delegator,_address,_vote,parseInt(new Date().getTime()/1000),0,0,_desc,proposalType).then((e) => {
             closeTip()
             showError(t("uploadPro"))
             setRefresh(true) //刷新提案
@@ -237,7 +237,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
         let _vote=parseInt(strategyRef.current.getData())
         if (isNaN(_vote) || _vote <0 || _vote>100 ) {strategyRef.current.notValid(t('passRateText'));return;}
         setChangeStrategy(false)
-        upPro('0x0000000000000000000000000000000000000000',parseInt(655.35*_vote),'') 
+        upPro('0x0000000000000000000000000000000000000000',parseInt(655.35*_vote),'',0) 
     }
 
     
@@ -277,7 +277,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
       
     return <>
    
-            <Card className='daism-title'>
+            <Card className='daism-title mt-3'>
             <Card.Header> Smart Commons {t('infoText')}</Card.Header>
             <Card.Body>
 

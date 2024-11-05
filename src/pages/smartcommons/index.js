@@ -21,6 +21,7 @@ export default function Home() {
 
   return (
     <PageLayout>
+      <div style={{marginTop:'10px'}} >
       <CreateDao setRefresh={setRefresh} />
       { daosData.rows.length?<DaosPage daosData={daosData} currentPageNum={currentPageNum} setCurrentPageNum={setCurrentPageNum}
           orderIndex={orderIndex} setOrderIndex={setOrderIndex}  orderType={orderType} setOrderType={setOrderType} setOrderField={setOrderField} 
@@ -29,6 +30,7 @@ export default function Home() {
         :daosData.status==='succeeded' ? <ShowErrorBar errStr={t('noDataText')} />
         :<Loadding />
       }
+      </div>
     </PageLayout>
   )
 }

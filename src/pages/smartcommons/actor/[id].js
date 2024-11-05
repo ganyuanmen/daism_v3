@@ -18,7 +18,7 @@ export default function MyActor({daoActor,actor,follow0,follow1}) {
 
     return (
       <PageLayout>
-        <Card className='daism-title mt-2'>
+        <Card className='daism-title mt-3'>
         <Card.Header>{t('myAccount')}</Card.Header>
         <Card.Body>
             <div className='d-flex justify-content-between align-items-center' >

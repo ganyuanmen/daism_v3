@@ -18,10 +18,12 @@ export default function MyActor({domain,accountTotal}) {
   
     return (
       <PageLayout>
-        {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />
-        :!loginsiwe?<Wecome />
-        :<ActorInfo t={t} tc={tc} user={user} domain={domain} accountTotal={accountTotal} />
-        }  
+        <div style={{marginTop:'10px'}} >
+            {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />
+            :!loginsiwe?<Wecome />
+            :<ActorInfo t={t} tc={tc} user={user} domain={domain} accountTotal={accountTotal} />
+            }  
+        </div>
       </PageLayout>
     );
 }

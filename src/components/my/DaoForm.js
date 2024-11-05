@@ -64,10 +64,10 @@ export default function DaoForm({typeData,user,setRefresh,t,tc,setShow,closeTip,
         if (!_temp || !checkAddress(_temp)) { _err = _err + 1; setErrorFirrstName(true); }
 
          _temp=form.org_firstvote.value.trim(); //第一个成员票权
-        if(!_temp || !checkNum(_temp) || parseInt(_temp)<4 || parseInt(_temp)>10000 ) {_err=_err+1; setErrorFirrstVote(true);}
+        if(!_temp || !checkNum(_temp) || parseInt(_temp)<0 || parseInt(_temp)>10000 ) {_err=_err+1; setErrorFirrstVote(true);}
 
         if(batch) {
-        _temp=form.per_number.value.trim(); //第一个成员票权
+        _temp=form.per_number.value.trim(); //每个mint 数量
         if(!_temp || !checkNum(_temp) || parseInt(_temp)>3 ) {_err=_err+1; setErrorPerNumber(true);}
         }
 
@@ -78,7 +78,7 @@ export default function DaoForm({typeData,user,setRefresh,t,tc,setShow,closeTip,
             _temp=form['org_firstName' + v.index].value.trim();
             if(!_temp || !checkAddress(_temp) ) {_err=_err+1; v.isErr1=true;}
             _temp=form['org_firstvote' + v.index].value.trim();
-            if(!_temp || !checkNum(_temp)|| parseInt(_temp)<4 || parseInt(_temp)>10000 ) {_err=_err+1; v.isErr2=true;}
+            if(!_temp || !checkNum(_temp)|| parseInt(_temp)<0 || parseInt(_temp)>10000 ) {_err=_err+1; v.isErr2=true;}
 
         })
         return _err === 0;

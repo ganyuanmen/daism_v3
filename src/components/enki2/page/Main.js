@@ -13,7 +13,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
     const [err,setErr]=useState("");
 
     useEffect(() => {
-        console.log("=========>",fetchWhere)
+        // console.log("=========>",fetchWhere)
         const fetchData = async () => {
             setIsLoading(true);
             try {
@@ -21,7 +21,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
                 if (fetchWhere.currentPageNum === 0) setData([]);
                 if(res.status===200){
                     if(Array.isArray(res.data)){
-                        console.log("mess data",res.data)
+                        // console.log("mess data",res.data)
                         setHasMore(res.data.length >= 12);
                         if (fetchWhere.currentPageNum === 0) setData(res.data);
                         else setData([...data, ...res.data]);
@@ -46,7 +46,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
         };
         if(fetchWhere.menutype===3 && (fetchWhere.eventnum === 1 || fetchWhere.account))  fetchData(); //个人显示所有，或登录后显示所有
         else if (fetchWhere.menutype===1 && fetchWhere.daoid)  fetchData(); // 有我的注册dao集，才能获取 
-        else fetchData(); //公共社区直接获取
+        else if(fetchWhere.menutype===2) fetchData(); //公共社区直接获取
     }, [fetchWhere]);
 
 

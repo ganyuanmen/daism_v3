@@ -40,7 +40,7 @@
     "voteText":"Voting rights",
     "addMember":"Add members",
     "delMember":"Delete member",
-    "voteValue":"Value range: integers ranging from 4 to 10000",
+    "voteValue":"Value range: integers ranging from 1 to 10000",
     "voteDesc":"The voting rights of members have two functions: 1. the voting ratio of proposals; 2. Dividend rights for profits.",
     "desctext":"describe",
     "smarcommondesc1":"Proposal default values for smart public devices",

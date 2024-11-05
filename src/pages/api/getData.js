@@ -40,14 +40,7 @@ const methods={
 }
 
 export default async function handler(req, res) {
-
-  console.log("req.headers.method------------:",req.headers.method)
-  console.log("req.query:",req.query)
-  
     if (req.method.toUpperCase()!== 'GET')  return res.status(405).json({errMsg:'Method Not Allowed'})
-  //client.get(`/api/getData?
-//&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=
-//${fetchWhere.order}&eventnum=${fetchWhere.eventnum}&account=${fetchWhere.account}`,'messagePageData').then(res =>{ 
     try{
         //向原帐号所在域名请求，公器的首页和活动，account为空，只向本地获取
         if(req.headers.method==='messagePageData' && req.query.account && req.query.account.includes('@') ){  
@@ -57,7 +50,6 @@ export default async function handler(req, res) {
                 res.status(200).json(await methods[req.headers.method](req.query))
            else { //其它域名
                 let response=await httpGet(`https://${domain}/api/getData?pi=${pi}&menutype=${menutype}&daoid=${daoid}&actorid=${actorid}&w=${w}&order=${order}&eventnum=${eventnum}&account=${account}&v=${v}`,{'Content-Type': 'application/json',method:'messagePageData'})
-              console.log("response",response)
                 if(response?.message) res.status(200).json(response.message)
                 else  res.status(500).json({errMsg: 'fail'});
            }

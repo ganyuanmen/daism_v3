@@ -36,8 +36,8 @@ export default function LogoPro({ daoName,daoId,setChangeLogo,delegator,lastPro,
         
         let uplogoid='0x0000000000000000000000000000000000000003'
       
-
-        window.daismDaoapi.Dao.addProposal(delegator,uplogoid,1,parseInt(new Date().getTime()/1000),0,0,'',
+        //修改logo proposalType=1
+        window.daismDaoapi.Dao.addProposal(delegator,uplogoid,1,parseInt(new Date().getTime()/1000),0,0,'',1,
         'svg',imgstr).then(() => {
             closeTip()
             showError(t("uploadPro"))

@@ -12,10 +12,25 @@ function geneChar(_name) {
 function insertData(data,actor_name,domain,avatar) {
 
    data.forEach(e => {
-      let sql="INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,is_send,is_discussion,top_img,video_url,dao_id,start_time,end_time,event_url,event_address,time_event,_type,receive_account,actor_inbox,send_type,link_url,createtime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-      let paras=[e.message_id,e.manager,actor_name,avatar,`${actor_name}@${domain}`,`https://${domain}/api/activitepub/users/${actor_name}`
-        ,e.title,e.content,e.is_send,e.is_discussion,geneChar(e.top_img),geneChar(e.video_url),e.dao_id,geneChar(e.start_time),geneChar(e.end_time),geneChar(e.event_url),geneChar(e.event_address),geneChar(e.time_event),e._type,geneChar(e.receive_account)
-        ,`https://${domain}/api/activitepub/inbox/${actor_name}`,e.send_type,geneChar(e.link_url),e.createtime];
+      let sql="INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,link_url,title,content,is_send,is_discussion,top_img,receive_account,send_type,createtime,reply_time) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      let paras=[
+        e.message_id,
+        e.manager,
+        actor_name,
+        avatar,
+        `${actor_name}@${domain}`,
+        `https://${domain}/api/activitepub/users/${actor_name}`,
+        `https://${domain}/api/activitepub/inbox/${actor_name}`,
+        e.link_url||'',
+        e.title,
+        e.content,
+        e.is_send,
+        e.is_discussion,
+        e.top_img||'',
+        e.receive_account||'',
+        e.send_type,
+        e.createtime,
+        e.reply_time];
       execute(sql,paras).then(()=>{});
       
     });

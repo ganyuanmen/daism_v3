@@ -40,7 +40,7 @@
     "voteText":"票权",
     "addMember":"增加成员",
     "delMember":"删除成员",
-    "voteValue":"取值范围：4-10000的整数",
+    "voteValue":"取值范围：1-10000的整数",
     "voteDesc":" 成员的票权有两个功能：1.提案的投票比率; 2.收益的分红权。",
     "desctext":"描述",
     "smarcommondesc1":"智能公器的提案默认值",

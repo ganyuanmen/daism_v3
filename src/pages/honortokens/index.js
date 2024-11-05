@@ -18,9 +18,11 @@ export default function NFT() {
 
     return (
         <PageLayout>
-        {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
-        :<Mynft user={user} t={t} tc={tc} showError={showError} closeTip={closeTip} showTip={showTip} />
-        }  
+          <div style={{marginTop:'10px'}} >
+            {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
+            :<Mynft user={user} t={t} tc={tc} showError={showError} closeTip={closeTip} showTip={showTip} />
+            }  
+        </div>
         </PageLayout>
     );
 }

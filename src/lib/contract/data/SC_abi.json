@@ -115,6 +115,11 @@
             "internalType": "string",
             "name": "desc",
             "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "proposalType",
+            "type": "uint16"
           }
         ],
         "internalType": "struct Object.Proposal",
@@ -319,6 +324,11 @@
         "internalType": "string",
         "name": "desc",
         "type": "string"
+      },
+      {
+        "internalType": "uint16",
+        "name": "proposalType",
+        "type": "uint16"
       }
     ],
     "stateMutability": "view",

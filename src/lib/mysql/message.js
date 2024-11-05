@@ -33,10 +33,6 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 	}
 	if(w) where=where?`${where} and title like '%${w}%'`:`where title like '%${w}%'`;
 	let sql=`select * from v_message${sctype} ${where} order by ${order} desc limit ${pi*12},12`;
-	console.log("-------------------------------------")
-	console.log(sql)
-	console.log("-------------------------------------")
-
 	let re=await getData(sql,[]);
 	if(parseInt(menutype)===3 && parseInt(eventnum)===3){ //从sc取出收藏
 		sql=`select * from v_messagesc where id in(select pid from a_bookmarksc where account='${account}') order by ${order} desc limit ${pi*12},12`;

@@ -27,7 +27,7 @@ export default function DaoInfo({daoData,daoMember,follower,domain,accountTotal}
 
     return (
         <PageLayout>
-            
+            <div style={{marginTop:'10px'}} >
                   { daoData.dao_id?<>
                     <Domain_div record={daoData} daoActor={daoActor}  domain={domain} tc={tc} accountTotal={accountTotal} t={t}/>
                     <DaoInfo_div record={daoData} t={t} />
@@ -36,6 +36,7 @@ export default function DaoInfo({daoData,daoMember,follower,domain,accountTotal}
 
                   </>
                 :<ShowErrorBar errStr={tc('noDataText')} />}   
+              </div>
         </PageLayout>
     );
 }

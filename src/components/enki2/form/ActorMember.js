@@ -75,7 +75,7 @@ export default function ActorMember({t,tc,user,actor,domain,accountTotal}){
         <div className='col-auto' >
             {actor?.manager.toLowerCase()===user.account.toLowerCase() &&
             <> 
-            <Button onClick={()=>{setRegister(true)}} ><UploadSvg size={18}/> {t('reRegisterText')}</Button>{'  '}
+            {actor?.actor_account.includes('@') && domain!=actor.actor_account.split('@')[1] && <Button onClick={()=>{setRegister(true)}} ><UploadSvg size={18}/> {t('reRegisterText')}</Button>}{'  '}
             <Button onClick={()=>{setShow(true)}} ><EditSvg size={18}/> {t('editText')}</Button>
             </>
             }

@@ -22,7 +22,6 @@ const SearchInput = ({t,setSearObj,actor,setFindErr}) => {
   const performSearch = (e) => {
     showTip(t('submittingText'))   
     client.get(`/api/getData?actor_account=${query.trim()}&user_account=${actor?.actor_account}`,'fromAccount').then(res =>{ 
-      console.log(res)
       if(res.status===200) {
         if(res.data.account){ //找到帐号
           setSearObj(res.data);

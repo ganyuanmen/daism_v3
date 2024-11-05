@@ -2,12 +2,9 @@ const abi=require('../data/SC_abi.json')
 
  class Dao {
 
-    async addProposal(delegator,account,dividendRights,createTime,rights,antirights,desc,fileType='svg',fileContent="0x54") {
-        let contract= this.genegateContract(delegator)
-        // let result = await contract['addProposal'].send([account,dividendRights,createTime,rights,antirights,desc]);
-              
-        let result = await contract['addProposal'].send({account,dividendRights,createTime,rights,antirights,desc},{fileType,fileContent})
-
+    async addProposal(delegator,account,dividendRights,createTime,rights,antirights,desc,proposalType,fileType='svg',fileContent="0x54") {
+        let contract= this.genegateContract(delegator)            
+        let result = await contract['addProposal'].send({account,dividendRights,createTime,rights,antirights,desc,proposalType},{fileType,fileContent})
         await result.wait()
         return result
     }

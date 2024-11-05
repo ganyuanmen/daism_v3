@@ -30,15 +30,17 @@ export default function MyDao() {
     
     return (
         <PageLayout>
-        {
-          user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
-          :<>
-            {loginsiwe?<>
-              {(daoActor && daoActor.length)?getDaoList(daoActor):<ShowErrorBar errStr={t('noDaoMemberText')} />}
-              </>:<Wecome />
+          <div style={{marginTop:'10px'}} >
+            {
+              user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
+              :<>
+                {loginsiwe?<>
+                  {(daoActor && daoActor.length)?getDaoList(daoActor):<ShowErrorBar errStr={t('noDaoMemberText')} />}
+                  </>:<Wecome />
+                }
+              </>
             }
-          </>
-        }
+          </div>
         </PageLayout>
     );
 }

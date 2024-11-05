@@ -23,18 +23,20 @@ export default function Dividend() {
 
     return (
         <PageLayout>
-        {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
-        :<>
-        {dividendData.rows.length?<>
-                <DividendPage dividendData={dividendData}  t={t}/>
-                <PageItem records={dividendData.total} pages={dividendData.pages} currentPageNum={currentPageNum} setCurrentPageNum={setCurrentPageNum} postStatus={dividendData.status} />
+          <div style={{marginTop:"10px"}} >
+            {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
+            :<>
+            {dividendData.rows.length?<>
+                    <DividendPage dividendData={dividendData}  t={t}/>
+                    <PageItem records={dividendData.total} pages={dividendData.pages} currentPageNum={currentPageNum} setCurrentPageNum={setCurrentPageNum} postStatus={dividendData.status} />
+                </>
+                :dividendData.status==='failed'?<ShowErrorBar errStr={dividendData.error} />
+                :dividendData.status==='succeeded' ? <ShowErrorBar errStr={tc('noDataText')} />
+                :<Loadding />
+            }  
             </>
-            :dividendData.status==='failed'?<ShowErrorBar errStr={dividendData.error} />
-            :dividendData.status==='succeeded' ? <ShowErrorBar errStr={tc('noDataText')} />
-            :<Loadding />
-        }  
-        </>
-        }
+            }
+        </div>
         </PageLayout>
     );
     }
