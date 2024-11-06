@@ -49,7 +49,7 @@ export default function SC({ domain }) {
                 const res = await client.get(`/api/getData?pi=${daoWhere.currentPageNum}&w=${daoWhere.where}`, 'daoPageData');
                 // console.log("dao data",res.data)
                 setHasMore(res.data.length >= 10);
-                if (fetchWhere.currentPageNum === 0) setData(res.data);
+                if (daoWhere.currentPageNum === 0) setData(res.data);
                 else setData([...data, ...res.data]);
             } catch (error) {
                 console.error(error);
