@@ -40,7 +40,11 @@ function Wallet() {
 
     function showError(str){dispatch(setMessageText(str))}
 
-    const NET={'0xaa36a7':'sepolia','0x4268':'holesky','0x1':'mainnet'}
+    const netWorkName='sepolia';
+    // const netWorkName='holesky';
+    // const netWorkName='mainnet';
+
+    const NET={'_0xaa36a7':'sepolia','_0x4268':'holesky','_0x1':'mainnet','_11155111':'sepolia','_17000':'holesky',"_1":"mainnet"}
 
 
     useEffect(() => {
@@ -109,9 +113,6 @@ function Wallet() {
 
     }, [providers]);  
     
- 
-    
-  
     const connectWallet=async(providerWithInfo,_daoaddress)=>{//连接钱包
         if(providerWithInfo)
             providerRef.current=providerWithInfo    
@@ -126,36 +127,34 @@ function Wallet() {
             setLoginAccount(tempAccount)
 
             providerWithInfo.provider.on('chainChanged', (_chainId,a,b,c)=>{
-                if(NET[_chainId]!=daoAddress['networkName'])
-                {
-                    showError(t('mustLoginText').replace('_',daoAddress['networkName']))
+                console.log("chainChanged--->",_chainId)
+                if(NET[`_${_chainId}`]!=netWorkName){
+                    showError(t('mustLoginText',{netName:netWorkName}));
                     onDisconnect()
                 }
-               setTimeout(() => {
-                window.location.reload()       //0x1 //0xaa36a7  parseInt(chainIdHex)  parseInt('0xaa36a7')=11155111
-               }, 1000); 
+                else { //切换成功之后，需要重新登录
+                    console.log("begin re connect.................")
+                    connectWalletRef.current(providerRef.current);
+                    // setTimeout(() => {
+                    //     window.location.reload()       //0x1 //0xaa36a7  parseInt(chainIdHex)  parseInt('0xaa36a7')=11155111
+                    // }, 1000); 
+                }
             });
           
             const provider = new ethers.BrowserProvider(providerWithInfo.provider);
             window.loginProvider=provider
             const signer =await provider.getSigner()
             window.daism_signer=signer
-
             const network=await provider.getNetwork()
-
             let tempChainId = network.chainId.toString()
-            if(network.name!==daoAddress['networkName'])
+            console.log("ok",JSON.stringify(network),NET[`_${tempChainId}`],netWorkName)
+            if(NET[`_${tempChainId}`]!=netWorkName)
             {
-                showError(t('mustLoginText').replace('_',daoAddress['networkName']))
+                showError(t('mustLoginText',{netName:netWorkName}));
                 setConnecting(false);
                 return
             }
-            
-            console.info("login network:",network.name,tempChainId)
-
-
-            window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)
-            
+            window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)           
             dispatch(setUser({connected:1,account:tempAccount,networkName:network.name, chainId:tempChainId}))
             provider.getBalance(tempAccount).then(_balance=>{setEth(ethers.formatEther(_balance))})
             if(router.pathname==='/' ) getTokens(tempAccount)
@@ -182,53 +181,53 @@ function Wallet() {
         //     loginRef.current.siweLogin() 
         //    }
             }
-            else 
-            {
+            // else 
+            // {
               
                 
-               const provider= new ethers.BrowserProvider(window.ethereum);
-                await provider.send('eth_requestAccounts', [])
-                window.ethereum.on('chainChanged', _chainId=>{  if(_chainId!=='0xaa36a7')
-                {
-                    showError(t('mustLoginText'))
-                    onDisconnect()
-                }
-                window.location.reload()});
-                window.loginProvider=provider
-                const signer =await provider.getSigner()
-                window.daism_signer=signer
-                const network=await provider.getNetwork()
-                let tempChainId = network.chainId.toString()
-                if(tempChainId!=='11155111')
-                {
-                    showError(t('mustLoginText'))
-                    setConnecting(false);
-                    return
-                }
-                let tempAccount= signer.address;
-                console.info("login network:",network.name,tempChainId)
+            //    const provider= new ethers.BrowserProvider(window.ethereum);
+            //     await provider.send('eth_requestAccounts', [])
+            //     window.ethereum.on('chainChanged', _chainId=>{  if(_chainId!=='0xaa36a7')
+            //     {
+            //         showError(t('mustLoginText'))
+            //         onDisconnect()
+            //     }
+            //     window.location.reload()});
+            //     window.loginProvider=provider
+            //     const signer =await provider.getSigner()
+            //     window.daism_signer=signer
+            //     const network=await provider.getNetwork()
+            //     let tempChainId = network.chainId.toString()
+            //     if(tempChainId!=='11155111')
+            //     {
+            //         showError(t('mustLoginText'))
+            //         setConnecting(false);
+            //         return
+            //     }
+            //     let tempAccount= signer.address;
+            //     console.info("login network:",network.name,tempChainId)
              
-                dispatch(setUser({connected:1,account:tempAccount,networkName:network.name, chainId:tempChainId}))
-                provider.getBalance(tempAccount).then(_balance=>{setEth(ethers.formatEther(_balance))})
-                if(router.pathname==='/' ) getTokens(tempAccount)
+            //     dispatch(setUser({connected:1,account:tempAccount,networkName:network.name, chainId:tempChainId}))
+            //     provider.getBalance(tempAccount).then(_balance=>{setEth(ethers.formatEther(_balance))})
+            //     if(router.pathname==='/' ) getTokens(tempAccount)
                 
-                if(_daoaddress && _daoaddress['UnitToken']) //刷新创建
-                {
-                    window.daismDaoapi = new DaoApi(signer,tempAccount,_daoaddress)
-                }
-                else  //点击按钮创建 
-                {
-                    window.daismDaoapi = new DaoApi(signer,tempAccount,daoAddress)
-                }
+            //     if(_daoaddress && _daoaddress['UnitToken']) //刷新创建
+            //     {
+            //         window.daismDaoapi = new DaoApi(signer,tempAccount,_daoaddress)
+            //     }
+            //     else  //点击按钮创建 
+            //     {
+            //         window.daismDaoapi = new DaoApi(signer,tempAccount,daoAddress)
+            //     }
                 
                 
-                window.sessionStorage.setItem("providerinfoname", '')
+            //     window.sessionStorage.setItem("providerinfoname", '')
              
-                window.ethereum.on('accountsChanged', _account=>{switchDisconnect(); window.location.reload();});
-               // window.addEventListener('beforeunload', e=>{logout()})  
-               // window.addEventListener('pagehide', e=>{logout()})  
+            //     window.ethereum.on('accountsChanged', _account=>{switchDisconnect(); window.location.reload();});
+            //    // window.addEventListener('beforeunload', e=>{logout()})  
+            //    // window.addEventListener('pagehide', e=>{logout()})  
     
-            }
+            // }
 
             window.sessionStorage.setItem("isLogin", "1")
             fetch("/api/siwe/administrutor").then(async res=>{
@@ -243,9 +242,10 @@ function Wallet() {
         }catch (err)
         {
             console.error(err)
-           // showTip(err);
+        } finally{
+            setConnecting(false);
         }
-        setConnecting(false);
+      
     }
 
     connectWalletRef.current=connectWallet
