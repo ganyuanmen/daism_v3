@@ -53,8 +53,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
     const checkIsEdit=()=>{  //是否允许修改
         if(!loginsiwe) return false;
         if(!actor?.actor_account && !actor?.actor_account.includes('@')) return false;
-        //非本地登录
-        if(actor.actor_account.split('@')[1]!=env.domain) return false;
+      
         //远程读取不可修改
         if(env.domain!=currentObj.actor_account.split('@')[1]) return false;
         //超级管理员
@@ -66,6 +65,8 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
                  return true;
             } 
         }else { //个人
+              //非本地登录
+            if(actor.actor_account.split('@')[1]!=env.domain) return false;
             if(currentObj.send_type===0){ //本地
                 if(actor.actor_account===currentObj.actor_account) return true;
             }else { //接收
@@ -155,7 +156,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
         </div>
             {currentObj?.top_img && 
              <div className="mt-2 mb-2" style={{ position:'relative', textAlign:'center'}} >
-                <img src={currentObj?.top_img} alit='' style={{maxHeight:'200px'}} />
+                <img src={currentObj?.top_img} alit='' style={{maxHeight:'400px'}} />
             </div>
             }
         <h1>{currentObj?.title}</h1>
@@ -176,7 +177,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
                  afterEditcall={afterEditcall} ref={repluBtn} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
 
                 <EnKiHeart isEdit={ableReply()} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} currentObj={currentObj} domain={env.domain} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
-                <EnKiBookmark isEdit={ableReply()} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} currentObj={currentObj} domain={env.domain} showTip={showTip} closeTip={closeTip} showClipError={showClipError}  />
+                <EnKiBookmark isEdit={ableReply() && actor.actor_account.split('@')[1]==env.domain} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} currentObj={currentObj} domain={env.domain} showTip={showTip} closeTip={closeTip} showClipError={showClipError}  />
               {currentObj.send_type===0 && <EnkiShare currentObj={currentObj} t={t} domain={env.domain} tc={tc} />}
             </div>
             {currentObj?.link_url && <div className="mt-2 mb-2" style={{textAlign:'center'}}>
@@ -184,7 +185,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
                     </div> 
             }
         
-            {data.map((obj,idx)=><ReplyItem isEdit={ableReply()} key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />)}
+            {data.map((obj,idx)=><ReplyItem isEdit={ableReply() && actor.actor_account===obj.actor_account } key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />)}
             { footerdiv()}
         </Card.Footer>
         </Card>

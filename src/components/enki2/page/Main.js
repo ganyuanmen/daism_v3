@@ -69,9 +69,11 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
     // }, [fetchWhere, hasMore]);
 
     const footerdiv=()=>{
-        if(err) return <ShowErrorBar errStr={err} />
-        else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
-        else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
+        if(!isLoading){
+            if(err) return <ShowErrorBar errStr={err} />
+            else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
+            else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
+        }
     }
 
     return (
