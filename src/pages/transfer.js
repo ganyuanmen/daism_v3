@@ -11,14 +11,15 @@ import Loadding from '../components/Loadding';
 import { Card,Button, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 
-export default function Transfer() {
+//获取eth
+export default function Transfer({locale,env}) {
     const [err,setErr]=useState('')
     const [mess,setMess]=useState('')
     const [loading,setLoading]=useState(false)
     const tc = useTranslations('Common')
     const user = useSelector((state) => state.valueData.user)
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
-    const daoAddress=useSelector((state) => state.valueData.daoAddress)
+    
 
 
 
@@ -44,9 +45,7 @@ export default function Transfer() {
 
   
     return (
-        <PageLayout>
-            
-            
+        <PageLayout env={env}>
 
             <Card className='mt-3 mb-3' >
                 <Card.Body>
@@ -55,7 +54,7 @@ export default function Transfer() {
                     <div  className='mt-2 mb-2' >{user.connected===1 && <h3 > login :{user.account}</h3>}</div>
                     <div  className='mt-2 mb-2' >{!loginsiwe && user.connected===1 && <Loginsign user={user} tc={tc} />}</div>
 
-                   {loading?<Loadding />: <Button onClick={send} disabled={!loginsiwe} > send me {daoAddress['networkName']==='holesky'?'0.5':'0.2'} ETH</Button>}
+                   {loading?<Loadding />: <Button onClick={send} disabled={!loginsiwe} > send me {env.networkName==='holesky'?'0.5':'0.2'} ETH</Button>}
            
                 </Card.Body>
             </Card>
@@ -69,7 +68,7 @@ export default function Transfer() {
 
             <Card className='mt-3 mb-3' >
                 <Card.Body>
-                <p> more test ETH in <a target="_blank" href={`https://${daoAddress['networkName']}-faucet.pk910.de/`}>https://{daoAddress['networkName']}-faucet.pk910.de</a> </p>
+                <p> more test ETH in <a target="_blank" href={`https://${env.networkName}-faucet.pk910.de/`}>https://{env.networkName}-faucet.pk910.de</a> </p>
                 </Card.Body>
             </Card>
 
@@ -80,12 +79,13 @@ export default function Transfer() {
 }
 
     
-export const getStaticProps  = ({ locale }) => {
+export const getServerSideProps  = ({ locale }) => {
     return {
         props: {
             messages: {
             ...require(`../messages/shared/${locale}.json`),
             },locale
+            ,env:getEnv()
             }
         }
     }

@@ -6,7 +6,7 @@ export default function useDaoList({currentPageNum, orderField, searchText, orde
 
     useEffect(() => {
         let ignore = false;
-        client.get(`/api/getData?ps=3&pi=${currentPageNum}&orderField=${orderField}&orderType=${orderType}&searchText=${searchText}`,'getDaosData').then(res =>{ 
+        client.get(`/api/getData?ps=10&pi=${currentPageNum}&orderField=${orderField}&orderType=${orderType}&searchText=${searchText}`,'getDaosData').then(res =>{ 
             if (!ignore) 
             if (res.status===200) setData({...res.data,status:'succeeded',error:''})
             else setData({rows:[],pages:0,total:0,status:'failed',error:res.statusText})

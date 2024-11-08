@@ -5,9 +5,12 @@ import PageLayout from '../../components/PageLayout';
 import { useTranslations } from 'next-intl'
 import Mynft from '../../components/nft/mynft'
 import {setTipText,setMessageText} from '../../data/valueData'
+import { getEnv } from '../../lib/utils/getEnv';
 
-
-export default function NFT() {
+/**
+ * 荣誉通证
+ */
+export default function NFT({env,locale}) {
     const t = useTranslations('nft')
     const tc = useTranslations('Common')
     const user = useSelector((state) => state.valueData.user) //钱包用户信息
@@ -17,7 +20,7 @@ export default function NFT() {
     function closeTip(){dispatch(setTipText(''))}
 
     return (
-        <PageLayout>
+        <PageLayout env={env}>
           <div style={{marginTop:'10px'}} >
             {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
             :<Mynft user={user} t={t} tc={tc} showError={showError} closeTip={closeTip} showTip={showTip} />
@@ -29,7 +32,7 @@ export default function NFT() {
 
 
 
-export const getStaticProps = ({locale }) => {  
+export const getServerSideProps = ({locale }) => {  
     
   
     return {
@@ -39,6 +42,7 @@ export const getStaticProps = ({locale }) => {
           ...require(`../../messages/nft/${locale}.json`),
         //   ...require(`../../messages/federation/${locale}.json`),
         },locale
+        ,env:getEnv()
       }
     }
   }

@@ -14,8 +14,8 @@ export default function EnkiShare({currentObj,t,domain,tc})
     const target1 = useRef(null);
     const target2 = useRef(null);
 
-    const path=currentObj.dao_id>0?'mySC':'me';
-    const url=`https://${domain}/communities/${path}/${currentObj.id}`;
+    const path=currentObj.dao_id>0?'enki':'enkier';
+    const url=`https://${domain}/communities/${path}/${currentObj.message_id}`;
     
     let delayTime=null;
     let localDomain='';
@@ -51,7 +51,7 @@ export default function EnkiShare({currentObj,t,domain,tc})
         
         <Button onClick={e=>setShow(true)}  variant="light"><LocationSvg  size={24} /> {t('shareText')} </Button>
 
-        <Modal className='daism-title' show={show} onHide={(e) => {setShow(false)}}>
+        <Modal size="lg" className='daism-title' show={show} onHide={(e) => {setShow(false)}}>
         <Modal.Header closeButton>share </Modal.Header>
         <Modal.Body  >
             <div> {t('linkText')}：</div>

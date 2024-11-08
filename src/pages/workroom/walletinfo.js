@@ -9,8 +9,12 @@ import { LockSvg } from '../../lib/jssvg/SvgCollection';
 import { useTranslations } from 'next-intl'
 import PageLayout from '../../components/PageLayout';
 import Loadding from '../../components/Loadding';
+import { getEnv } from '../../lib/utils/getEnv';
 
-export default function ShowWalletInfo() {
+/**
+ * 我的钱包
+ */
+export default function ShowWalletInfo({env,locale}) {
     const t = useTranslations('wallet')
     const tc = useTranslations('Common')
     const [utokenApprove,setUtokenApprove]=useState(undefined)
@@ -60,7 +64,7 @@ export default function ShowWalletInfo() {
       
 
     return (
-        <PageLayout>
+        <PageLayout env={env}>
           <div style={{marginTop:"10px"}} >
         {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />:
             <Table striped bordered hover style={{width:'100%',marginTop:'4px'}} >
@@ -88,7 +92,7 @@ export default function ShowWalletInfo() {
 
 
 
-export const getStaticProps = ({ locale }) => {
+export const getServerSideProps = ({ locale }) => {
     
   
       return {
@@ -97,7 +101,7 @@ export const getStaticProps = ({ locale }) => {
             ...require(`../../messages/shared/${locale}.json`),
             ...require(`../../messages/wallet/${locale}.json`),
           },locale
-
+          ,env:getEnv()
         }
       }
     }

@@ -10,12 +10,13 @@ import Tokens from '../../components/my/Tokens'
 import Daos from '../../components/my/Daos'
 import Proposal from '../../components/my/Pro';
 import { useEffect } from 'react';
-// import dynamic from 'next/dynamic';
-// import {useEipTypes} from '../../hooks/useMessageData'
+import {getEnv} from '../../lib/utils/getEnv'
 
 
-
-export default function MyDao() {
+/**
+ * 工作室
+ */
+export default function MyDao({locale,env}) {
     const t = useTranslations('my')
     const tc = useTranslations('Common')
     const imgAr = [<TokenSvg/>,<SwapSvg/>,<DaoSvg/>,<AppSvg/>] //菜单logo
@@ -23,7 +24,6 @@ export default function MyDao() {
     const user = useSelector((state) => state.valueData.user) //钱包用户信息
     const ethBalance = useSelector((state) => state.valueData.ethBalance)
     const [utokenBalance,setUtokenBalance]=useState('0')
-    const daismAddress=useSelector((state) => state.valueData.daoAddress)
     const [activeTab, setActiveTab] = useState(0);
     
    
@@ -41,7 +41,7 @@ export default function MyDao() {
     
     const cStyle={fontWeight:'bold',textAlign:'center'}
     return (
-        <PageLayout>
+        <PageLayout env={env}>
         {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
         :<>
             <Container>
@@ -65,8 +65,8 @@ export default function MyDao() {
             </Container>
             <Container>
                 {activeTab === 0 && <Tokens user={user} t={t} tc={tc} />}
-                {activeTab === 1 && <Logs user={user} tx_url={daismAddress?.tx_url} t={t} tc={tc} />}
-                {activeTab === 2 && <Daos  user={user} t={t} tc={tc} />}
+                {activeTab === 1 && <Logs user={user} tx_url={env.tx_url} t={t} tc={tc} />}
+                {activeTab === 2 && <Daos env={env}  user={user} t={t} tc={tc} />}
                 {activeTab === 3 && <Proposal user={user} tc={tc} />}
             </Container>
         </>
@@ -77,7 +77,7 @@ export default function MyDao() {
 
 
 
-export const getStaticProps = ({ locale }) => {  
+export const getServerSideProps = ({ locale }) => {  
     
   
     return {
@@ -87,6 +87,7 @@ export const getStaticProps = ({ locale }) => {
           ...require(`../../messages/my/${locale}.json`),
           ...require(`../../messages/dao/${locale}.json`),
         },locale
+        ,env:getEnv()
       }
     }
   }

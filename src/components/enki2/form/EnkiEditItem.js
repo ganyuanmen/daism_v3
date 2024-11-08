@@ -5,12 +5,10 @@ import ConfirmWin from "../../federation/ConfirmWin";
 import { client } from "../../../lib/api/client";
 import { useDispatch} from 'react-redux';
 import {setTipText,setMessageText} from '../../../data/valueData';
-import { useSelector } from 'react-redux';
 
 //type 默认是 发文 1-> 是回复 preEditCall 修改前操作  delCallBack 删除后回调  
 export default function EnkiEditItem({tc,t,messageObj,delCallBack,preEditCall,sctype,type=0})
 {
-    const daoAddress=useSelector((state) => state.valueData.daoAddress)
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
@@ -30,12 +28,12 @@ export default function EnkiEditItem({tc,t,messageObj,delCallBack,preEditCall,sc
     const [show,setShow]=useState(false)
     const handleSelect = (eventKey) =>{ 
 
-        if(messageObj.actor_account && messageObj.actor_account.includes('@')){
-            const [name,domain]=messageObj.actor_account.split('@');
-            if(domain!==daoAddress['sys_domain']) 
-                return showClipError(t('noHandleText',{domain}))
+        // if(messageObj.actor_account && messageObj.actor_account.includes('@')){
+        //     const [name,domain]=messageObj.actor_account.split('@');
+        //     if(domain!==daoAddress['domain']) 
+        //         return showClipError(t('noHandleText',{domain}))
 
-        }
+        // }
 
         switch(eventKey)
         {

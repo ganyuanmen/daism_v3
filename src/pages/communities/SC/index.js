@@ -12,11 +12,12 @@ import Loadding from '../../../components/Loadding';
 import iaddStyle from '../../../styles/iadd.module.css'
 import { client } from '../../../lib/api/client';
 import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
+import { getEnv } from '../../../lib/utils/getEnv';
 
 /**
 *公共社区
  */
-export default function SC({ domain }) {
+export default function SC({ locale,env }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  ///当前页
         daoid: '0',  //0 所有, 数字 单个
@@ -84,7 +85,7 @@ export default function SC({ domain }) {
     }
   
     return (
-        <PageLayout>
+        <PageLayout env={env}>
             <div className={iaddStyle.clearfix}>
                 <div className={iaddStyle.scsidebar}>
                     <div className='mb-3' >
@@ -129,8 +130,8 @@ export default function SC({ domain }) {
                 <div className={iaddStyle.sccontent}>
 
                     {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
-                    {activeTab === 1 && <EnkiCreateMessage domain={domain} actor={actor} t={t} tc={tc} currentObj={currentObj} afterEditCall={afterEditCall} />}
-                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain} 
+                    {activeTab === 1 && <EnkiCreateMessage env={env} actor={actor} t={t} tc={tc} currentObj={currentObj} afterEditCall={afterEditCall} />}
+                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env} 
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                 </div>
@@ -147,7 +148,8 @@ export const getServerSideProps = ({ locale }) => {
             messages: {
                 ...require(`../../../messages/shared/${locale}.json`),
                 ...require(`../../../messages/federation/${locale}.json`),
-            }, locale, domain: process.env.LOCAL_DOMAIN
+            }, locale
+            ,env:getEnv()
         }
     }
 }

@@ -8,7 +8,7 @@ import {setTipText,setMessageText} from '../../data/valueData'
 import { useDispatch,useSelector} from 'react-redux';
 import Loginsign from '../Loginsign';
 
-export default function User({user,daoAddress,loginsiwe,t,...props}) {
+export default function User({user,loginsiwe,t,...props}) {
 
   const loginRef=useRef()
   const router = useRouter();

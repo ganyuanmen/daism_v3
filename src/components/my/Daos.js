@@ -10,13 +10,13 @@ import { useState } from 'react';
 /**
  * 我的smart common
  */
-export default function Daos({user,t,tc}) {
+export default function Daos({user,t,tc,env}) {
     const [refresh,setRefresh]=useState(true)
 
     const daosData =useMyDaoData(user.account,refresh,setRefresh)
    
     return ( <>
-            <CreateDao  setRefresh={setRefresh}/>
+            <CreateDao env={env}  setRefresh={setRefresh}/>
             {daosData.data.length?<DaosPage daosData={daosData} user={user} t={t} tc={tc} />
             :daosData.status==='failed'?<ShowErrorBar errStr={daosData.error} />
             :daosData.status==='succeeded' && !daosData.data.length ? <ShowErrorBar errStr={tc('noDataText')}  />

@@ -18,7 +18,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
             setIsLoading(true);
             try {
                 const res = await client.get(`/api/getData?pi=${fetchWhere.currentPageNum}&menutype=${fetchWhere.menutype}&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=${fetchWhere.order}&eventnum=${fetchWhere.eventnum}&account=${fetchWhere.account}&v=${fetchWhere.v}`, 'messagePageData');
-                if (fetchWhere.currentPageNum === 0) setData([]);
+                // if (fetchWhere.currentPageNum === 0) setData([]);
                 if(res.status===200){
                     if(Array.isArray(res.data)){
                         // console.log("mess data",res.data)
@@ -69,8 +69,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
     // }, [fetchWhere, hasMore]);
 
     const footerdiv=()=>{
-        if(isLoading) return <Loadding /> 
-        else if(err) return <ShowErrorBar errStr={err} />
+        if(err) return <ShowErrorBar errStr={err} />
         else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
         else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
     }
@@ -79,7 +78,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
         <>
             <CommunitySerach searchPlace='Search...' setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
             <div style={{ width: '100%' }} >
-                {Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
+                {isLoading?<Loadding /> : Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
             </div>
             <div className="mt-3 mb-3" style={{textAlign:'center'}}  >
                 {footerdiv()}

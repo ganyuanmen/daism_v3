@@ -8,7 +8,7 @@ export default function Icon() {
   )
 }
 
-export const getStaticProps  = ({ req, res,locale }) => {
+export const getServerSideProps  = ({ req, res,locale }) => {
  
   
     return {

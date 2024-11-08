@@ -5,11 +5,8 @@ import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap'
 import Wallet from './Wallet'
 import Loddingwin from './Loddingwin'
 import ShowTip from './ShowTip'
-import { useSelector } from 'react-redux';
 
-// import { MetaMaskProvider } from "@metamask/sdk-react";
-
-export default function PageLayout({children}) {
+export default function PageLayout({children,env}) {
 
   const t = useTranslations('Navigation')
   const { locale, locales, route,query } = useRouter()
@@ -17,8 +14,7 @@ export default function PageLayout({children}) {
   const restoredURL = `?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`;
   const path=`${route}${restoredURL.length>1?restoredURL:''}`
   const tc = useTranslations('Common')
-  const daoAddress=useSelector((state) => state.valueData.daoAddress)
-
+  
   return (
     <>
   
@@ -37,9 +33,9 @@ export default function PageLayout({children}) {
                   <Nav.Link className={route === '/workroom' ? 'pnavactive'  : ''}  href={`${locale!='zh'?'':'/zh'}/workroom`} >{t('my')}</Nav.Link>
                  
                   <NavDropdown className={route.startsWith('/communities') ? 'pnavactive'  : ''} title={t('social')} id="basic-nav-dropdown1">   
-                    <NavDropdown.Item style={{paddingLeft:'20px'}} className={route === '/communities/mySC' ? 'pnavactive'  : ''} href={`${locale!='zh'?'':'/zh'}/communities/mySC`} > {t('myCommunity')}</NavDropdown.Item>
+                    <NavDropdown.Item style={{paddingLeft:'20px'}} className={route === '/communities/enki' ? 'pnavactive'  : ''} href={`${locale!='zh'?'':'/zh'}/communities/enki`} > {t('myCommunity')}</NavDropdown.Item>
                     <NavDropdown.Item style={{paddingLeft:'20px'}} className={route === '/communities/SC' ? 'pnavactive'  : ''} href={`${locale!='zh'?'':'/zh'}/communities/SC`} > {t('publicCommunities')}</NavDropdown.Item>
-                    <NavDropdown.Item style={{paddingLeft:'20px'}} className={route === '/communities/me' ? 'pnavactive'  : ''} href={`${locale!='zh'?'':'/zh'}/communities/me`} > {t('personalSocial')}</NavDropdown.Item>
+                    <NavDropdown.Item style={{paddingLeft:'20px'}} className={route === '/communities/enkier' ? 'pnavactive'  : ''} href={`${locale!='zh'?'':'/zh'}/communities/enkier`} > {t('personalSocial')}</NavDropdown.Item>
                   </NavDropdown>
 
                   <NavDropdown title={t('college')} id="basic-nav-dropdown2">
@@ -47,8 +43,8 @@ export default function PageLayout({children}) {
                     <NavDropdown.Item style={{paddingLeft:'20px'}} target='_blank' href={locale!='zh'?"https://learn.daism.io/docs.html":"https://learn.daism.io/zh/docs.html"}>{t('doc')}</NavDropdown.Item>
                   </NavDropdown>
 
-                  <div style={{flex:'1',textAlign:'center',fontSize:'20px'}} ><strong>{daoAddress['networkName']}</strong></div>
-                 <Wallet /> 
+                  <div style={{flex:'1',textAlign:'center',fontSize:'20px'}} ><strong>{env.networkName}</strong></div>
+                 <Wallet env={env} /> 
 
                 <div className='wlanguage' >
                   <Link  href={path} locale={otherLocale}>

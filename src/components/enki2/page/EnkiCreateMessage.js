@@ -12,7 +12,7 @@ import dynamic from 'next/dynamic';
 const RichTextEditor = dynamic(() => import('../../RichTextEditor'), { ssr: false });
 
 //currentObj 有值表示修改
-export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, currentObj,afterEditCall, addCallBack }) {
+export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentObj,afterEditCall, addCallBack }) {
 
     const [showEvent, setShowEvent] = useState(false) //是否活动发文
     const [selectedDaoid, setSelectedDaoid] = useState(""); //智能公器选择值
@@ -38,7 +38,7 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
 
     useEffect(() => { //为select 设默认值 
         if(Array.isArray(daoData)){
-            let selectDao = daoData.filter(obj => obj.domain === domain);
+            let selectDao = daoData.filter(obj => obj.domain === env.domain);
             if (selectDao.length > 0) setSelectedDaoid(selectDao[0].dao_id);
         }
 
@@ -126,7 +126,7 @@ export default function EnkiCreateMessage({ t, tc, domain, actor, daoData, curre
         setSelectedDaoid(event.target.value);
         let _account = selectRef.current.options[selectRef.current.selectedIndex].text;
         const [name, accounDomain] = _account.split('@');
-        if (accounDomain != domain) {
+        if (accounDomain != env.domain) {
             setErrorSelect(true);
             setLoginDomain(accounDomain);
         }

@@ -6,7 +6,7 @@ import Editor from './Editor';
 
 
 //回复按钮 isd 是否允许回复
-const MessageReply = forwardRef(({ t, tc, actor, loginsiwe, total, domain, currentObj, addReplyCallBack, afterEditcall, replyObj, setReplyObj, showTip, closeTip, showClipError }, ref) => {
+const MessageReply = forwardRef(({ t, tc, actor, total, currentObj, addReplyCallBack, afterEditcall, replyObj, setReplyObj, showTip, closeTip, showClipError,isEdit }, ref) => {
     const [showWin, setShowWin] = useState(false); //回复窗口显示
     const editorRef = useRef()
 
@@ -47,17 +47,10 @@ const MessageReply = forwardRef(({ t, tc, actor, loginsiwe, total, domain, curre
             });
     }
 
-    const ableChange = () => {
-        if (!loginsiwe || !actor?.actor_account || currentObj?.is_discussion != 1) return false;
-        //发布帐号，用于判断是否本域名
-        let _account=currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account;
-        const [name, messDomain] = _account.split('@');
-        return domain === messDomain; //本域名发布，可以回复
-
-    }
+ 
     return (
         <>
-            {ableChange() ? <div>
+            {(isEdit && currentObj?.is_discussion === 1) ? <div>
                 <Button onClick={() => {
                     setShowWin(true);
                     setReplyObj(null); //表示新增

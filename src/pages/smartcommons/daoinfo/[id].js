@@ -9,15 +9,15 @@ import DaoInfo_div from '../../../components/federation/DaoInfo_div';
 import Daomember_div from '../../../components/federation/Daomember_div';
 import Follower_div from '../../../components/federation/Follower_div';
 import Domain_div from '../../../components/federation/Domain_div';
+import { getEnv } from '../../../lib/utils/getEnv';
 
-//只 显示组织帐号 actor/[id] 显示个人帐号 
-export default function DaoInfo({daoData,daoMember,follower,domain,accountTotal}) {
-    // const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
+/**
+ * dao 信息 
+ */
+export default function DaoInfo({daoData,daoMember,follower,accountTotal,env,locale}) {
     const daoActor=useSelector((state) => state.valueData.daoActor)
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
-    // const user = useSelector((state) => state.valueData.user)
-
     const [member,setMember]=useState([])
     const [follow,setFollow]=useState([])
 
@@ -26,10 +26,10 @@ export default function DaoInfo({daoData,daoMember,follower,domain,accountTotal}
     
 
     return (
-        <PageLayout>
+        <PageLayout env={env}>
             <div style={{marginTop:'10px'}} >
                   { daoData.dao_id?<>
-                    <Domain_div record={daoData} daoActor={daoActor}  domain={domain} tc={tc} accountTotal={accountTotal} t={t}/>
+                    <Domain_div record={daoData} daoActor={daoActor}  domain={env.domain} tc={tc} accountTotal={accountTotal} t={t}/>
                     <DaoInfo_div record={daoData} t={t} />
                     {daoData && member && member.length>0 &&  <Daomember_div record={member} t={t} dao_manager={daoData.dao_manager}/>}
                     {follow && follow.length>0 &&  <Follower_div record={follow} t={t} />}
@@ -50,8 +50,8 @@ export const getServerSideProps = async ({ locale,query }) => {
           messages: {
             ...require(`../../../messages/shared/${locale}.json`),
             ...require(`../../../messages/federation/${locale}.json`),
-          },
-          domain:process.env.LOCAL_DOMAIN,
+          }
+          ,env:getEnv(),
           daoData:await getJsonArray("daodatabyid",[daoid],true),
           daoMember:await getJsonArray('daomember',[daoid]),
           follower:await getJsonArray('fllower',[daoid]),

@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useSelector } from 'react-redux';
 import PageLayout from '../../../components/PageLayout'
 import EnkiMember from '../../../components/enki2/form/EnkiMember';
@@ -16,11 +16,11 @@ import ShowErrorBar from '../../../components/ShowErrorBar';
 import EnKiFollow from '../../../components/enki2/form/EnKiFollow';
 import EnKiUnFollow from '../../../components/enki2/form/EnKiUnFollow'
 import FollowCollection from '../../../components/enki3/FollowCollection';
-
+import { getEnv } from '../../../lib/utils/getEnv';
 /**
  * 个人社区
  */
-export default function me({ domain }) {
+export default function me({ env,locale }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  //当前页
         daoid: 0,  //此处不用
@@ -57,7 +57,7 @@ export default function me({ domain }) {
 
     const createHandle=()=>{ //创建发文
         const [name,localdomain]=actor.actor_account.split('@');
-        if(domain!==localdomain) return showClipError(t('loginDomainText',{domain:localdomain}));
+        if(env.domain!==localdomain) return showClipError(t('loginDomainText',{domain:localdomain}));
         setCurrentObj(null);
         setActiveTab(1);
     }
@@ -96,7 +96,7 @@ export default function me({ domain }) {
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
     return (
-        <PageLayout>
+        <PageLayout env={env}>
 
             <div style={{ width: '100%' }} className="clearfix">
                   <div className={iaddStyle.scsidebar}>
@@ -116,7 +116,7 @@ export default function me({ domain }) {
                             
                         </>}
                     </ul>
-                    {loginsiwe && actor?.actor_account.includes('@') && domain===actor.actor_account.split('@')[1] && <div>
+                    {loginsiwe && actor?.actor_account.includes('@') && env.domain===actor.actor_account.split('@')[1] && <div>
                     <SearchInput setSearObj={setSearObj} setFindErr={setFindErr} actor={actor} t={t} />
                     {searObj && <div className='mt-3' >
                         <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} />
@@ -138,16 +138,17 @@ export default function me({ domain }) {
                     {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle}
                         currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain}
+                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={domain} />}
+                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}
                 </div>
             </div>
 
         </PageLayout>
     )
 }
+
 
 export const getServerSideProps = ({ locale }) => {
 
@@ -156,7 +157,8 @@ export const getServerSideProps = ({ locale }) => {
             messages: {
                 ...require(`../../../messages/shared/${locale}.json`),
                 ...require(`../../../messages/federation/${locale}.json`),
-            }, locale, domain: process.env.LOCAL_DOMAIN,
+            }, locale
+            ,env:getEnv()
         }
     }
 }

@@ -24,7 +24,7 @@ export default function FollowItem1({messageObj,t,domain}) {
 
     useEffect(()=>{
         let ignore = false; 
-        if(actor?.actor_account.includes('@')){
+        if(actor?.actor_account && actor?.actor_account.includes('@')){
             client.get(`/api/getData?actorAccount=${messageObj.account}&userAccount=${actor?.actor_account}`,'getFollow').then(res =>{ 
                 if (!ignore) 
                     if (res.status===200) setIsFollow(!!res.data.id || domain!=actor.actor_account.split('@')[1])

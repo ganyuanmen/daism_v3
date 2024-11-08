@@ -20,7 +20,7 @@ export default function FollowItem0({messageObj,t,domain}) {
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
 
     useEffect(()=>{
-        if(actor?.actor_account.includes('@')){
+        if(actor?.actor_account && actor?.actor_account.includes('@')){
             setIsFollow(domain!=actor.actor_account.split('@')[1]); //不是注册在登录，设置已关注
         }
 

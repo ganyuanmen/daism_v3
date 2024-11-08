@@ -13,6 +13,7 @@ export const config = {
     },
 };
 
+
 export default withSession(async (req, res) => {
     if (req.method.toUpperCase() !== 'POST') return res.status(405).json({ errMsg: 'Method Not Allowed' })
     const sessionUser = req.session.get('user');
@@ -29,8 +30,8 @@ export default withSession(async (req, res) => {
         let paras;
         const sctype = daoid ? 'sc' : '';
         if (id[0] == '0') { //增加
-            let message_id = uuidv4()
-            if (daoid) { //mysc
+            let message_id = uuidv4().replaceAll('-','')
+            if (daoid) { //enki
                 paras = [message_id,actorid[0], daoid[0], title[0], content[0], isSend[0], isDiscussion[0], path, _type[0]]
 
                 if (_type[0] == '1') { //活动发文
@@ -52,7 +53,7 @@ export default withSession(async (req, res) => {
             if (insertId) {
                 if (parseInt(isSend[0]) === 1) {
                     if (process.env.IS_DEBUGGER === '1') console.info("message send --->", [account[0], path, insertId, title[0]])
-                    send(account[0], content[0], path, insertId, `《${title[0]}》`, path, daoid ? 'mySC' : 'me')
+                    send(account[0], content[0], path, message_id, `《${title[0]}》`, path, daoid ? 'enki' : 'enkier')
                 }
 
                 setTimeout(async () => {  //生成链接卡片

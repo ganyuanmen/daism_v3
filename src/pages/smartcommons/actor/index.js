@@ -6,22 +6,24 @@ import PageLayout from '../../../components/PageLayout';
 import { useTranslations } from 'next-intl'
 import Wecome from '../../../components/federation/Wecome'
 import EnKiRigester from '../../../components/enki2/form/EnKiRigester';
-
-
+import { getEnv } from '../../../lib/utils/getEnv';
 import ActorMember from '../../../components/enki2/form/ActorMember';
 
-export default function MyActor({domain,accountTotal}) {
+/**
+ * 登录后个人信息
+ */
+export default function MyActor({env,accountTotal,locale}) {
     const user = useSelector((state) => state.valueData.user)
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
     let tc = useTranslations('Common')
     let t = useTranslations('ff')
   
     return (
-      <PageLayout>
+      <PageLayout env={env}>
         <div style={{marginTop:'10px'}} >
             {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />
             :!loginsiwe?<Wecome />
-            :<ActorInfo t={t} tc={tc} user={user} domain={domain} accountTotal={accountTotal} />
+            :<ActorInfo t={t} tc={tc} user={user} domain={env.domain} accountTotal={accountTotal} />
             }  
         </div>
       </PageLayout>
@@ -49,9 +51,9 @@ export const getServerSideProps = ({ locale }) => {
         messages: {
           ...require(`../../../messages/shared/${locale}.json`),
           ...require(`../../../messages/federation/${locale}.json`),
-        },
-        domain:process.env.LOCAL_DOMAIN,
-        accountTotal:process.env.SMART_COMMONS_COUNT,locale
+        }
+        ,env:getEnv()
+        ,accountTotal:process.env.SMART_COMMONS_COUNT,locale
       }
     }
 

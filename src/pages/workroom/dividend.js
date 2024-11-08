@@ -8,11 +8,11 @@ import { useSelector } from 'react-redux';
 import useGetDividend from "../../hooks/useGetDividend";
 import PageLayout from '../../components/PageLayout';
 import ShowAddress from '../../components/ShowAddress'
-
+import { getEnv } from "../../lib/utils/getEnv";
 /**
- * 兑换记录
+ * 我的分红
  */
-export default function Dividend() {
+export default function Dividend({env,locale}) {
     const t = useTranslations('my')
     const tc = useTranslations('Common')
 
@@ -22,7 +22,7 @@ export default function Dividend() {
     const dividendData = useGetDividend({currentPageNum,did:user.account})   
 
     return (
-        <PageLayout>
+        <PageLayout env={env}>
           <div style={{marginTop:"10px"}} >
             {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
             :<>
@@ -77,7 +77,7 @@ export default function Dividend() {
 
     
 
-export const getStaticProps = ({locale }) => {  
+export const getServerSideProps = ({locale }) => {  
     
   
     return {
@@ -86,6 +86,7 @@ export const getStaticProps = ({locale }) => {
           ...require(`../../messages/shared/${locale}.json`),
           ...require(`../../messages/my/${locale}.json`),
         },locale
+        ,env:getEnv()
       }
     }
   }

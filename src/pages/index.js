@@ -11,7 +11,8 @@ import usePrice from "../hooks/usePrice";
 import ShowErrorBar from "../components/ShowErrorBar";
 import { useTranslations } from 'next-intl'
 import PageLayout from '../components/PageLayout';
-
+import { client } from '../lib/api/client';
+import {getEnv} from '../lib/utils/getEnv'
 
 const commulate_abi=require('../lib/contract/data/commulate.json')
 const uToken_abi=require('../lib/contract/data/unitToken.json')
@@ -21,7 +22,7 @@ const iadd_abi=require('../lib/contract/data/iadd.json')
 /**
  * IADD兑换
  */
-export default function IADD() {
+export default function IADD({locale,env}) {
     const [gasPrice,setGasePrice]=useState(0)  //gas基本费用
     const [priorty,setPriorty]=useState(0)  //矿工费用
     const [isTip, setIsTip] = useState(false); //是否显示打赏
@@ -30,7 +31,7 @@ export default function IADD() {
     const [utoken,setUtoken]=useState()
     const [utokenBalance,setUtokenBalance]=useState('0')
     const [iadd,setIadd]=useState()
-    const [netName,setnetName]=useState('')
+     
     const t = useTranslations('iadd')
     const tc = useTranslations('Common')
     const downRef=useRef()
@@ -38,37 +39,33 @@ export default function IADD() {
     const tipRef=useRef()  //打赏窗口
     const statusRef=useRef()
     const submitRef=useRef()
-    const providerRef=useRef(undefined)
+    const providerRef=useRef(new ethers.JsonRpcProvider(env.node_url))
     const price=usePrice()
     const ratioRef=useRef(0.3)   // 滑点值 0.3%
-    //合约地址，节点地址node_url ，网络类型 networkName
-    const daismAddress=useSelector((state) => state.valueData.daoAddress)
-    providerRef.current=new ethers.JsonRpcProvider(daismAddress.node_url)
-
+   
     const [outobj, setOutobj] = useState({ btext: t('selectTokenText'), blogo: '', token_id: 0 }) //下选择对象，输出对象
   
     useEffect(()=>{
-        if(user.connected===1 && window.daismDaoapi)
-        {
+        if(user.connected===1 && window.daismDaoapi){
             window.daismDaoapi.UnitToken.balanceOf(user.account).then(utokenObj=>{setUtokenBalance(utokenObj.utoken)})
         }
 
         let timeObj
-        if(daismAddress?.Commulate) {
+        if(env?.Commulate) {
            if(user.connected===1 && window.loginProvider){
-            setComulate(new ethers.Contract(daismAddress['Commulate'], commulate_abi, window.loginProvider))
-            setUtoken(new ethers.Contract(daismAddress['UnitToken'], uToken_abi, window.loginProvider))
-            setIadd(new ethers.Contract(daismAddress['_IADD'], iadd_abi, window.loginProvider))
+            setComulate(new ethers.Contract(env['Commulate'], commulate_abi, window.loginProvider))
+            setUtoken(new ethers.Contract(env['UnitToken'], uToken_abi, window.loginProvider))
+            setIadd(new ethers.Contract(env['_IADD'], iadd_abi, window.loginProvider))
            }
            else {
-            setComulate(new ethers.Contract(daismAddress['Commulate'], commulate_abi, providerRef.current))
-            setUtoken(new ethers.Contract(daismAddress['UnitToken'], uToken_abi, providerRef.current))
-            setIadd(new ethers.Contract(daismAddress['_IADD'], iadd_abi, providerRef.current))
+            setComulate(new ethers.Contract(env['Commulate'], commulate_abi, providerRef.current))
+            setUtoken(new ethers.Contract(env['UnitToken'], uToken_abi, providerRef.current))
+            setIadd(new ethers.Contract(env['_IADD'], iadd_abi, providerRef.current))
            }
 
             function getPrice()
             {
-                setnetName(daismAddress.networkName);    
+                // setnetName(env.networkName);    
                 providerRef.current.getFeeData().then(feeData=>{
                     setGasePrice(parseFloat(ethers.formatUnits(feeData.gasPrice,'gwei')))
                     setPriorty(parseFloat(ethers.formatUnits(feeData.maxPriorityFeePerGas,'gwei')))
@@ -83,10 +80,10 @@ export default function IADD() {
         }
 
         return ()=>{ clearInterval(timeObj) }
-    },[daismAddress,user])
+    },[env,user])
 
     return (
-        <PageLayout>
+        <PageLayout env={env} >
             <div style={{maxWidth:'800px',margin:'10px auto'}}  > 
                 <Card  className='daism-title' >
                     <Card.Header className='d-flex justify-content-between' >
@@ -116,7 +113,7 @@ export default function IADD() {
     }
 
     
-export const getStaticProps  = async ({locale }) => {
+export const getServerSideProps  = async ({locale }) => {
     // const messages = await import(`../messages/shared/${locale}.json`);
 
     return {
@@ -125,6 +122,7 @@ export const getStaticProps  = async ({locale }) => {
             ...require(`../messages/shared/${locale}.json`),
             ...require(`../messages/iadd/${locale}.json`),
             },locale
+            ,env:getEnv()
             }
         }
     }

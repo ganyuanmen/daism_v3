@@ -12,7 +12,7 @@ import LoginButton from '../LoginButton';
 import { client } from '../../lib/api/client';
 import editStyle from '../../styles/editor.module.css'
 
-export default function DaoForm({typeData,user,setRefresh,t,tc,setShow,closeTip,showErrorTip,showTip}) {
+export default function DaoForm({typeData,env,user,setRefresh,t,tc,setShow,closeTip,showErrorTip,showTip}) {
     const [addAr, setAddAr] = useState([]); //dao 成员模块 DOM内容，包含名称和票权
     const [errorManager, setErrorManager] = useState(false) //合约地址错误标记
     const [errorDaoName, setErrorDaoName] = useState(false) //dao名称错误标记
@@ -27,14 +27,11 @@ export default function DaoForm({typeData,user,setRefresh,t,tc,setShow,closeTip,
     const [type,setType]=useState(1)
     // const editorRef=useRef()
     const typeNameRef=useRef()
-    const daismAddress=useSelector((state) => state.valueData.daoAddress)
-
     const [createName,setCreateName]=useState(false)  //creator 已存在
     const [errcontract,setErrcontract]=useState(false)  //creator 非法合约地址
     const [daoName,setDaoName]=useState(false)  //dao_name 已存在
     const [daoSymbol,setDaoSymbol]=useState(false)  //dao_symbol 已存在
     const [batch,setBatch]=useState(false) //是否同时mint NFT批量
-
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)  //siwe登录
  
     const imgRef=useRef()
@@ -159,7 +156,7 @@ export default function DaoForm({typeData,user,setRefresh,t,tc,setShow,closeTip,
                         let abicoder=new ethers.AbiCoder()
                         let functionData=abicoder.encode(['address[]','uint256'],[members,form.per_number.value.trim()])
                         //打包
-                        mintnftparas=abicoder.encode([ "address", "bytes" ], [daismAddress['DAismSingleNFT'], functionData ]);
+                        mintnftparas=abicoder.encode([ "address", "bytes" ], [env.DAismSingleNFT, functionData ]);
                     } 
                  
                     let daoinfo=[
@@ -476,8 +473,8 @@ const handleInputChange = (e) => {
                 <Accordion.Item eventKey="0">
                     <Accordion.Header > {t('hoorDescText')}</Accordion.Header>
                     <Accordion.Body>
-                        <div className='mb-2'>daismRegistrar: {daismAddress['SCRegistrar']}</div>
-                        <div className='mb-2'>daismHonorTokens: {daismAddress['DAismSingleNFT']}</div>
+                        <div className='mb-2'>daismRegistrar: {env.SCRegistrar}</div>
+                        <div className='mb-2'>daismHonorTokens: {env.DAismSingleNFT}</div>
                         <div dangerouslySetInnerHTML={{ __html: _desc }} />
                     </Accordion.Body>
                 </Accordion.Item>

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-export function handleEnv()
+export function getEnv()
 {
     let _daismAddress
     if(process.env.NODE_ENV==='development') { 
@@ -17,7 +17,9 @@ export function handleEnv()
     _daismAddress['networkName']=process.env.BLOCKCHAIN_NETWORK
     _daismAddress['node_url']=process.env.HTTPS_URL
     _daismAddress['tx_url']=process.env.ETHERSCAN_URL
-    _daismAddress['sys_domain']=process.env.LOCAL_DOMAIN
-    process.env.DAIMADDRESS=JSON.stringify(_daismAddress)
+    _daismAddress['domain']=process.env.LOCAL_DOMAIN
+  //  process.env.DAIMADDRESS=JSON.stringify(_daismAddress)
+
+  return _daismAddress;
 
 }

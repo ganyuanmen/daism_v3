@@ -10,12 +10,13 @@ import EnkiCreateMessage from '../../../components/enki2/page/EnkiCreateMessage'
 import MessagePage from '../../../components/enki2/page/MessagePage';
 import iaddStyle from '../../../styles/iadd.module.css'
 import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
+import { getEnv } from '../../../lib/utils/getEnv';
 
 /**
  * 我的社区
  */
 
-export default function mySC({ domain }) {
+export default function enki({ env,locale }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  //当前页
         daoid: '',  //所有'1,2,..', 单个'1' 方便sql in(${daoid})
@@ -72,7 +73,7 @@ export default function mySC({ domain }) {
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
   
     return (
-        <PageLayout>
+        <PageLayout  env={env} >
 
             <div className="clearfix">
                   <div className={iaddStyle.scsidebar}>
@@ -107,9 +108,8 @@ export default function mySC({ domain }) {
                 {daoData.length > 0 && <div className={iaddStyle.sccontent}>
 
                     {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
-                    {activeTab === 1 && <EnkiCreateMessage domain={domain} daoData={daoData} actor={actor} t={t} tc={tc} addCallBack={refreshCallBack} currentObj={currentObj} afterEditCall={afterEditCall} />}
-                    
-                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} domain={domain}
+                    {activeTab === 1 && <EnkiCreateMessage env={env} daoData={daoData} actor={actor} t={t} tc={tc} addCallBack={refreshCallBack} currentObj={currentObj} afterEditCall={afterEditCall} />}
+                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                 </div>
@@ -129,7 +129,8 @@ export const getServerSideProps = ({ locale }) => {
             messages: {
                 ...require(`../../../messages/shared/${locale}.json`),
                 ...require(`../../../messages/federation/${locale}.json`),
-            }, locale, domain: process.env.LOCAL_DOMAIN
+            }, locale
+            ,env:getEnv()
         }
     }
 }

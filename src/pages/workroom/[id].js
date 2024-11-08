@@ -13,7 +13,7 @@ import {setTipText,setMessageText} from '../../data/valueData'
 import useDaoDetail from '../../hooks/useDaoDetail';
 import PageLayout from '../../components/PageLayout';
 import { useRouter } from 'next/router';
-// import RichTextEditor from '../../components/RichTextEditor';
+import { getEnv } from '../../lib/utils/getEnv';
 import LogoPro from '../../components/dao/LogoPro';
 import useLastPro from '../../hooks/useLastPro';
 import DaismTextarea from '../../components/form/DaismTextarea';
@@ -21,10 +21,11 @@ import ConfirmWin from '../../components/federation/ConfirmWin';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import useGetVersion from '../../hooks/useGetVersion';
-// import dynamic from 'next/dynamic';
 
-// const RichTextEditor = dynamic(() => import('../../components/RichTextEditor'), { ssr: false });
-export default function DaoDetail() {
+/**
+ * 指定id 某个智能公器信息
+ */
+export default function DaoDetail({locale,env}) {
     const { query } = useRouter()
     const daoid=query.id
     const [refresh,setRefresh]=useState(true)
@@ -35,7 +36,7 @@ export default function DaoDetail() {
     const tc = useTranslations('Common')
    
     return (
-        <PageLayout>
+        <PageLayout env={env}>
             {daoData.data.length?<> 
                   <DaoInfo record={daoData.data[0]} user={user} daoid={daoid} lastPro={lastPro} setRefresh={setRefresh} /> 
             </>
@@ -485,6 +486,7 @@ export const getServerSideProps = ({ locale }) => {
             ...require(`../../messages/shared/${locale}.json`),
             ...require(`../../messages/dao/${locale}.json`),
           },locale
+          ,env:getEnv()
           
         }
       }

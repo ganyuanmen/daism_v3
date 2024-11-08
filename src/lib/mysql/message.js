@@ -61,14 +61,15 @@ export async function daoPageData({pi,w})
 //关注插入  id:自动ID ,
 //element.user_account--->receive_account
 //`https://${process.env.LOCAL_DOMAIN}/communities/${sctype}/${id}`--->linkUrl
-export async function insertMessage(id,account,linkUrl,pathtype)
+export async function insertMessage(id,account,message_id,pathtype)
 {
 	let sctype=pathtype==='me'?'':'sc';
 	let re=await getData(`SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM v_message${sctype} where id=?`
 	,[id]);
+	re=re[0]
 
-	// if(re[0]) return
-   re=re[0]//
+	let linkUrl=`https://${process.env.LOCAL_DOMAIN}/communities/${pathtype}/${message_id}`
+	
 	let sql="INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,link_url,title,content,is_send,is_discussion,top_img,receive_account,send_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 	let paras=[re.message_id,re.manager,re.actor_name,re.avatar,re.actor_account,re.actor_url,re.actor_inbox,linkUrl,re.title,re.content,0,1,re.top_img,account,1]
 
@@ -128,7 +129,7 @@ export async function handleHeartAndBook({account,pid,flag,table,sctype})
 //获取一条发文
 export async function getOne(id,sctype)
 {
-    let re= await getData(`select * from v_message${sctype} where id=?`,[id]);
+    let re= await getData(`select * from v_message${sctype} where message_id=?`,[id]);
     return  re[0] || {}
 }
 

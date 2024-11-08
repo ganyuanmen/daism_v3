@@ -8,7 +8,7 @@ import {useEipTypes} from '../../hooks/useMessageData'
 import { useSelector } from 'react-redux';
 import { useDispatch} from 'react-redux';
 
-export default function CreateDao({setRefresh}) {
+export default function CreateDao({setRefresh,env}) {
     
     const [show, setShow] = useState(false); 
     const typeData=useEipTypes() //所有eip类型
@@ -31,7 +31,7 @@ export default function CreateDao({setRefresh}) {
         <Modal className='daism-title'  size="lg" show={show} onHide={(e) => {setShow(false)}} >
         <Modal.Header closeButton>mint {t('smartcommon')}</Modal.Header>
          <Modal.Body>
-            <DaoForm showErrorTip={showErrorTip} showTip={showTip} closeTip={closeTip} typeData={typeData} user={user} setRefresh={setRefresh} t={t} tc={tc} setShow={setShow} />
+            <DaoForm env={env} showErrorTip={showErrorTip} showTip={showTip} closeTip={closeTip} typeData={typeData} user={user} setRefresh={setRefresh} t={t} tc={tc} setShow={setShow} />
        </Modal.Body>
         </Modal>
         </div>

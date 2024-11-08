@@ -12,16 +12,12 @@ const initialState = {
     daoActor:[], //dao列表 //[{dao_id,dao_name,dao_symbol,dao_manager,dao_logo,dao_desc,actor_account,domain,actor_url}] accout=> XXX@domain
     messageText:'', // 提示窗口信息
     loginsiwe:false,  //登录siwe
-    daoAddress:{}  // daism 合约地址,包括其它
 }
   
 export const valueDataSlice = createSlice({
   name: 'valueData',
   initialState,
   reducers: {
-    setDaoAddress: (state, action) => {
-      state.daoAddress = action.payload;
-    },
     setUser: (state, action) => {
       state.user = action.payload;
     },
@@ -59,5 +55,6 @@ export const valueDataSlice = createSlice({
   }
 })
 
-export const { setEthBalance,setTipText,setMessageText,setUser,setActor,setTokenList,setTokenFilter,setDaoList,setDaoFilter,setDaoActor,setLoginsiwe,setDaoAddress,setIs_ceateDao} = valueDataSlice.actions
+export const { setEthBalance,setTipText,setMessageText,setUser,setActor,setTokenList,setTokenFilter,setDaoList,
+  setDaoFilter,setDaoActor,setLoginsiwe} = valueDataSlice.actions
 export default valueDataSlice.reducer

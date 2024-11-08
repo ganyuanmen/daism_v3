@@ -6,9 +6,13 @@ import PageLayout from '../../components/PageLayout';
 import { useTranslations } from 'next-intl'
 import DaoItem from '../../components/federation/DaoItem'
 import CreateDao from '../../components/my/CreateDao';
-//我的smart common
+import { getEnv } from '../../lib/utils/getEnv';
 
-export default function MyDao() {  
+/**
+ * 菜单中，我的智能公器
+ */
+
+export default function MyDao({locale,env}) {  
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
     const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
@@ -18,7 +22,7 @@ export default function MyDao() {
 
     const getDaoList=data=>{
         return <>
-              <CreateDao setRefresh={setRefresh} />
+              <CreateDao env={env} setRefresh={setRefresh} />
               <Card className='daism-title mt-2'>
                 <Card.Header>{t('daoGroupText')}</Card.Header>
                 <Card.Body>
@@ -29,7 +33,7 @@ export default function MyDao() {
     }
     
     return (
-        <PageLayout>
+        <PageLayout env={env}>
           <div style={{marginTop:'10px'}} >
             {
               user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
@@ -45,7 +49,7 @@ export default function MyDao() {
     );
 }
 
-export const getStaticProps = ({locale }) => {
+export const getServerSideProps = ({locale }) => {
       return {
         props: {
           messages: {
@@ -53,6 +57,7 @@ export const getStaticProps = ({locale }) => {
             ...require(`../../messages/federation/${locale}.json`),
             ...require(`../../messages/my/${locale}.json`),
           },locale
+          ,env:getEnv()
         }
       }
     }

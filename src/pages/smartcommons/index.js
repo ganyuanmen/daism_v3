@@ -6,9 +6,12 @@ import Loadding from "../../components/Loadding";
 import DaosPage from "../../components/home/DaosPage";
 import useDaoList from '../../hooks/useDaoList';
 import CreateDao from '../../components/my/CreateDao';
+import { getEnv } from '../../lib/utils/getEnv';
 
-
-export default function Home() {
+/**
+ * 智能公器列表
+ */
+export default function Home({env,locale}) {
   const t = useTranslations('Common')
   const [currentPageNum, setCurrentPageNum] = useState(1) //当前页
   const [orderIndex, setOrderIndex] = useState(0)
@@ -20,9 +23,9 @@ export default function Home() {
   const setRefresh=()=>{setOrderIndex(1)}
 
   return (
-    <PageLayout>
+    <PageLayout env={env}>
       <div style={{marginTop:'10px'}} >
-      <CreateDao setRefresh={setRefresh} />
+      <CreateDao env={env}  setRefresh={setRefresh} />
       { daosData.rows.length?<DaosPage daosData={daosData} currentPageNum={currentPageNum} setCurrentPageNum={setCurrentPageNum}
           orderIndex={orderIndex} setOrderIndex={setOrderIndex}  orderType={orderType} setOrderType={setOrderType} setOrderField={setOrderField} 
           setSearchText={setSearchText} postStatus={daosData.status}/>
@@ -35,7 +38,7 @@ export default function Home() {
   )
 }
 
-export const getStaticProps  = ({ locale }) => {
+export const getServerSideProps  = ({ locale }) => {
  
   
     return {
@@ -45,6 +48,7 @@ export const getStaticProps  = ({ locale }) => {
           ...require(`../../messages/dao/${locale}.json`),
           ...require(`../../messages/my/${locale}.json`),
         },locale
+        ,env:getEnv()
       }
     }
   }
