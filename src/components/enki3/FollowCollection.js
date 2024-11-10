@@ -43,6 +43,8 @@ export default function FollowCollection({t,method,account,domain}) {
             }
         };
         fetchData();
+
+        return ()=>{setData([])}
     
     }, [account,method]);
 

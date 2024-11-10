@@ -31,7 +31,7 @@ export default function Message({currentObj,locale,env}) {
       </Head>
     
       <PageLayout env={env}>
-        {currentObj?.id? <MessagePage t={t} tc={tc} currentObj={currentObj} domain={env.domain} />
+        {currentObj?.id? <MessagePage locale={locale} t={t} tc={tc} currentObj={currentObj} env={env} />
         :<ShowErrorBar errStr={t('noPostingText')} />
         }
         </PageLayout>

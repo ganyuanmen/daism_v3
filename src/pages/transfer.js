@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import ShowErrorBar from '../components/ShowErrorBar';
 import Loginsign from '../components/Loginsign';
 import Loadding from '../components/Loadding';
-
+import { getEnv } from '../lib/utils/getEnv';
 import { Card,Button, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 

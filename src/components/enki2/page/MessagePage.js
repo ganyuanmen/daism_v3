@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
  * 单登个发文信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
  * isEdit 是否允许修改  
  */
-export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCallBack,preEditCall,setActiveTab}) { 
+export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,delCallBack,preEditCall,setActiveTab}) { 
     const[fetchWhere, setFetchWhere] = useState({currentPageNum:0
         ,account:currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account 
         ,sctype:currentObj.dao_id>0?'sc':''
@@ -39,6 +39,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
     function closeTip(){dispatch(setTipText(''))}
     function showClipError(str){dispatch(setMessageText(str))}  
     const repluBtn=useRef()
+    const contentDiv=useRef()
 
     const ableReply = () => { //是否允许回复，点赞，书签
         if(!loginsiwe) return false;
@@ -148,7 +149,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
         // else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
         else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
     }
-    
+
     return (
         <div className="mt-3" style={{width:'100%'}}>
         <div className="mt-2 mb-2" >
@@ -167,7 +168,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
                {currentObj?._type===1 && <EventItem t={t} currentObj={currentObj} /> }
             </Card.Header>
         <Card.Body>
-            <div dangerouslySetInnerHTML={{__html: currentObj?.content}}></div>
+            <div ref={contentDiv} dangerouslySetInnerHTML={{__html: currentObj?.content}}></div>
         </Card.Body>
         <Card.Footer style={{padding:0}} >
             <div className="d-flex justify-content-between align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:'4px 8px'}}  >
@@ -178,7 +179,7 @@ export default function MessagePage({t,tc,currentObj,actor,loginsiwe,env,delCall
 
                 <EnKiHeart isEdit={ableReply()} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} currentObj={currentObj} domain={env.domain} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                 <EnKiBookmark isEdit={ableReply() && actor.actor_account.split('@')[1]==env.domain} t={t} tc={tc} loginsiwe={loginsiwe} actor={actor} currentObj={currentObj} domain={env.domain} showTip={showTip} closeTip={closeTip} showClipError={showClipError}  />
-              {currentObj.send_type===0 && <EnkiShare currentObj={currentObj} t={t} domain={env.domain} tc={tc} />}
+              {currentObj.send_type===0 && <EnkiShare content={contentDiv.current?.textContent} locale={locale} currentObj={currentObj} t={t} tc={tc} />}
             </div>
             {currentObj?.link_url && <div className="mt-2 mb-2" style={{textAlign:'center'}}>
                     <a  href={currentObj?.link_url} >{t('origlText')}......</a>

@@ -45,7 +45,7 @@ export default function EnKiRigester({t,user,domain,setRegister,re,accountTotal}
             closeTip()
             return
         }
-        
+    
         //重新设置登录信息
         window.daismDaoapi.Domain.recordInfo(actorName,domain).then(re => {
             // dispatch(setActor({...actor,domain,actor_name:actorName,actor_account:`${actorName}@${domain}`,actor_url:`https://${domain}/api/activitepub/users/${actorName}`}))
@@ -53,13 +53,13 @@ export default function EnKiRigester({t,user,domain,setRegister,re,accountTotal}
             dispatch(setUser({...user,connected:0,account:'',chainId:0}))
             dispatch(setLoginsiwe(false))
             
-            if(re){ //重新注册，恢复资料
+            if(re && actor?.actor_account){ //重新注册，恢复资料
                 // console.log("refresh ..................",actor)
                 setTimeout(() => {
                     fetch(`/api/admin/recover`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ actorName:`0x${actorName}`,domain,oldAccount:actor.actor_account})
+                        body: JSON.stringify({ actorName:`0x${actorName}`,domain,oldAccount:actor.actor_account,sctype:'',daoid:0})
                     })
                     .then(async response => {console.log('recover ok') })
             }, 3000);

@@ -15,7 +15,7 @@ export default function FollowItem1({messageObj,t,domain}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
-
+    const[data,setData]=useState(messageObj)
     const [isFollow,setIsFollow]=useState(true); //是否已关注
 
     function showClipError(str){dispatch(setMessageText(str))}  
@@ -37,10 +37,29 @@ export default function FollowItem1({messageObj,t,domain}) {
         return () => {ignore = true}
     },[actor])
 
+    useEffect(()=>{
+        // 
+        let ignore = false;
+        client.get(`/api/getData?url=${messageObj.url}`,'getUserFromUrl').then(res =>{ 
+            console.log("1begin---->")
+            console.log(messageObj)
+            console.log(res)
+            if (!ignore) 
+                if (res.status===200) 
+                    if(res?.data?.avatar)
+                    {
+                        if(res.data.avatar!==messageObj.avatar) 
+                          setData({...messageObj,avatar:res.data.avatar})
+                    }
+          });
+        return () => {ignore = true}
+    },[messageObj])
+ 
+
     return (
         
             <Row className="d-flex align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:"5px 2px"}}  >
-                <Col><EnkiMember messageObj={messageObj} isLocal={false} hw={32} /></Col>
+                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} /></Col>
                 <Col>
                     {actor?.actor_account && !isFollow && <EnKiFollow  t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                     }

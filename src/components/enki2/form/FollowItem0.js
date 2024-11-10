@@ -5,6 +5,7 @@ import EnKiUnFollow from './EnKiUnFollow'
 import {useSelector, useDispatch} from 'react-redux';
 import {setTipText,setMessageText} from '../../../data/valueData';
 import { useEffect, useState } from "react";
+import { client } from "../../../lib/api/client";
 
 /**
  * 我关注谁的item
@@ -14,6 +15,8 @@ export default function FollowItem0({messageObj,t,domain}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
+
+    const[data,setData]=useState(messageObj)
 
     function showClipError(str){dispatch(setMessageText(str))}  
     const actor = useSelector((state) => state.valueData.actor)
@@ -25,11 +28,30 @@ export default function FollowItem0({messageObj,t,domain}) {
         }
 
     },[actor])
+
+    useEffect(()=>{
+        // 
+        let ignore = false;
+        client.get(`/api/getData?url=${messageObj.url}`,'getUserFromUrl').then(res =>{ 
+            console.log("0begin------>")
+            console.log(messageObj)
+            console.log(res)
+            if (!ignore) 
+                if (res.status===200) 
+                    if(res?.data?.avatar)
+                    {
+                      if(res.data.avatar!==messageObj.avatar)  {
+                        setData({...messageObj,avatar:res.data.avatar});
+                        }
+                    }
+          });
+        return () => {ignore = true}
+    },[messageObj])
  
     return (
         
             <Row className="d-flex align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:"5px 2px"}}  >
-                <Col><EnkiMember messageObj={messageObj} isLocal={false} hw={32} /></Col>
+                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} /></Col>
                 {loginsiwe && !isFollow && <Col>
                     <EnKiUnFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                 </Col>

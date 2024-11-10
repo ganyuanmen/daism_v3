@@ -256,3 +256,25 @@ async function getInboxFromUrl1(url,type='application/activity+json'){
 
 	return obj 
 }
+
+//getData中 从网页获取个人信息 
+export async function getUserFromUrl({url}){
+	const myURL = new URL(url);
+	let obj={name:'',domain:myURL.hostname,inbox:'',account:'',url:'',pubkey:'',avatar:''}
+	let re= await httpGet(url,{"Content-Type": 'application/activity+json'})
+	if(re.code!==200) return obj;
+	re=re.message
+	if(!re) return obj;
+	if(re.name) obj.name=re.name;
+	if(re.inbox) { 
+	obj.inbox=re.inbox; 
+	obj.desc=re.summary;
+	obj.pubkey=re.publicKey.publicKeyPem;
+	obj.url=re.id;
+	obj.account=`${re.name}@${myURL.hostname}`
+	}
+	if(re.avatar && re.avatar.url) obj.avatar=re.avatar.url;   
+	else if(re.icon && re.icon.url) obj.avatar=re.icon.url;  
+
+	return obj 
+}

@@ -23,7 +23,15 @@ export default withSession(async (req, res) => {
       let selectImg=saveImage(files,fileType)
       let path =selectImg?`https://${process.env.LOCAL_DOMAIN}/${process.env.IMGDIRECTORY}/${selectImg}`:'';
       let lok= await updateActor({account,actorDesc,path})
-      if(lok) res.status(200).json(await getActor(did[0])); 
+      if(lok) {
+        res.status(200).json(await getActor(did[0])); 
+        if(path) { //修改头像 更新头像
+          let sql="update a_message set avatar=? where actor_account=?";
+          execute(sql,[path,account]).then(()=>{});
+          
+        }
+
+      }
       else res.status(500).json({errMsg: 'fail'})
 
   } catch (err) {

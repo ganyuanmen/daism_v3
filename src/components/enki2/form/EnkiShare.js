@@ -5,8 +5,9 @@ import { LocationSvg  } from '../../../lib/jssvg/SvgCollection';
 /**
  * 分享 显示链接 和 html 内容
  */
-export default function EnkiShare({currentObj,t,domain,tc})
+export default function EnkiShare({content, locale, currentObj,t,tc})
 {
+    console.log(content)
     const [show,setShow]=useState(false)
     const [showOver1,setShowOver1]=useState(false)
     const [showOver2,setShowOver2]=useState(false)
@@ -15,13 +16,15 @@ export default function EnkiShare({currentObj,t,domain,tc})
     const target2 = useRef(null);
 
     const path=currentObj.dao_id>0?'enki':'enkier';
-    const url=`https://${domain}/communities/${path}/${currentObj.message_id}`;
+    let url;
+     
     
     let delayTime=null;
     let localDomain='';
    try{
     const myURL = new URL(currentObj.actor_url);
     localDomain= myURL.hostname;
+    url=`https://${localDomain}/${locale==='zh'?'zh/':''}communities/${path}/${currentObj.message_id}`;
 
    }catch(e){}
     
@@ -33,7 +36,7 @@ export default function EnkiShare({currentObj,t,domain,tc})
         <div  >
             <div style="padding:2px 8px 2px 8px" >${localDomain}</div>
             <div style="padding:2px 8px 2px 8px" >${currentObj.actor_name} (${currentObj.actor_account})</div>
-            <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;" > ${currentObj.title}</div>	
+            <div style="padding:2px 8px 2px 8px;display:-webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;" > ${currentObj.title+'\n'+content?.replaceAll('\n','')}</div>	
         </div>
         </a>` ;
 

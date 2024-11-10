@@ -138,7 +138,7 @@ export default function me({ env,locale }) {
                     {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle}
                         currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab === 2 && <MessagePage t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
+                    {activeTab === 2 && <MessagePage locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                     {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}

@@ -36,7 +36,7 @@ export default function Domain_div({record,t,tc,daoActor,domain,accountTotal}) {
             closeTip()
             return
         }
-        
+     
         window.daismDaoapi.Domain.record(record.dao_id,domain).then(async re => {
            
             setTimeout(async () => {
@@ -47,11 +47,11 @@ export default function Domain_div({record,t,tc,daoActor,domain,accountTotal}) {
                         dispatch(setDaoActor(data.daoActor))
                         window.sessionStorage.setItem("daoActor", JSON.stringify(data.daoActor))
                     }
-                    if(re){ //重新注册，恢复资料
+                    if(re && record.actor_account){ //重新注册，恢复资料
                         fetch(`/api/admin/recover`, {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({actorName:record.dao_symbol,domain,oldAccount:record.actor_account })
+                            body: JSON.stringify({actorName:record.dao_symbol,domain,oldAccount:record.actor_account,sctype:'sc',daoid:record.dao_id })
                         })
                         .then(async response => {console.log('recover ok') })
                     }

@@ -10,8 +10,6 @@ import { getEnv } from '../../../lib/utils/getEnv';
 
 /**
  * 社区 单个发文信息
- * @param {*} param0 
- * @returns 
  */
 export default function Message({currentObj,locale,env}) {
   const router = useRouter();
@@ -33,7 +31,7 @@ export default function Message({currentObj,locale,env}) {
       </Head>
     
       <PageLayout  env={env} >
-        {currentObj?.id? <MessagePage t={t} tc={tc} currentObj={currentObj} domain={env.domain} />
+        {currentObj?.id? <MessagePage locale={locale} t={t} tc={tc} currentObj={currentObj} env={env} />
         :<ShowErrorBar errStr={t('noPostingText')} />
         }
         </PageLayout>
