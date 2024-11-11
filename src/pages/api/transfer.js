@@ -51,7 +51,7 @@ export default withSession(async (req, res) => {
 //     };
 
 //     const txResponse = await wallet.sendTransaction(tx);
-//     console.log('Transaction hash:', txResponse.hash);
+
 
 //     // await txResponse.wait(); // 等待交易确认
 

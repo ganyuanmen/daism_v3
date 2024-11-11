@@ -30,12 +30,7 @@ const RichTextEditor = ({title,defaultValue,editorRef}) => {
       // headers:{encType:'multipart/form-data'},
       // prepareData: function(formData){
       //   const fileInput = document.querySelector('input[type="file"]');
-      //   console.log( fileInput)
-      //   console.log( fileInput.files)
-      //     console.log("===========================")
-      //     console.log(JSON.stringify(formData))
-
-      //     console.log("===========================")
+     
       //   //  data.append('image', data.getAll('files'));
       //     return formData;
       // },

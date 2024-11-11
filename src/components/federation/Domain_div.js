@@ -53,7 +53,7 @@ export default function Domain_div({record,t,tc,daoActor,domain,accountTotal}) {
                             headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({actorName:record.dao_symbol,domain,oldAccount:record.actor_account,sctype:'sc',daoid:record.dao_id })
                         })
-                        .then(async response => {console.log('recover ok') })
+                        .then(async response => {console.info('recover ok') })
                     }
                     window.location.reload()
                 }

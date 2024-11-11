@@ -16,7 +16,8 @@
 
   "Common":{
     "about":"about",
-    "title":"DEX-DAism",
+    "title":"DeVal-DAism",
+    "smartTitle":"Smart Commons - DAism",
     "titleDesc":"DAism is a public governance layer of dApps and tokenomics . Proof of Value (PoV, Proof-of-Value)  is the unique governance consensus developed by DAism. The mission of DAism is aiming to foster the proliferation of Smart Commons and the flourishing of tokenomics.",
     "copyText": "Copied",
     "totalRecordText": "Total records",

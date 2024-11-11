@@ -24,7 +24,6 @@ export default withSession(async (req, res) => {
         const [fields, files] = await form.parse(req);
         const { id, startTime, endTime, eventUrl, eventAddress, time_event, actorid, daoid, _type, account, title, content, fileType, isSend, isDiscussion } = fields
         const imgPath = saveImage(files, fileType[0])
-        // console.log({ id, startTime, endTime, eventUrl, eventAddress, time_event, actorid, daoid, _type, account, title, content, fileType, isSend, isDiscussion })
         let path = imgPath ? `https://${process.env.LOCAL_DOMAIN}/${process.env.IMGDIRECTORY}/${imgPath}` : '';
         let sql = '';
         let paras;

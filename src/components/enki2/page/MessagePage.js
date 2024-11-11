@@ -92,14 +92,12 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
     const afterEditcall=()=>{setReplyObj(null);callBack();}
     
     useEffect(() => {
-        // console.log("---------------->>>",fetchWhere)
         const fetchData = async () => {
             setIsLoading(true);
             try {
                 const res = await client.get(`/api/getData?pi=${fetchWhere.currentPageNum}&pid=${fetchWhere.pid}&account=${fetchWhere.account}&sctype=${fetchWhere.sctype}`,'replyPageData');
                 if(res.status===200){
                     if(Array.isArray(res.data)){
-                        // console.log("reply data",res.data)
                         setHasMore(res.data.length >= 20);
                         if (fetchWhere.currentPageNum === 0) setData(res.data);
                         else setData([...data, ...res.data]);
@@ -132,7 +130,6 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
     //         const scrollHeight = document.documentElement.scrollHeight;
     //         const clientHeight = document.documentElement.clientHeight;
     //         if (scrollTop + clientHeight >= scrollHeight) {
-    //             console.log('reply滚动到底部了', [fetchWhere, hasMore]);
     //             if (hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
     //         }
     //     };

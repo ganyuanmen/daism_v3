@@ -20,6 +20,7 @@ export default function Message({currentObj,locale,env}) {
     return (
       <>
         <Head>
+        <title>{currentObj?.title}</title>
         <meta content={`${currentObj.actor_name} (${currentObj.actor_account})`} property="og:title" />
         <meta content={`https://${env.domain}${router.asPath}`} property="og:url" />
         <meta content={new Date().toISOString()} property="og:published_time" />

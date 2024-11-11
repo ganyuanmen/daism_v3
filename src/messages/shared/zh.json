@@ -16,7 +16,8 @@
 
   "Common":{
     "about":"关于",
-    "title":"交易-道易程",
+    "title":"去估值-道易程",
+    "smartTitle":"智能公器-道易程",
     "titleDesc":"道易程是以太坊dApp和通证经济的公共治理层,价值证明（PoV，Proof of Value）是其独创的治理共识,道易程的使命是以价值为导向，让通证经济得以蓬勃发展，让智能公器（Smart Commons）得以繁衍生息",
     "copyText": "已复制",
     "totalRecordText":"总共有",

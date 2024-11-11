@@ -33,9 +33,7 @@ export default function FollowItem0({messageObj,t,domain}) {
         // 
         let ignore = false;
         client.get(`/api/getData?url=${messageObj.url}`,'getUserFromUrl').then(res =>{ 
-            console.log("0begin------>")
-            console.log(messageObj)
-            console.log(res)
+
             if (!ignore) 
                 if (res.status===200) 
                     if(res?.data?.avatar)

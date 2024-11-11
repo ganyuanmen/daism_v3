@@ -7,7 +7,6 @@ import { LocationSvg  } from '../../../lib/jssvg/SvgCollection';
  */
 export default function EnkiShare({content, locale, currentObj,t,tc})
 {
-    console.log(content)
     const [show,setShow]=useState(false)
     const [showOver1,setShowOver1]=useState(false)
     const [showOver2,setShowOver2]=useState(false)

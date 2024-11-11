@@ -6,22 +6,23 @@ import { client } from "../../../lib/api/client";
 import CommunitySerach from "../../enki3/CommunitySerach";
 import ShowErrorBar from "../../ShowErrorBar";
 
+
+
 export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setActiveTab }) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [err,setErr]=useState("");
 
+    
+
     useEffect(() => {
-        // console.log("=========>",fetchWhere)
         const fetchData = async () => {
             setIsLoading(true);
             try {
                 const res = await client.get(`/api/getData?pi=${fetchWhere.currentPageNum}&menutype=${fetchWhere.menutype}&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=${fetchWhere.order}&eventnum=${fetchWhere.eventnum}&account=${fetchWhere.account}&v=${fetchWhere.v}`, 'messagePageData');
-                // if (fetchWhere.currentPageNum === 0) setData([]);
                 if(res.status===200){
                     if(Array.isArray(res.data)){
-                        // console.log("mess data",res.data)
                         setHasMore(res.data.length >= 12);
                         if (fetchWhere.currentPageNum === 0) setData(res.data);
                         else setData([...data, ...res.data]);
@@ -56,7 +57,6 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
     //         const scrollHeight = document.documentElement.scrollHeight;
     //         const clientHeight = document.documentElement.clientHeight;
     //         if (scrollTop + clientHeight >= scrollHeight) {
-    //             console.log('mess滚动到底部了', [fetchWhere, hasMore]);
     //             if (hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
     //         }
     //     };

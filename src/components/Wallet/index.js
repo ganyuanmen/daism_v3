@@ -69,13 +69,13 @@ function Wallet({env}) {
 
     const onChaidChange=(provider)=>{
         provider.on('chainChanged', (_chainId,a,b,c)=>{
-            console.log("chainChanged--->",_chainId)
+            console.info("chainChanged--->",_chainId)
             if(NET[`_${_chainId}`]!=env.networkName){
                 showError(t('mustLoginText',{netName:env.networkName}));
                 onDisconnect()
             }
             else { //切换成功之后，需要重新登录
-                console.log("begin re connect.................")
+                console.info("begin re connect.................")
                 window.location.reload()       //0x1 //0xaa36a7  parseInt(chainIdHex)  parseInt('0xaa36a7')=11155111
             }
         });
@@ -104,7 +104,7 @@ function Wallet({env}) {
                 window.daism_signer=signer
                 const network=await provider.getNetwork()
                 let tempChainId = network.chainId.toString()
-                console.log("ok",JSON.stringify(network),NET[`_${tempChainId}`],env.networkName)
+                console.info("ok",JSON.stringify(network),NET[`_${tempChainId}`],env.networkName)
                 if(!checkNetWork(tempChainId)) return;
               
                 window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)           

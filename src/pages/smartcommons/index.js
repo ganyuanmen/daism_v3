@@ -7,7 +7,7 @@ import DaosPage from "../../components/home/DaosPage";
 import useDaoList from '../../hooks/useDaoList';
 import CreateDao from '../../components/my/CreateDao';
 import { getEnv } from '../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * 智能公器列表
  */
@@ -23,6 +23,11 @@ export default function Home({env,locale}) {
   const setRefresh=()=>{setOrderIndex(1)}
 
   return (
+  <>
+    <Head>
+        <title>{t('smartTitle')}</title>
+    </Head>
+
     <PageLayout env={env}>
       <div style={{marginTop:'10px'}} >
       <CreateDao env={env}  setRefresh={setRefresh} />
@@ -35,6 +40,7 @@ export default function Home({env,locale}) {
       }
       </div>
     </PageLayout>
+  </>
   )
 }
 

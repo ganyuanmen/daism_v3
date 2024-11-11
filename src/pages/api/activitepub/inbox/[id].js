@@ -51,18 +51,18 @@ export default async function handler(req, res) {
 	if(!postbody.type || !postbody.actor) return res.status(404).json({errMsg:'Invalid JSON'})	
 	const _type=postbody.type.toLowerCase();
 	const name = req.query.id;
-	console.log(`inbox-----${name}-${_type}-${postbody.actor}`);
+	console.info(`inbox-----${name}-${_type}-${postbody.actor}`);
 	if(_type!=='follow' && _type!=='accept' && _type!=='undo' && _type!=='create' ) return res.status(200).json({errMsg:'No need to handle'});
 	
 	let actor = cache.get(postbody.actor);
 	if (actor) {
-		console.log("命中..............")
+		console.info("命中..............")
 	} else {
-		console.log(`begin getInboxFromUrl from ${name}:`,postbody.actor)
+		console.info(`begin getInboxFromUrl from ${name}:`,postbody.actor)
 		try {
 		    actor=await getInboxFromUrl(postbody.actor); 
 			if(!cache.get(postbody.actor)){
-				console.log("setting time:",new Date().getTime())
+				console.info("setting time:",new Date().getTime())
 				cache.set(postbody.actor, actor); // 将新数据存入缓存
 			}
 		} catch (error) {
