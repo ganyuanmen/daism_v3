@@ -10,7 +10,7 @@ import Daomember_div from '../../../components/federation/Daomember_div';
 import Follower_div from '../../../components/federation/Follower_div';
 import Domain_div from '../../../components/federation/Domain_div';
 import { getEnv } from '../../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * dao 信息 
  */
@@ -25,7 +25,10 @@ export default function DaoInfo({daoData,daoMember,follower,accountTotal,env,loc
     useEffect(()=>{ setFollow(follower) },[follower])
     
 
-    return (
+    return (<>
+      <Head>
+          <title>{tc('smartcommonsTitle',{name:daoData?.dao_symbol})}</title>
+      </Head>
         <PageLayout env={env}>
             <div style={{marginTop:'10px'}} >
                   { daoData.dao_id?<>
@@ -37,7 +40,7 @@ export default function DaoInfo({daoData,daoMember,follower,accountTotal,env,loc
                   </>
                 :<ShowErrorBar errStr={tc('noDataText')} />}   
               </div>
-        </PageLayout>
+        </PageLayout></>
     );
 }
 

@@ -8,7 +8,7 @@ import ShowErrorBar from "../../ShowErrorBar";
 
 
 
-export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setActiveTab }) {
+export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setCurrentObj, setActiveTab }) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -80,7 +80,7 @@ export default function Main({ t,fetchWhere, setFetchWhere, setCurrentObj, setAc
         <>
             <CommunitySerach searchPlace='Search...' setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
             <div style={{ width: '100%' }} >
-                {isLoading?<Loadding /> : Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
+                {isLoading?<Loadding /> : Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard env={env} path={path}  locale={locale} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
             </div>
             <div className="mt-3 mb-3" style={{textAlign:'center'}}  >
                 {footerdiv()}

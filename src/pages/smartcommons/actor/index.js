@@ -8,7 +8,7 @@ import Wecome from '../../../components/federation/Wecome'
 import EnKiRigester from '../../../components/enki2/form/EnKiRigester';
 import { getEnv } from '../../../lib/utils/getEnv';
 import ActorMember from '../../../components/enki2/form/ActorMember';
-
+import Head from 'next/head';
 /**
  * 登录后个人信息
  */
@@ -18,7 +18,10 @@ export default function MyActor({env,accountTotal,locale}) {
     let tc = useTranslations('Common')
     let t = useTranslations('ff')
   
-    return (
+    return (<>
+      <Head>
+          <title>{tc('myAccounttTitle')}</title>
+      </Head>
       <PageLayout env={env}>
         <div style={{marginTop:'10px'}} >
             {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />
@@ -26,7 +29,7 @@ export default function MyActor({env,accountTotal,locale}) {
             :<ActorInfo t={t} tc={tc} user={user} domain={env.domain} accountTotal={accountTotal} />
             }  
         </div>
-      </PageLayout>
+      </PageLayout></>
     );
 }
 

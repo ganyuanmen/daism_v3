@@ -9,6 +9,7 @@ import useGetDividend from "../../hooks/useGetDividend";
 import PageLayout from '../../components/PageLayout';
 import ShowAddress from '../../components/ShowAddress'
 import { getEnv } from "../../lib/utils/getEnv";
+import Head from 'next/head';
 /**
  * 我的分红
  */
@@ -21,7 +22,10 @@ export default function Dividend({env,locale}) {
     const [currentPageNum, setCurrentPageNum] = useState(1); //当前页
     const dividendData = useGetDividend({currentPageNum,did:user.account})   
 
-    return (
+    return (<>
+      <Head>
+          <title>{tc('myDivdendTitle')}</title>
+      </Head>
         <PageLayout env={env}>
           <div style={{marginTop:"10px"}} >
             {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')} />
@@ -37,7 +41,7 @@ export default function Dividend({env,locale}) {
             </>
             }
         </div>
-        </PageLayout>
+        </PageLayout></>
     );
     }
 

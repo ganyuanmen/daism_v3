@@ -18,18 +18,20 @@ import { useSelector } from 'react-redux';
  * 单登个发文信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
  * isEdit 是否允许修改  
  */
-export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,delCallBack,preEditCall,setActiveTab}) { 
+export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe,env,delCallBack,preEditCall}) { 
     const[fetchWhere, setFetchWhere] = useState({currentPageNum:0
         ,account:currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account 
         ,sctype:currentObj.dao_id>0?'sc':''
         ,pid:currentObj.id});
+
+        // console.log(currentObj,path)
 
     const daoActor=useSelector((state) => state.valueData.daoActor)
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [err,setErr]=useState("");
-
+    const [isEdit,setIsEdit]=useState(false);
     const [total,setTotal]=useState(0);//回复总数
     const [refresh,setRefresh]=useState(false);  //刷新回复总数
     const [replyObj,setReplyObj]=useState(null) //回复内容，用于修改，为null表示新增
@@ -41,9 +43,40 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
     const repluBtn=useRef()
     const contentDiv=useRef()
 
+    useEffect(()=>{
+        const checkIsEdit=()=>{  //是否允许修改
+            if(!loginsiwe) return false;
+            if(!actor?.actor_account && !actor?.actor_account?.includes('@')) return false;
+            //远程读取不可修改
+            if(env.domain!=currentObj.actor_account.split('@')[1]) return false;
+            if(currentObj.dao_id>0){  //SC
+                if(path!=='enki') return false; // 不是从我的社区模块进入，不允许修改
+                let _member=daoActor.find((obj)=>{return obj.dao_id===currentObj.dao_id})
+                if(_member){
+                     return true;
+                } 
+            }else { //个人
+                if(path!=='enkier') return false;// 不是从个人社交模块进入，不允许修改
+                  //非本地登录
+                if(actor.actor_account.split('@')[1]!=env.domain) return false;
+                if(currentObj.send_type===0){ //本地
+                    if(actor.actor_account===currentObj.actor_account) return true;
+                }else { //接收
+                    if(actor.actor_account===currentObj.receive_account) return true;
+                }
+            }
+            //超级管理员
+            if(actor?.manager?.toLowerCase()==env.administrator.toLowerCase()) return true;
+            return false;
+        }
+
+        setIsEdit(checkIsEdit())
+
+    },[actor,currentObj])
+
     const ableReply = () => { //是否允许回复，点赞，书签
         if(!loginsiwe) return false;
-        if(!actor?.actor_account && !actor?.actor_account.includes('@')) return false;
+        if(!actor?.actor_account && !actor?.actor_account?.includes('@')) return false;
 
         //发布帐号，用于判断是否本域名
         let _account=currentObj?.send_type==0?currentObj?.actor_account:currentObj?.receive_account;
@@ -51,31 +84,7 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
         return env.domain === messDomain; //本域名发布，可以回复
     }
 
-    const checkIsEdit=()=>{  //是否允许修改
-        if(!loginsiwe) return false;
-        if(!actor?.actor_account && !actor?.actor_account.includes('@')) return false;
-      
-        //远程读取不可修改
-        if(env.domain!=currentObj.actor_account.split('@')[1]) return false;
-        //超级管理员
-        if(actor?.manager?.toLowerCase()==env.administrator.toLowerCase()) return true;
-
-        if(currentObj.dao_id>0){  //SC
-            let _member=daoActor.find((obj)=>{return obj.dao_id===currentObj.dao_id})
-            if(_member){
-                 return true;
-            } 
-        }else { //个人
-              //非本地登录
-            if(actor.actor_account.split('@')[1]!=env.domain) return false;
-            if(currentObj.send_type===0){ //本地
-                if(actor.actor_account===currentObj.actor_account) return true;
-            }else { //接收
-                if(actor.actor_account===currentObj.receive_account) return true;
-            }
-        }
-        return false;
-    }
+  
    
      //选取回复总数  
      useEffect(()=>{
@@ -150,7 +159,7 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
     return (
         <div className="mt-3" style={{width:'100%'}}>
         <div className="mt-2 mb-2" >
-         {setActiveTab && <Button onClick={e=>{ setActiveTab(0)}} ><ExitSvg size={24} />  {t('esctext')}</Button>}
+       
         </div>
             {currentObj?.top_img && 
              <div className="mt-2 mb-2" style={{ position:'relative', textAlign:'center'}} >
@@ -160,7 +169,7 @@ export default function MessagePage({locale,t,tc,currentObj,actor,loginsiwe,env,
         <h1>{currentObj?.title}</h1>
         <Card className="mb-3" >
             <Card.Header>
-                <EnkiMemberItem t={t} messageObj={currentObj} domain={env.domain} actor={actor}  delCallBack={delCallBack} preEditCall={preEditCall} showTip={showTip} closeTip={closeTip} showClipError={showClipError} isEdit={checkIsEdit()} />
+                <EnkiMemberItem t={t} messageObj={currentObj} domain={env.domain} actor={actor}  delCallBack={delCallBack} preEditCall={preEditCall} showTip={showTip} closeTip={closeTip} showClipError={showClipError} isEdit={isEdit} />
                {/* 活动 */}
                {currentObj?._type===1 && <EventItem t={t} currentObj={currentObj} /> }
             </Card.Header>

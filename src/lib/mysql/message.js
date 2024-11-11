@@ -3,7 +3,7 @@ import { httpGet } from "../net";
 import { getUser } from './user';
 
  
-////pi,menutype,daoid,w,actorid:发文人ID,account,order,eventnum
+////pi,menutype,daoid,w,actorid:嗯文人ID,account,order,eventnum
 // menutype 1 我的社区，2 公区社区 3 个人社区
 //eventnum 社区: 0 非活动，1活动, 个人：1:首页 2:我的嗯文 3:我的收藏 4:我的接收嗯文 
 // v: 1 我关注的社区
@@ -109,7 +109,7 @@ export async function getAllSmartCommon()
 }
 
 
-//获取点赞数量及是否已点赞heart  获取收藏数量及是否已收藏bookmark  account:人id pid:发文id
+//获取点赞数量及是否已点赞heart  获取收藏数量及是否已收藏bookmark  account:人id pid:嗯文id
 export async function getHeartAndBook({pid,account,table,sctype})
 {
     let sql=`SELECT a.total,IFNULL(b.pid,0) pid FROM (SELECT COUNT(*) total FROM a_${table}${sctype} WHERE pid=?) a LEFT JOIN (SELECT pid FROM a_${table}${sctype} WHERE pid=? and account=?) b ON 1=1`
@@ -118,7 +118,7 @@ export async function getHeartAndBook({pid,account,table,sctype})
 }
 
 
-//点赞、取消点赞 heart  收藏、取消收藏 bookmark  account:人id pid:发文id
+//点赞、取消点赞 heart  收藏、取消收藏 bookmark  account:人id pid:嗯文id
 export async function handleHeartAndBook({account,pid,flag,table,sctype})
 {
     if(flag==0)  return await execute(`delete from a_${table}${sctype} where pid=? and account=?`,[pid,account]);
@@ -126,10 +126,10 @@ export async function handleHeartAndBook({account,pid,flag,table,sctype})
 }
 
 
-//获取一条发文
+//获取一条嗯文
 export async function getOne(id,sctype)
 {
-    let re= await getData(`select * from v_message${sctype} where message_id=?`,[id]);
+    let re= await getData(`select * from v_message${sctype} where ${id.length<10?'id':'message_id'}=?`,[id]);
     return  re[0] || {}
 }
 

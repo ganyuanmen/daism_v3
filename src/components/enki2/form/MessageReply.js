@@ -50,7 +50,7 @@ const MessageReply = forwardRef(({ t, tc, actor, total, currentObj, addReplyCall
  
     return (
         <>
-            {(isEdit && currentObj?.is_discussion === 1) ? <div>
+            {(isEdit && currentObj?.is_discussion == 1) ? <div>
                 <Button onClick={() => {
                     setShowWin(true);
                     setReplyObj(null); //表示新增

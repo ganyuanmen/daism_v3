@@ -41,6 +41,18 @@ function Wallet({env}) {
     },[daoLogin])
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await client.get('/api/siwe/getdaoactor?t='+new Date().getTime());
+                if(res.status===200){
+                    dispatch(setDaoActor(res.data.daoActor))
+                    dispatch(setActor(res.data.actor))
+                }
+            } catch (error) {
+                console.error(error);
+            } 
+        };
+
         if(providers.length) {
             let _name=window.sessionStorage.getItem("providerinfoname")
             if(_name){
@@ -58,10 +70,11 @@ function Wallet({env}) {
                 connectWalletRef.current(providerRef.current)
                 if(window.sessionStorage.getItem("loginsiwe")==='1'){ // //恢复siwe 登录
                     dispatch(setLoginsiwe(true))
-                    let _dao=window.sessionStorage.getItem("daoActor")
-                    if(_dao) dispatch(setDaoActor(JSON.parse(_dao)))
-                    let _actor=window.sessionStorage.getItem("actor")
-                    if(_actor) dispatch(setActor(JSON.parse(_actor)))
+                    fetchData()
+                    // let _dao=window.sessionStorage.getItem("daoActor")
+                    // if(_dao) dispatch(setDaoActor(JSON.parse(_dao)))
+                    // let _actor=window.sessionStorage.getItem("actor")
+                    // if(_actor) dispatch(setActor(JSON.parse(_actor)))
                 }
             }         
         }
@@ -76,7 +89,8 @@ function Wallet({env}) {
             }
             else { //切换成功之后，需要重新登录
                 console.info("begin re connect.................")
-                window.location.reload()       //0x1 //0xaa36a7  parseInt(chainIdHex)  parseInt('0xaa36a7')=11155111
+                // window.location.reload()       //0x1 //0xaa36a7  parseInt(chainIdHex)  parseInt('0xaa36a7')=11155111
+                connectWalletRef.current(providerRef.current)
             }
         });
     }
@@ -147,8 +161,8 @@ function Wallet({env}) {
         dispatch(setDaoActor([]))
         window.sessionStorage.setItem("isLogin", "0")
         window.sessionStorage.setItem("loginsiwe", "0")
-        window.sessionStorage.setItem("daoActor", '')
-        window.sessionStorage.setItem("actor", '')
+        // window.sessionStorage.setItem("daoActor", '')
+        // window.sessionStorage.setItem("actor", '')
         window.sessionStorage.setItem("providerinfouuid", '')
         
         window.daismDaoapi=null
@@ -163,8 +177,8 @@ function Wallet({env}) {
         dispatch(setDaoActor(null))
         
         window.sessionStorage.setItem("loginsiwe", "0")
-        window.sessionStorage.setItem("daoActor", '')
-        window.sessionStorage.setItem("actor", '')
+        // window.sessionStorage.setItem("daoActor", '')
+        // window.sessionStorage.setItem("actor", '')
         window.daismDaoapi=null
     }
 

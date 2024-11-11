@@ -40,12 +40,12 @@ export default function Domain_div({record,t,tc,daoActor,domain,accountTotal}) {
         window.daismDaoapi.Domain.record(record.dao_id,domain).then(async re => {
            
             setTimeout(async () => {
-                const res = await fetch('/api/siwe/getdaoactor')
+                const res = await fetch('/api/siwe/getdaoactor?t='+new Date().getTime())
                 let data=await res.json();
                 if(res.status===200) { 
                     if(data.daoActor.length){
                         dispatch(setDaoActor(data.daoActor))
-                        window.sessionStorage.setItem("daoActor", JSON.stringify(data.daoActor))
+                        // window.sessionStorage.setItem("daoActor", JSON.stringify(data.daoActor))
                     }
                     if(re && record.actor_account){ //重新注册，恢复资料
                         fetch(`/api/admin/recover`, {

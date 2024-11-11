@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import DaoItem from '../../components/federation/DaoItem'
 import CreateDao from '../../components/my/CreateDao';
 import { getEnv } from '../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * 菜单中，我的智能公器
  */
@@ -32,7 +32,10 @@ export default function MyDao({locale,env}) {
             </>    
     }
     
-    return (
+    return (<>
+      <Head>
+          <title>{tc('myCommonsTitle')}</title>
+      </Head>
         <PageLayout env={env}>
           <div style={{marginTop:'10px'}} >
             {
@@ -45,7 +48,7 @@ export default function MyDao({locale,env}) {
               </>
             }
           </div>
-        </PageLayout>
+        </PageLayout></>
     );
 }
 

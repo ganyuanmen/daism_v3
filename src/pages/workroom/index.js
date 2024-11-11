@@ -11,7 +11,7 @@ import Daos from '../../components/my/Daos'
 import Proposal from '../../components/my/Pro';
 import { useEffect } from 'react';
 import {getEnv} from '../../lib/utils/getEnv'
-
+import Head from 'next/head';
 
 /**
  * 工作室
@@ -40,7 +40,10 @@ export default function MyDao({locale,env}) {
     },[setActiveTab])
     
     const cStyle={fontWeight:'bold',textAlign:'center'}
-    return (
+    return ( <>
+        <Head>
+            <title>{tc('workTitle')}</title>
+        </Head>
         <PageLayout env={env}>
         {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
         :<>
@@ -72,6 +75,7 @@ export default function MyDao({locale,env}) {
         </>
         }  
         </PageLayout>
+        </>
     );
 }
 

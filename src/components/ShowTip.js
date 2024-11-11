@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 
 export default function ShowTip() {
     const messageText = useSelector((state) => state.valueData.messageText)
+    const tipImag = useSelector((state) => state.valueData.tipImag)
     const t = useTranslations('Common')
     const dispatch = useDispatch();
 
@@ -14,7 +15,7 @@ export default function ShowTip() {
                 <Modal.Title>{t('tipText')}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="daism-tip-body">
-                <img alt="" src="/mess.svg" width={32} height={32} />
+                <img alt="" src={`/${tipImag}`} width={32} height={32} />
                 <div className="daism-tip-text">{messageText}</div>
             </Modal.Body>
         </Modal>

@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl'
 import PageLayout from '../../components/PageLayout';
 import Loadding from '../../components/Loadding';
 import { getEnv } from '../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * 我的钱包
  */
@@ -63,7 +63,10 @@ export default function ShowWalletInfo({env,locale}) {
 
       
 
-    return (
+    return (<>
+      <Head>
+          <title>{tc('myWalletTitle')}</title>
+      </Head>
         <PageLayout env={env}>
           <div style={{marginTop:"10px"}} >
         {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />:
@@ -86,7 +89,7 @@ export default function ShowWalletInfo({env,locale}) {
                     </tbody>
             </Table>}
             </div>
-            </PageLayout>
+            </PageLayout></>
     );
 }
 

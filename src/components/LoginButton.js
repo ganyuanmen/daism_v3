@@ -52,8 +52,8 @@ const LoginButton = forwardRef((props, ref) => {
             dispatch(setDaoActor(data.daoActor))
             dispatch(setActor(data.actor))
             window.sessionStorage.setItem("loginsiwe", "1")
-            window.sessionStorage.setItem("daoActor", JSON.stringify(data.daoActor))
-            window.sessionStorage.setItem("actor", JSON.stringify(data.actor))
+            // window.sessionStorage.setItem("daoActor", JSON.stringify(data.daoActor))
+            // window.sessionStorage.setItem("actor", JSON.stringify(data.actor))
         }
         setSingering(false)
         showLoadding('')

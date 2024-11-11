@@ -12,12 +12,15 @@ import Loadding from '../../../components/Loadding';
 import iaddStyle from '../../../styles/iadd.module.css'
 import { client } from '../../../lib/api/client';
 import EnkiAccount from '../../../components/enki2/form/EnkiAccount';
-import { getEnv } from '../../../lib/utils/getEnv';
+import { getEnv,decrypt } from '../../../lib/utils/getEnv';
+import Head from 'next/head';
+import { getOne } from '../../../lib/mysql/message';
+import { httpGet } from '../../../lib/net';
 
 /**
 *公共社区
  */
-export default function SC({ locale,env }) {
+export default function SC({openObj, locale,env }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  ///当前页
         daoid: '0',  //0 所有, 数字 单个
@@ -29,7 +32,7 @@ export default function SC({ locale,env }) {
         eventnum: 0  //0 活动 1 非活动
      });
 
-    const [daoWhere,setDaoWhere]=useState({currentPageNum:0,where:''}); //dao 下载
+    const [daoWhere,setDaoWhere]=useState({ currentPageNum:0,where:''}); //dao 下载
     const [data, setData] = useState([]);  //公器列表
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -41,7 +44,22 @@ export default function SC({ locale,env }) {
     const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
     const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
     const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
-    
+
+    function removeUrlParams() {
+        setCurrentObj(null);
+        if(window.location.href.includes('?d=')) {
+            const url = new URL(window.location.href);
+            url.search = ''; // 清空所有参数
+            window.history.replaceState({}, '', url.href);
+        }
+      }
+
+    useEffect(()=>{ 
+        if(openObj.id){
+            setCurrentObj(openObj);
+            setActiveTab(2);
+        } 
+    },[openObj])
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -66,23 +84,29 @@ export default function SC({ locale,env }) {
 
     const latestHandle=()=>{ // 最新
         //account: '' 从本地读取
+        removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:'',eventnum:0,where:'',daoid:0,v:0})
         setActiveTab(0);
     }
 
     const eventHandle=()=>{ //活动
         //account: '' 从本地读取
+        removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:'',eventnum:1,where:'',daoid:0,v:0})
         setActiveTab(0);
     }
 
     const myFollowHandle=()=>{ //我关注的社区
         //account: '' 从本地读取
+        removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum:0,account:actor?.actor_account,eventnum:0,where:'',daoid:0,v:1})
         setActiveTab(0);
     }
   
-    return (
+    return (<>
+        <Head>
+            <title>{currentObj?.id?currentObj?.title:tc('enkiTitle')}</title>
+        </Head>
         <PageLayout env={env}>
             <div className={iaddStyle.clearfix}>
                 <div className={iaddStyle.scsidebar}>
@@ -107,6 +131,7 @@ export default function SC({ locale,env }) {
                         {actor?.actor_account && <li><a href="#" onClick={myFollowHandle}>{t('followCommunity')}</a></li>} 
                         {Array.isArray(data) && data.map((obj, idx) => <li key={obj.dao_id} className={iaddStyle.scli}>
                             <a href="#" onClick={e=>{
+                                removeUrlParams();
                                 setFetchWhere({...fetchWhere,daoid:obj.dao_id,currentPageNum:0,where:'',eventnum:0,v:0,account:obj.actor_account});
                                 setActiveTab(0);
                                 }} >
@@ -127,27 +152,41 @@ export default function SC({ locale,env }) {
 
                 <div className={iaddStyle.sccontent}>
 
-                    {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
+                    {activeTab === 0 && <Main env={env} t={t} locale={locale} path="SC" setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage env={env} actor={actor} t={t} tc={tc} currentObj={currentObj} afterEditCall={afterEditCall} />}
-                    {activeTab === 2 && <MessagePage locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env} 
+                    {activeTab === 2 && <MessagePage  path="SC"  locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env} 
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                 </div>
             </div>
 
-        </PageLayout>
+        </PageLayout></>
     )
 }
 
-export const getServerSideProps = ({ locale }) => {
-
+export const getServerSideProps = async({ locale,query }) => {
+    let openObj={}; 
+    const env=getEnv();
+    if(query.d){
+        const [id,daoid,domain]=decrypt(query.d).split(',');
+        const sctype=parseInt(daoid)>0?'sc':'';
+        if(domain==env.domain){
+            openObj=await getOne(id,sctype)
+        }
+        else 
+        {
+            let response=await httpGet(`https://${domain}/api/getData?id=${id}&sctype=${sctype}`,{'Content-Type': 'application/json',method:'getOne'})
+            if(response?.message) openObj=response.message
+        }
+        
+    }
     return {
         props: {
             messages: {
                 ...require(`../../../messages/shared/${locale}.json`),
                 ...require(`../../../messages/federation/${locale}.json`),
             }, locale
-            ,env:getEnv()
+            ,env,openObj
         }
     }
 }

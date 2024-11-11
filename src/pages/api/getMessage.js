@@ -1,7 +1,7 @@
 // import { getData } from "../../lib/mysql/common";
 import { messagePageData } from "../../lib/mysql/message";
 
-////pi,menutype,daoid,w,actorid:发文人ID,account,order,eventnum
+////pi,menutype,daoid,w,actorid:嗯文人ID,account,order,eventnum
 // menutype 1 我的社区，2 公区社区 3 个人社区
 //eventnum 社区: 0 非活动，1活动, 个人：1:首页 2:我的嗯文 3:我的收藏 4:我的接收嗯文 
 // v: 1 我关注的社区

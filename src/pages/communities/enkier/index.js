@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl'
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { useSelector } from 'react-redux';
 import PageLayout from '../../../components/PageLayout'
 import EnkiMember from '../../../components/enki2/form/EnkiMember';
@@ -16,11 +16,13 @@ import ShowErrorBar from '../../../components/ShowErrorBar';
 import EnKiFollow from '../../../components/enki2/form/EnKiFollow';
 import EnKiUnFollow from '../../../components/enki2/form/EnKiUnFollow'
 import FollowCollection from '../../../components/enki3/FollowCollection';
-import { getEnv } from '../../../lib/utils/getEnv';
+import { getEnv,decrypt } from '../../../lib/utils/getEnv';
+import { getOne } from '../../../lib/mysql/message';
+import Head from 'next/head';
 /**
  * 个人社区
  */
-export default function me({ env,locale }) {
+export default function me({openObj,env,locale }) {
     const [fetchWhere, setFetchWhere] = useState({
         currentPageNum: 0,  //当前页
         daoid: 0,  //此处不用
@@ -49,13 +51,30 @@ export default function me({ env,locale }) {
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
 
+    function removeUrlParams() {
+        setCurrentObj(null);
+        if(window.location.href.includes('?d=')) {
+            const url = new URL(window.location.href);
+            url.search = ''; // 清空所有参数
+            window.history.replaceState({}, '', url.href);
+        }
+      }
+
+      useEffect(()=>{ 
+        if(openObj.id){
+            setCurrentObj(openObj);
+            setActiveTab(2);
+        } 
+    },[openObj])
     const homeHandle=()=>{ //首页
          //account: '' 从本地读取
+         removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: '' })
         setActiveTab(0);
     }
 
     const createHandle=()=>{ //创建发文
+        removeUrlParams()
         const [name,localdomain]=actor.actor_account.split('@');
         if(env.domain!==localdomain) return showClipError(t('loginDomainText',{domain:localdomain}));
         setCurrentObj(null);
@@ -64,28 +83,33 @@ export default function me({ env,locale }) {
 
     const myPostHandle=()=>{ //我的发文
         //account: '' 从源地读取
+        removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 2,account: actor?.actor_account })
         setActiveTab(0);
     }
  
     const myReceiveHandle=()=>{ //接收到的发文
             //account: '' 从源地读取
+            removeUrlParams()
             setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 4,account: actor?.actor_account })
             setActiveTab(0);
     }
 
     const followManHandle0=()=>{ //我关注谁
+        removeUrlParams()
         setFollowMethod('getFollow0');
         setActiveTab(3);
     }
 
     
     const followManHandle1=()=>{ //谁关注我
+        removeUrlParams()
         setFollowMethod("getFollow1");
         setActiveTab(3);
     }
 
     const myBookHandle=()=>{ //我的书签
+        removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 3,actorid:actor?.id,account: actor?.actor_account })
         setActiveTab(0);
     }
@@ -95,7 +119,10 @@ export default function me({ env,locale }) {
     const preEditCall = () => { setActiveTab(1); } //修改前回调
     const afterEditCall=(obj)=>{setCurrentObj(obj);setActiveTab(2);} //修改后回调
 
-    return (
+    return (<>
+        <Head>
+            <title>{currentObj?.id?currentObj?.title:tc('enkiTitle')}</title>
+        </Head>
         <PageLayout env={env}>
 
             <div style={{ width: '100%' }} className="clearfix">
@@ -116,7 +143,7 @@ export default function me({ env,locale }) {
                             
                         </>}
                     </ul>
-                    {loginsiwe && actor?.actor_account.includes('@') && env.domain===actor.actor_account.split('@')[1] && <div>
+                    {loginsiwe && actor?.actor_account?.includes('@') && env.domain===actor.actor_account.split('@')[1] && <div>
                     <SearchInput setSearObj={setSearObj} setFindErr={setFindErr} actor={actor} t={t} />
                     {searObj && <div className='mt-3' >
                         <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} />
@@ -132,33 +159,47 @@ export default function me({ env,locale }) {
                     }
                 </div>
                 <div className={iaddStyle.sccontent}>
-                    {activeTab === 0 && <Main t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
+                    {activeTab === 0 && <Main env={env} locale={locale} path="enkier" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
                         fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
 
                     {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle}
                         currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab === 2 && <MessagePage locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
+                    {activeTab === 2 && <MessagePage  path="enkier" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                     {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}
                 </div>
             </div>
 
-        </PageLayout>
+        </PageLayout></>
     )
 }
 
 
-export const getServerSideProps = ({ locale }) => {
-
+export const getServerSideProps = async ({ locale,query }) => {
+    let openObj={}; 
+    const env=getEnv();
+    if(query.d){
+        const [id,daoid,domain]=decrypt(query.d).split(',');
+        const sctype=parseInt(daoid)>0?'sc':'';
+        if(domain==env.domain){
+            openObj=await getOne(id,sctype)
+        }
+        else 
+        {
+            let response=await httpGet(`https://${domain}/api/getData?id=${id}&sctype=${sctype}`,{'Content-Type': 'application/json',method:'getOne'})
+            if(response?.message) openObj=response.message
+        }
+        
+    }
     return {
         props: {
             messages: {
                 ...require(`../../../messages/shared/${locale}.json`),
                 ...require(`../../../messages/federation/${locale}.json`),
             }, locale
-            ,env:getEnv()
+            ,env,openObj
         }
     }
 }

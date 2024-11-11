@@ -9,14 +9,18 @@ import EnkiMember from '../../../components/enki2/form/EnkiMember'
 import FollowItem0 from '../../../components/enki2/form/FollowItem0';
 import FollowItem1 from '../../../components/enki2/form/FollowItem1';
 import { getEnv } from '../../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * 指定个人帐号
  */
 export default function MyActor({daoActor,actor,follow0,follow1,locale,env}) {
   let t = useTranslations('ff')
+  let tc = useTranslations('Common')
 
-    return (
+    return (<>
+      <Head>
+          <title>{tc('myAccountTitle',{name:actor?.actor_name})}</title>
+      </Head>
       <PageLayout env={env}>
         <Card className='daism-title mt-3'>
         <Card.Header>{t('myAccount')}</Card.Header>
@@ -57,7 +61,7 @@ export default function MyActor({daoActor,actor,follow0,follow1,locale,env}) {
           </Tabs>
         </Card.Body>
         </Card>
-        </PageLayout>
+        </PageLayout></>
     );
 }
 

@@ -12,6 +12,7 @@ const initialState = {
     daoActor:[], //dao列表 //[{dao_id,dao_name,dao_symbol,dao_manager,dao_logo,dao_desc,actor_account,domain,actor_url}] accout=> XXX@domain
     messageText:'', // 提示窗口信息
     loginsiwe:false,  //登录siwe
+    tipImag:'mess.svg',
 }
   
 export const valueDataSlice = createSlice({
@@ -20,6 +21,9 @@ export const valueDataSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+    },
+    setTipImag: (state, action) => {
+      state.tipImag = action.payload;
     },
     setEthBalance: (state, action) => {
         state.ethBalance = action.payload;
@@ -56,5 +60,5 @@ export const valueDataSlice = createSlice({
 })
 
 export const { setEthBalance,setTipText,setMessageText,setUser,setActor,setTokenList,setTokenFilter,setDaoList,
-  setDaoFilter,setDaoActor,setLoginsiwe} = valueDataSlice.actions
+  setDaoFilter,setDaoActor,setLoginsiwe,setTipImag} = valueDataSlice.actions
 export default valueDataSlice.reducer

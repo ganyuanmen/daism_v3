@@ -21,6 +21,7 @@ import ConfirmWin from '../../components/federation/ConfirmWin';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import useGetVersion from '../../hooks/useGetVersion';
+import Head from 'next/head';
 
 /**
  * 指定id 某个智能公器信息
@@ -35,7 +36,10 @@ export default function DaoDetail({locale,env}) {
     const t = useTranslations('dao')
     const tc = useTranslations('Common')
    
-    return (
+    return ( <>
+        <Head>
+            <title>{tc('smartcommonsTitle',{name:daoData?.data[0]?.dao_symbol})}</title>
+        </Head>
         <PageLayout env={env}>
             {daoData.data.length?<> 
                   <DaoInfo record={daoData.data[0]} user={user} daoid={daoid} lastPro={lastPro} setRefresh={setRefresh} /> 
@@ -45,6 +49,7 @@ export default function DaoDetail({locale,env}) {
             :<Loadding />
             }   
         </PageLayout>
+        </>
     );
 }
 

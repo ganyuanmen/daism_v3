@@ -3,10 +3,12 @@
 
 import Card from "react-bootstrap/Card";
 import EnkiMemberItem from "./EnkiMemberItem";
-import { useRouter } from 'next/navigation';
-export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj}) {
+const crypto = require('crypto');
+
+
+export default function EnkiMessageCard({env, path, locale, t,setCurrentObj,setActiveTab,messageObj}) {
+    console.log(env)
     const months=t('monthText').split(',')
-    const router = useRouter();
     const getMonth=()=>{
         let m=new Date(messageObj.start_time)
         return months[m.getMonth()]
@@ -30,16 +32,26 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
         textAlign:'center',
         textOverflow: 'ellipsis'
     }
-    const url=`${locale==='zh'?'/zh/':'/'}communities/${path}/${currentObj.message_id}`;
+    
+const encrypt=(text)=>{
+    const cipher = crypto.createCipheriv('aes-256-cbc', env.KEY, Buffer.from(env.IV, 'hex'));
+    let encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+  }
+
+
     return (
    
-        <Card className='mb-1' onClick={(e)=>{router.push(`/workroom/walletinfo`, { scroll: false })}} style={{width:'100%',maxHeight:'360px',overflow:'hidden' }}>
+
+        <Card className='mb-1' style={{width:'100%',maxHeight:'360px',overflow:'hidden' }}>
             <Card.Header>
             <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isEdit={false}  />    {/* '不检测关注' 不修改不删除 */}
             </Card.Header>
             
         <Card.Body className="daism-click"  >
-            
+            <a className="daism-a" href={`/${locale}/communities/${path}?d=${encrypt(`${messageObj.id},${messageObj.dao_id},${messageObj.actor_account.split('@')[1]}`)}`} >
+            <div>
             {messageObj._type===1?  <div style={{position:'relative'}}>
                 {messageObj.top_img && <div style={{textAlign:'center'}} ><img src={messageObj.top_img} alt='' style={{maxHeight:'100px'}} /></div> }
                 <div className='border' style={bStyle} >
@@ -53,8 +65,10 @@ export default function EnkiMessageCard({t,setCurrentObj,setActiveTab,messageObj
 
            <h2 style={aStyle} >{messageObj.title} </h2>
            <div dangerouslySetInnerHTML={{__html:messageObj.content}}></div>
+           </div>
+           </a>
         </Card.Body>
-    </Card>
+        </Card>
 
     );
 }

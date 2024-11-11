@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import Mynft from '../../components/nft/mynft'
 import {setTipText,setMessageText} from '../../data/valueData'
 import { getEnv } from '../../lib/utils/getEnv';
-
+import Head from 'next/head';
 /**
  * 荣誉通证
  */
@@ -19,7 +19,11 @@ export default function NFT({env,locale}) {
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
 
-    return (
+    return (  <>
+      <Head>
+          <title>{tc('tokensTitle')}</title>
+      </Head>
+  
         <PageLayout env={env}>
           <div style={{marginTop:'10px'}} >
             {user.connected<1?<ShowErrorBar errStr={tc('noConnectText')}></ShowErrorBar>
@@ -27,6 +31,7 @@ export default function NFT({env,locale}) {
             }  
         </div>
         </PageLayout>
+        </>
     );
 }
 

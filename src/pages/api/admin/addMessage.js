@@ -33,11 +33,11 @@ export default withSession(async (req, res) => {
             if (daoid) { //enki
                 paras = [message_id,actorid[0], daoid[0], title[0], content[0], isSend[0], isDiscussion[0], path, _type[0]]
 
-                if (_type[0] == '1') { //活动发文
+                if (_type[0] == '1') { //活动嗯文
                     sql = 'INSERT INTO a_messagesc(message_id,actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type,start_time,end_time,event_url,event_address,time_event) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
                     paras = paras.concat([startTime[0], endTime[0], eventUrl[0], eventAddress[0], time_event[0]])
                 }
-                else {  //普通发文
+                else {  //普通嗯文
                     sql = 'INSERT INTO a_messagesc(message_id,actor_id,dao_id,title,content,is_send,is_discussion,top_img,_type) VALUES(?,?,?,?,?,?,?,?,?)';
                 }
 
@@ -67,10 +67,10 @@ export default withSession(async (req, res) => {
                 path = re[0]['top_img']
             }
             if (daoid) {
-                if (_type[0] == '1') { //活动发文
+                if (_type[0] == '1') { //活动嗯文
                     sql = "update a_messagesc set _type=1,title=?,content=?,is_send=?,is_discussion=?,top_img=?,start_time=?,end_time=?,event_url=?,event_address=?,time_event=? where id=?"
                     paras= [title[0], content[0], isSend[0], isDiscussion[0], path, startTime[0], endTime[0], eventUrl[0], eventAddress[0], time_event[0], id[0]];
-                } else {//普通发文
+                } else {//普通嗯文
                     sql = "update a_messagesc set _type=0,title=?,content=?,is_send=?,is_discussion=?,top_img=?,start_time=NULL,end_time=NULL,event_url=NULL,event_address=NULL,time_event=-1 where id=?";
                     paras=[title[0], content[0], isSend[0], isDiscussion[0], path, id[0]];
                 }
