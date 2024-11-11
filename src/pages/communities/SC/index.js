@@ -171,11 +171,12 @@ export const getServerSideProps = async({ locale,query }) => {
         const [id,daoid,domain]=decrypt(query.d).split(',');
         const sctype=parseInt(daoid)>0?'sc':'';
         if(domain==env.domain){
-            openObj=await getOne(id,sctype)
+            openObj=await getOne({id,sctype})
         }
         else 
         {
             let response=await httpGet(`https://${domain}/api/getData?id=${id}&sctype=${sctype}`,{'Content-Type': 'application/json',method:'getOne'})
+           console.log(response)
             if(response?.message) openObj=response.message
         }
         

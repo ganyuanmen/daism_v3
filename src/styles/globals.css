@@ -8,7 +8,7 @@
   }
    
   .daism-a{color:black; text-decoration: none;}
-
+  .daism-a:hover{ cursor: pointer;}
   .daism-span{display: inline-block;margin-right: 8px;}
 
   .daism-nowrap{overflow: hidden;  text-overflow:ellipsis; white-space: nowrap;

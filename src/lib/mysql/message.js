@@ -127,7 +127,7 @@ export async function handleHeartAndBook({account,pid,flag,table,sctype})
 
 
 //获取一条嗯文
-export async function getOne(id,sctype)
+export async function getOne({id,sctype})
 {
     let re= await getData(`select * from v_message${sctype} where ${id.length<10?'id':'message_id'}=?`,[id]);
     return  re[0] || {}

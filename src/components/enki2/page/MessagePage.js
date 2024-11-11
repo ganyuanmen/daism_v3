@@ -24,7 +24,6 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
         ,sctype:currentObj.dao_id>0?'sc':''
         ,pid:currentObj.id});
 
-        // console.log(currentObj,path)
 
     const daoActor=useSelector((state) => state.valueData.daoActor)
     const [data, setData] = useState([]);

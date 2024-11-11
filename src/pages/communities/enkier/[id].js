@@ -7,7 +7,7 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import PageLayout from '../../../components/PageLayout'
 import { getEnv } from '../../../lib/utils/getEnv';
-
+import { useSelector } from 'react-redux';
 /**
  * 个人社区 单个发文信息
  */
@@ -16,7 +16,8 @@ export default function Message({currentObj,locale,env}) {
 
   let t = useTranslations('ff');
   const tc = useTranslations('Common');
-  
+  const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
+  const loginsiwe = useSelector((state) => state.valueData.loginsiwe)
     return (
       <>
         <Head>
@@ -32,7 +33,7 @@ export default function Message({currentObj,locale,env}) {
       </Head>
     
       <PageLayout env={env}>
-        {currentObj?.id? <MessagePage locale={locale} t={t} tc={tc} currentObj={currentObj} env={env} />
+        {currentObj?.id? <MessagePage path="noedit" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe}  currentObj={currentObj} env={env} />
         :<ShowErrorBar errStr={t('noPostingText')} />
         }
         </PageLayout>
@@ -42,7 +43,7 @@ export default function Message({currentObj,locale,env}) {
 
 export const getServerSideProps =async ({locale,query }) => {
 
-  const currentObj=await getOne(query.id,'')
+  const currentObj=await getOne({id:query.id,sctype:''})
 
     return {
       props: {

@@ -124,7 +124,7 @@ async function createMess(postbody,name,actor){ //对方的推送
 	if(replyType){ //对方的回复
 		if(id)
 		{       
-			let message=await getOne(id)
+			let message=await getOne({id,sctype:''})
 			if(message['is_discussion']===1) //允许讨论
 			{
 				execute("INSERT INTO a_message_commont(pid,message_id,actor_name,avatar,actor_account,actor_url,content) values(?,?,?,?,?,?,?)",
