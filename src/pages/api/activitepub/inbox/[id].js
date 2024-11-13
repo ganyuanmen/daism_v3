@@ -52,6 +52,7 @@ export default async function handler(req, res) {
 	const _type=postbody.type.toLowerCase();
 	const name = req.query.id;
 	console.info(`inbox-----${name}-${_type}-${postbody.actor}`);
+	console.log(postbody)
 	if(_type!=='follow' && _type!=='accept' && _type!=='undo' && _type!=='create' ) return res.status(200).json({errMsg:'No need to handle'});
 	
 	let actor = cache.get(postbody.actor);

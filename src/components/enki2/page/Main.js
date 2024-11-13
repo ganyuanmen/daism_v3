@@ -16,6 +16,7 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
+            if (fetchWhere.currentPageNum === 0) setData([]);
             try {
                 const res = await client.get(`/api/getData?pi=${fetchWhere.currentPageNum}&menutype=${fetchWhere.menutype}&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=${fetchWhere.order}&eventnum=${fetchWhere.eventnum}&account=${fetchWhere.account}&v=${fetchWhere.v}`, 'messagePageData');
                 if(res.status===200){
@@ -57,20 +58,19 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
     const footerdiv=()=>{
         if(!isLoading){
             if(err) return <ShowErrorBar errStr={err} />
-            else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
         }
     }
 
     return (
         <>
-            <CommunitySerach searchPlace='Search...' setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
+            <CommunitySerach t={t} searchPlace={`${t('searchMainText')}...`} setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
             <div style={{ width: '100%' }} >
                 <InfiniteScroll
                     dataLength={data.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
                     loader={<Loadding />}
-                    endMessage={<div style={{textAlign:'center'}} >---没有更多数据了---</div>}
+                    endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
                 >
                     {data.map((obj, idx) => (
                         <EnkiMessageCard env={env} path={path}  locale={locale} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />

@@ -19,6 +19,7 @@ import FollowCollection from '../../../components/enki3/FollowCollection';
 import { getEnv,decrypt } from '../../../lib/utils/getEnv';
 import { getOne } from '../../../lib/mysql/message';
 import Head from 'next/head';
+import { httpGet } from '../../../lib/net';
 /**
  * 个人社区
  */
@@ -121,7 +122,7 @@ export default function me({openObj,env,locale }) {
 
     return (<>
         <Head>
-            <title>{currentObj?.id?currentObj?.title:tc('enkiTitle')}</title>
+            <title>{currentObj?.id?currentObj?.title:tc('enkierTitle')}</title>
         </Head>
         <PageLayout env={env}>
 

@@ -39,6 +39,10 @@ const encrypt=(text)=>{
     return encrypted;
   }
 
+  const getDomain=()=>{
+    let _account=(messageObj.send_type==0?messageObj.actor_account:messageObj.receive_account);
+    return _account.split('@')[1];
+  }
 
     return (
    
@@ -49,7 +53,7 @@ const encrypt=(text)=>{
             </Card.Header>
             
         <Card.Body className="daism-click"  >
-            <a className="daism-a" href={`/${locale}/communities/${path}?d=${encrypt(`${messageObj.id},${messageObj.dao_id},${messageObj.actor_account.split('@')[1]}`)}`} >
+            <a className="daism-a" href={`/${locale}/communities/${path}?d=${encrypt(`${messageObj.id},${messageObj.dao_id},${getDomain()}`)}`} >
             <div>
             {messageObj._type===1?  <div style={{position:'relative'}}>
                 {messageObj.top_img && <div style={{textAlign:'center'}} ><img src={messageObj.top_img} alt='' style={{maxHeight:'100px'}} /></div> }

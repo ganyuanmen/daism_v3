@@ -133,7 +133,8 @@
     "followManText1":"Be followed",
     "myBookText":"Bookmarks",
     "myReceiveText":"My Receive",
-    "emprtyData":"No data found!"
+    "emprtyData":"There is no more data available",
+    "searchMainText":"Search"
 
   }
 }

@@ -139,7 +139,6 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
     const footerdiv=()=>{
         if(!isLoading) {
             if(err) return <ShowErrorBar errStr={err} />
-            else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
         }
     }
 
@@ -175,7 +174,7 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
               {currentObj.send_type===0 && <EnkiShare content={contentDiv.current?.textContent} locale={locale} currentObj={currentObj} t={t} tc={tc} />}
             </div>
             {currentObj?.link_url && <div className="mt-2 mb-2" style={{textAlign:'center'}}>
-                    <a  href={currentObj?.link_url} >{t('origlText')}......</a>
+                    <a target="_blank" href={currentObj?.link_url} >{t('origlText')}......</a>
                     </div> 
             }
             <InfiniteScroll
@@ -183,7 +182,7 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
                     next={fetchMoreData}
                     hasMore={hasMore}
                     loader={<Loadding />}
-                    endMessage={<div style={{textAlign:'center'}} >---没有更多数据了---</div>}
+                    endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
                 >
                     {data.map((obj, idx) => (
                         <ReplyItem isEdit={ableReply() && actor.actor_account===obj.actor_account } key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />

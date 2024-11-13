@@ -6,7 +6,7 @@ import { InputGroup,Form,Button } from "react-bootstrap"
  * 社区搜索
  */
 
-const CommunitySerach = React.memo(({searchPlace,setFetchWhere,fetchWhere}) => {
+const CommunitySerach = React.memo(({t,searchPlace,setFetchWhere,fetchWhere}) => {
     const searRef=useRef()
  
     return <div className="sctop" >
@@ -19,7 +19,7 @@ const CommunitySerach = React.memo(({searchPlace,setFetchWhere,fetchWhere}) => {
                 />
                 <Button variant="outline-secondary" onClick={e => {
                     setFetchWhere({ ...fetchWhere, currentPageNum: 0, where: searRef.current.value })
-                }} > Search </Button>
+                }} > {t('searchMainText')} </Button>
             </InputGroup>
             </div>
 })

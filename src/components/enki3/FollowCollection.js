@@ -51,7 +51,7 @@ export default function FollowCollection({t,method,account,domain}) {
     const footerdiv=()=>{
         if(isLoading) return <Loadding /> 
         else if(err) return <ShowErrorBar errStr={err} />
-        else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
+        else if(Array.isArray(data) && data.length==0) return <div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>
       
     }
     
