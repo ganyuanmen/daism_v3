@@ -176,7 +176,6 @@ export const getServerSideProps = async({ locale,query }) => {
         else 
         {
             let response=await httpGet(`https://${domain}/api/getData?id=${id}&sctype=${sctype}`,{'Content-Type': 'application/json',method:'getOne'})
-           console.log(response)
             if(response?.message) openObj=response.message
         }
         

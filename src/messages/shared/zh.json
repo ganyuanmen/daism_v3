@@ -38,6 +38,7 @@
     "blockchainText2":"有时候区块链会很慢，等待很长的时间，这是正常的",
     "blockchainText3":"正在上链中，请耐心等候",
     "tipText":"提示",
+    "tipText1":"警告",
     "singerLoginingText":"正在签名登录......",
     "singerLoginText":"签名登录",
     "loginText": "登录",

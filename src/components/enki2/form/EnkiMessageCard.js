@@ -6,7 +6,7 @@ import EnkiMemberItem from "./EnkiMemberItem";
 const crypto = require('crypto');
 
 
-export default function EnkiMessageCard({env, path, locale, t,setCurrentObj,setActiveTab,messageObj}) {
+export default function EnkiMessageCard({env, path, locale, t,messageObj}) {
     const months=t('monthText').split(',')
     const getMonth=()=>{
         let m=new Date(messageObj.start_time)

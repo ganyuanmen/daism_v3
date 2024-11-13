@@ -40,7 +40,7 @@ export default function LogoPro({ daoName,daoId,setChangeLogo,delegator,lastPro,
         window.daismDaoapi.Dao.addProposal(delegator,uplogoid,1,parseInt(new Date().getTime()/1000),0,0,'',1,
         'svg',imgstr).then(() => {
             closeTip()
-            showError(t("uploadPro"))
+            showError(`${t("uploadPro")}_*_`)
             setRefresh(true)
           }, err => {
               console.error(err);closeTip();

@@ -38,6 +38,7 @@
     "blockchainText2": "Sometimes the blockchain can be slow, and it may take a long time. This is normal",
     "blockchainText3": "Being added to the blockchain, please wait patiently",
     "tipText": "Tip",
+    "tipText1":"warning",
     "errorText": "An error occurred while submitting the request. Please check and handle it in your wallet!\r\n",
     "loginText": "Login",
     "singerLoginingText": "Signing in...",

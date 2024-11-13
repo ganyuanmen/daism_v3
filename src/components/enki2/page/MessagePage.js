@@ -14,6 +14,7 @@ import { ExitSvg } from "../../../lib/jssvg/SvgCollection";
 import EnkiShare from "../form/EnkiShare";
 import { client } from "../../../lib/api/client";
 import { useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 /**
  * 单登个发文信息界面 // preEditCall:修改前回调 delCallBack:删除后已刷新
  * isEdit 是否允许修改  
@@ -82,11 +83,9 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
         const [name, messDomain] = _account.split('@');
         return env.domain === messDomain; //本域名发布，可以回复
     }
-
   
-   
      //选取回复总数  
-     useEffect(()=>{
+    useEffect(()=>{
        let ignore = false;
        client.get(`/api/getData?sctype=${currentObj.dao_id>0?'sc':''}&pid=${currentObj.id}`,'getReplyTotal').then(res =>{ 
            if (!ignore) 
@@ -132,27 +131,16 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
     
     }, [fetchWhere]);
 
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    //         const scrollHeight = document.documentElement.scrollHeight;
-    //         const clientHeight = document.documentElement.clientHeight;
-    //         if (scrollTop + clientHeight >= scrollHeight) {
-    //             if (hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
-    //         }
-    //     };
+    const fetchMoreData = () => {
+        console.log("reply next------------>",fetchWhere)
+        setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
+      };
 
-    //     window.addEventListener('scroll', handleScroll);
-
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, [fetchWhere, hasMore]);
     const footerdiv=()=>{
-        if(isLoading) return <Loadding /> 
-        else if(err) return <ShowErrorBar errStr={err} />
-        // else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
-        else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
+        if(!isLoading) {
+            if(err) return <ShowErrorBar errStr={err} />
+            else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
+        }
     }
 
     return (
@@ -190,8 +178,18 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
                     <a  href={currentObj?.link_url} >{t('origlText')}......</a>
                     </div> 
             }
-        
-            {data.map((obj,idx)=><ReplyItem isEdit={ableReply() && actor.actor_account===obj.actor_account } key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />)}
+            <InfiniteScroll
+                    dataLength={data.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<Loadding />}
+                    endMessage={<div style={{textAlign:'center'}} >---没有更多数据了---</div>}
+                >
+                    {data.map((obj, idx) => (
+                        <ReplyItem isEdit={ableReply() && actor.actor_account===obj.actor_account } key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />
+                    ))}
+            </InfiniteScroll>
+
             { footerdiv()}
         </Card.Footer>
         </Card>

@@ -92,7 +92,7 @@ export default function User({user,loginsiwe,t,...props}) {
     const data = await response.json();
 
     if (response.ok) {
-      showError(data.msg);
+      showError(`${data.msg}_*_`);
     } else {
       showError(data.errMsg);
     }

@@ -5,16 +5,13 @@ import { useEffect, useState, useRef } from "react"
 import { client } from "../../../lib/api/client";
 import CommunitySerach from "../../enki3/CommunitySerach";
 import ShowErrorBar from "../../ShowErrorBar";
-
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setCurrentObj, setActiveTab }) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [err,setErr]=useState("");
-
-    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,39 +37,27 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
                 console.error(error);
                 setHasMore(false); //读取错误，不再读
                 setErr(error?.message);
-
+    
             } finally {
                 setIsLoading(false);
             }
         };
+
         if(fetchWhere.menutype===3 && (fetchWhere.eventnum === 1 || fetchWhere.account))  fetchData(); //个人显示所有，或登录后显示所有
         else if (fetchWhere.menutype===1 && fetchWhere.daoid)  fetchData(); // 有我的注册dao集，才能获取 
         else if(fetchWhere.menutype===2) fetchData(); //公共社区直接获取
     }, [fetchWhere]);
 
 
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    //         const scrollHeight = document.documentElement.scrollHeight;
-    //         const clientHeight = document.documentElement.clientHeight;
-    //         if (scrollTop + clientHeight >= scrollHeight) {
-    //             if (hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
-    //         }
-    //     };
-
-    //     window.addEventListener('scroll', handleScroll);
-
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, [fetchWhere, hasMore]);
+  const fetchMoreData = () => {
+    console.log("mess next------------>",fetchWhere)
+    setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
+  };
 
     const footerdiv=()=>{
         if(!isLoading){
             if(err) return <ShowErrorBar errStr={err} />
             else if(Array.isArray(data) && data.length==0) return <h3 className="mt-3" >{t('emprtyData')}</h3>
-            else if(hasMore) <Button onClick={()=>setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 })} variant='light'>fetch more ...</Button>
         }
     }
 
@@ -80,11 +65,21 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
         <>
             <CommunitySerach searchPlace='Search...' setFetchWhere={setFetchWhere} fetchWhere={fetchWhere} />
             <div style={{ width: '100%' }} >
-                {isLoading?<Loadding /> : Array.isArray(data) && data.map((obj, idx) => <EnkiMessageCard env={env} path={path}  locale={locale} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />)}
+                <InfiniteScroll
+                    dataLength={data.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<Loadding />}
+                    endMessage={<div style={{textAlign:'center'}} >---没有更多数据了---</div>}
+                >
+                    {data.map((obj, idx) => (
+                        <EnkiMessageCard env={env} path={path}  locale={locale} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />
+                    ))}
+                </InfiniteScroll>
             </div>
-            <div className="mt-3 mb-3" style={{textAlign:'center'}}  >
+             <div className="mt-3 mb-3" style={{textAlign:'center'}}  >
                 {footerdiv()}
-            </div>
+            </div> 
         </>
 
     );

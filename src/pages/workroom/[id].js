@@ -227,7 +227,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
         showTip(t('submitingProText'));
         window.daismDaoapi.Dao.addProposal(record.delegator,_address,_vote,parseInt(new Date().getTime()/1000),0,0,_desc,proposalType).then((e) => {
             closeTip()
-            showError(t("uploadPro"))
+            showError(`${t("uploadPro")}_*_`)
             setRefresh(true) //刷新提案
             }, err => {
                 console.error(err);
@@ -257,7 +257,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
         showTip(t('getDivdending')); 
         window.daismDaoapi.Dao.getDividend(record.delegator,user.account).then(() => {
             closeTip()
-            showError(t('divdendComplete'))
+            showError(`${t('divdendComplete')}_*_`)
             setDivdend('0')
           }, err => {
               console.error(err);closeTip();
