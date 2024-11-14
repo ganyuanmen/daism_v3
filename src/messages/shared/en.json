@@ -49,7 +49,6 @@
     "daoMemberVerify": "Node Settings",
     "exitText": "Exit",
     "myAccount": "My account",
-    "getTestEth":"Get test ETH",
     "exitWalletText": "Disconnect Wallet",
     "metmaskTip1":"1. For computers: If your browser doesn't have the MetaMask plugin installed, it is recommended to use MetaMask.",
     "metmaskTip2":"2. For mobile: Access directly using the MetaMask app.",

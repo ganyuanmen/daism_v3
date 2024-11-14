@@ -142,6 +142,7 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
         }
     }
 
+    
     return (
         <div className="mt-3" style={{width:'100%'}}>
         <div className="mt-2 mb-2" >
@@ -181,8 +182,8 @@ export default function MessagePage({path,locale,t,tc,currentObj,actor,loginsiwe
                     dataLength={data.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
-                    loader={<Loadding />}
-                    endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
+                    // loader={<Loadding />}
+                    // endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
                 >
                     {data.map((obj, idx) => (
                         <ReplyItem isEdit={ableReply() && actor.actor_account===obj.actor_account } key={obj.id} t={t} paccount={currentObj.actor_account} replyObj={obj} actor={actor} delCallBack={callBack} preEditCall={preEditCallBack} sctype={currentObj.dao_id>0?'sc':''} />

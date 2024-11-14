@@ -52,7 +52,6 @@ export default async function handler(req, res) {
 	const _type=postbody.type.toLowerCase();
 	const name = req.query.id;
 	console.info(`inbox-----${name}-${_type}-${postbody.actor}`);
-	console.log(postbody)
 	if(_type!=='follow' && _type!=='accept' && _type!=='undo' && _type!=='create' ) return res.status(200).json({errMsg:'No need to handle'});
 	
 	let actor = cache.get(postbody.actor);
@@ -126,10 +125,10 @@ async function createMess(postbody,name,actor){ //对方的推送
 		if(id)
 		{       
 			let message=await getOne({id,sctype:''})
-			if(message['is_discussion']===1) //允许讨论
+			if(message['is_discussion']==1) //允许讨论
 			{
 				execute("INSERT INTO a_message_commont(pid,message_id,actor_name,avatar,actor_account,actor_url,content) values(?,?,?,?,?,?,?)",
-				[id,message_id,strs[0],actor.avatar,actor.account,postbody.actor,content]).then(()=>{})
+				[message['id'],message_id,strs[0],actor.avatar,actor.account,postbody.actor,content]).then(()=>{})
 			}
 		}
 	}
@@ -157,14 +156,13 @@ async function genePost(postbody,replyType,actor){
 		// actor= await getInboxFromUrl(postbody.actor)
 
 	let message_id=postbody.id;
-	let id=0
+	let id=''
 	if(!replyType || !replyType.includes('/communities/')) return {content,title,imgpath,actor,id,message_id} //不是本地回复，可能是推送或其它回复
 	
 	if(actor.account)
 	{
 		let ids=replyType.split('/')
-		let _id=parseInt(ids[ids.length-1])
-		if(_id && Number.isFinite(_id))  id=_id;
+		id=ids[ids.length-1]
 	}
 	return {content,title,imgpath,id,message_id}
 }

@@ -58,6 +58,13 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
     const footerdiv=()=>{
         if(!isLoading){
             if(err) return <ShowErrorBar errStr={err} />
+            if(Array.isArray(data) && data.length==0) return <div className="mt-3" >{t('noFounData')}</div>
+            if(!hasMore) return <div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>
+
+
+        }else 
+        {
+            return <Loadding />
         }
     }
 
@@ -69,8 +76,8 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
                     dataLength={data.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
-                    loader={<Loadding />}
-                    endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
+                    // loader={<Loadding />}
+                    // endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
                 >
                     {data.map((obj, idx) => (
                         <EnkiMessageCard env={env} path={path}  locale={locale} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />

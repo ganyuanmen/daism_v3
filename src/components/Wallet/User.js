@@ -24,7 +24,7 @@ export default function User({user,loginsiwe,t,...props}) {
   function closeTip(){dispatch(setTipText(''))}
   
 
-  const handleSelect = (eventKey) =>{ 
+  const handleSelect =async (eventKey) =>{ 
     switch(eventKey)
     {
         case "1":
@@ -35,9 +35,6 @@ export default function User({user,loginsiwe,t,...props}) {
           break;
         case "3":
           router.push(`/smartcommons/mySC`, { scroll: false })
-          break;
-        case "9":
-          router.push(`/transfer`, { scroll: false })
           break;
         case "4":
            router.push(`/workroom/dividend`, { scroll: false })
@@ -54,13 +51,14 @@ export default function User({user,loginsiwe,t,...props}) {
           break;
         case 'a':
           showTip('正在创建荣誉通证，请稍候...')
-          window.daismDaoapi.Unft.mint().then(e => {
-            closeTip();
-            showError('荣誉通证创建成功')
-        }, err => {
-            console.error(err);closeTip();
+          try {
+            await window.daismDaoapi.Unft.mint();
+            showError('荣誉通证创建成功_*_');
+          } catch (err) {
             showError("错误："+(err.message ? err.message : err));
-        })
+          }finally{
+            closeTip()
+          }
           break;
         case 'b':
          // if (fileInputRef.current) {fileInputRef.current.click()}
@@ -109,9 +107,8 @@ export default function User({user,loginsiwe,t,...props}) {
         <NavDropdown.Item eventKey="2"><span className='daism-color' ><UserSvg size={24}/></span> {t('myAccount')}...</NavDropdown.Item>
         <NavDropdown.Item eventKey="3"><span className='daism-color' ><AppSvg  size={24}/></span> {t('daoGroupApprove')} </NavDropdown.Item>
         <NavDropdown.Item eventKey="4"><span className='daism-color' ><TokenSvg  size={24}/></span> {t('daoDividend')} </NavDropdown.Item>
-        <NavDropdown.Item eventKey="9"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('getTestEth')} </NavDropdown.Item>
         <NavDropdown.Item eventKey="b"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('importText')} mastodon </NavDropdown.Item>
-         {/* <NavDropdown.Item eventKey="a"><span className='daism-color' ><SwapTokenSvg size={24}/></span> 中本聪 荣誉通证 </NavDropdown.Item>  */}
+       {/* <NavDropdown.Item eventKey="a"><span className='daism-color' ><SwapTokenSvg size={24}/></span> 中本聪 荣誉通证 </NavDropdown.Item>  */}
        {/* {admin && <NavDropdown.Item eventKey="4"><span className='daism-color' ><MemberVerify size={24}/></span> {t('daoMemberVerify')}</NavDropdown.Item> } */}
         <NavDropdown.Divider />
       {loginsiwe?<NavDropdown.Item eventKey="5"><span className='daism-color' ><ExitSvg size={24}/></span> {t('exitText')}</NavDropdown.Item>

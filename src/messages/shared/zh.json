@@ -63,7 +63,6 @@
     "clearText":"清空",
     "cancelText":"取消",
     "confirmText": "确认",
-    "getTestEth":"获取测试ETH",
     "noLoginText":"没有钱包签名登录,请从用户的下拉菜单登录.",
     "uriValidText":"请填写正确的图片uri(http(s)://XXXX)",
     "imgUriText":"图片链接地址",

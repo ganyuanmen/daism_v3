@@ -134,7 +134,8 @@
     "myBookText":"Bookmarks",
     "myReceiveText":"My Receive",
     "emprtyData":"There is no more data available",
-    "searchMainText":"Search"
+    "searchMainText":"Search" ,
+    "noFounData":"No data found"
 
   }
 }
