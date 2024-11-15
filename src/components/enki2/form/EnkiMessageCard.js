@@ -49,7 +49,7 @@ const encrypt=(text)=>{
 
         <Card className='mb-1' style={{width:'100%',maxHeight:'360px',overflow:'hidden' }}>
             <Card.Header>
-            <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isEdit={false}  />    {/* '不检测关注' 不修改不删除 */}
+            <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isEdit={false} locale={locale}  />    {/* '不检测关注' 不修改不删除 */}
             </Card.Header>
             
         <Card.Body className="daism-click"  >

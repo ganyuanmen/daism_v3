@@ -20,6 +20,7 @@ import { getEnv,decrypt } from '../../../lib/utils/getEnv';
 import { getOne } from '../../../lib/mysql/message';
 import Head from 'next/head';
 import { httpGet } from '../../../lib/net';
+import { Right,Left } from '../../../lib/jssvg/SvgCollection';
 /**
  * 个人社区
  */
@@ -40,6 +41,7 @@ export default function me({openObj,env,locale }) {
     const [followMethod,setFollowMethod]=useState('getFollow0') //默认显示我关注谁
     const [searObj,setSearObj]=useState(null) //查找到帐号的对象
     const [findErr,setFindErr]=useState(false) //搜索帐号没找到
+    const [big,setBig]=useState(true) //左边缩进按钮控制, 默认左边大
 
     const actor = useSelector((state) => state.valueData.actor)  //siwe登录信息
     const user = useSelector((state) => state.valueData.user) //钱包登录用户信息
@@ -67,10 +69,17 @@ export default function me({openObj,env,locale }) {
             setActiveTab(2);
         } 
     },[openObj])
+
+    useEffect(()=>{
+        if(activeTab==0 && actor?.actor_account)
+        {
+            setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: actor.actor_account }) 
+        }
+    },[activeTab,actor])
     const homeHandle=()=>{ //首页
          //account: '' 从本地读取
          removeUrlParams()
-        setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: '' })
+        setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: actor?.actor_account?actor.actor_account:'' })
         setActiveTab(0);
     }
 
@@ -127,7 +136,12 @@ export default function me({openObj,env,locale }) {
         <PageLayout env={env}>
 
             <div style={{ width: '100%' }} className="clearfix">
-                  <div className={iaddStyle.scsidebar}>
+                  <div className={`${iaddStyle.scsidebar} ${big?iaddStyle.scsidebarbig:iaddStyle.scsidebarsmall}`}>
+                  <button onClick={e=>{setBig(!big)}} type="button" className="btn" style={{position:'absolute',padding:'4px',top:'4px',right:'2px'}} >
+                    {big?<Left size={24} />:<Right size={24} />}
+                  </button>
+                    
+                   {big && <>
                     <div className='mb-3' >
                         {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
                         {!loginsiwe && <Loginsign user={user} tc={tc} />}
@@ -158,8 +172,10 @@ export default function me({openObj,env,locale }) {
                     {findErr && <ShowErrorBar errStr={t('noFindText')} />}
                     </div>
                     }
+                    </>}
                 </div>
-                <div className={iaddStyle.sccontent}>
+
+                <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
                     {activeTab === 0 && <Main env={env} locale={locale} path="enkier" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
                         fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
 

@@ -37,6 +37,7 @@ export async function execute(sql, sqlParams) {
     const result = await promisePool.execute(sql,sqlParams)
     return result
   } catch (error) {
+    console.info(`execute: ${sql}-->`+sqlParams.join())
     console.error(error)
     return 0
   }

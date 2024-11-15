@@ -135,7 +135,9 @@
     "myReceiveText":"My Receive",
     "emprtyData":"There is no more data available",
     "searchMainText":"Search" ,
-    "noFounData":"No data found"
+    "noFounData":"No data found",
+    "publishCompany":"Publish Community",
+    "moreText":"more"
 
   }
 }

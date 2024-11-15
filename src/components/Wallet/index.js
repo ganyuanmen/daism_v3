@@ -29,18 +29,10 @@ function Wallet({env}) {
     const t = useTranslations('Common')
     const loginRef=useRef() //siwe 登录
     function showError(str){dispatch(setMessageText(str))}
-    //new 合约对象条件
-    const [daoLogin,setDaoLogin]=useState({account:'',signer:null,env})
+  
     const NET={'_0xaa36a7':'sepolia','_0x4268':'holesky','_0x1':'mainnet','_11155111':'sepolia','_17000':'holesky',"_1":"mainnet"}
 
-    useEffect(()=>{ //根据daoLogin 创建合约对象
-        if(daoLogin.account && daoLogin.signer){
-            window.daismDaoapi = new DaoApi(daoLogin.signer,daoLogin.account,env)
-        }
-        return ()=>{ window.daismDaoapi =null }
-    },[daoLogin])
-
-    useEffect(() => {
+     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await client.get('/api/siwe/getdaoactor?t='+new Date().getTime());
@@ -120,10 +112,9 @@ function Wallet({env}) {
                 let tempChainId = network.chainId.toString()
                 console.info("ok",JSON.stringify(network),NET[`_${tempChainId}`],env.networkName)
                 if(!checkNetWork(tempChainId)) return;
-              
+                window.daismDaoapi = new DaoApi(signer,tempAccount,env)
                 window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)           
                 dispatch(setUser({connected:1,account:tempAccount,networkName:network.name, chainId:tempChainId}))
-                setDaoLogin({...daoLogin,account:tempAccount,signer:signer}); //创建合约对象
                 provider.getBalance(tempAccount).then(_balance=>{setEth(ethers.formatEther(_balance))})
                 if(router.pathname==='/' ) getTokens(tempAccount)
                 providerWithInfo.provider.on('accountsChanged', _account=>{switchDisconnect(); window.location.reload();});
@@ -185,10 +176,10 @@ function Wallet({env}) {
     return (
         <>
           <div>
-              {user.connected >0 && <User t={t} loginsiwe={loginsiwe} disconnect={onDisconnect} user={user} />}
+              {user.connected >0 && <User t={t} loginsiwe={loginsiwe} disconnect={onDisconnect} domain={env.domain} user={user} />}
           </div>
           <div  style={{marginTop:'6px',marginRight:'10px'}}  >
-            {user.connected >0?<ShowAddress  address={daoLogin.account} ></ShowAddress>
+            {user.connected >0?<ShowAddress  address={user.account} ></ShowAddress>
            :providers.length > 0?
             <Dropdown>
                 <Dropdown.Toggle style={{borderRadius:'12px !important',marginLeft:'16px !important'}} variant="primary" size="sm" disabled={connecting}  id="dropdown-basic">

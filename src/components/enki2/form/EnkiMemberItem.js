@@ -5,11 +5,13 @@ import EnKiFollow from "./EnKiFollow";
 import { useState,useEffect } from "react";
 import { client } from "../../../lib/api/client";
 
+import dynamic from 'next/dynamic';
+const EnkiMessageMember = dynamic(() => import('../../enki3/EnkiMessageMember'), { ssr: false });
 
 //isEdit 是否可修改的
-export default function EnkiMemberItem({t,actor,messageObj,domain,delCallBack,preEditCall,showTip,closeTip,showClipError,isEdit}) {
+export default function EnkiMemberItem({locale,t,actor,messageObj,domain,delCallBack,preEditCall,showTip,closeTip,showClipError,isEdit}) {
     const [isFollow,setIsFollow]=useState(true) //默认已关注
-
+    
 
     useEffect(() => {
         let ignore = false; //getFollow, //获某一关注 {actorAccount,userAccount} userAccount 关注  actorAccount
@@ -25,11 +27,14 @@ export default function EnkiMemberItem({t,actor,messageObj,domain,delCallBack,pr
         
     }, [actor]);
 
+  
  
 
     return (
         <div className="d-flex justify-content-between align-items-center">
-            <EnkiMember messageObj={messageObj} isLocal={!messageObj?.message_id.startsWith('http')} />
+            {(messageObj.dao_id==0 &&messageObj.send_type==0 && messageObj?.manager)?<EnkiMessageMember t={t} messageObj={messageObj} locale={locale} />
+            :<EnkiMember messageObj={messageObj} isLocal={!messageObj?.message_id.startsWith('http')} /> }
+            
             {actor?.actor_account && !isFollow && messageObj.actor_account!==actor?.actor_account && 
             <EnKiFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} /> }
             

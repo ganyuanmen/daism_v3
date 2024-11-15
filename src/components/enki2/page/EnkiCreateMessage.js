@@ -143,11 +143,11 @@ export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentOb
                 <DaismImg title={t('selectTopImg')} defaultValue={currentObj ? currentObj.top_img : ''} ref={imgstrRef} maxSize={1024 * 500} fileTypes='svg,jpg,jpeg,png,gif,webp' />
              
                 <InputGroup className="mb-3">
-                    <InputGroup.Text>发布社区:</InputGroup.Text>
+                    <InputGroup.Text>{t('publishCompany')}:</InputGroup.Text>
                     {currentObj?.id ?<Form.Control readOnly={true} disabled={true} defaultValue={currentObj.actor_account} />
                     :<Form.Select ref={selectRef} value={selectedDaoid} onChange={handleSelectChange}
                         isInvalid={errorSelect ? true : false} onFocus={e => { setErrorSelect(false) }}>
-                        <option value=''>请选择</option>
+                        <option value=''>{t('selectText')}</option>
                         {daoData.map((option) => (
                             <option key={option.dao_id} value={option.dao_id}>
                                 {option.actor_account}

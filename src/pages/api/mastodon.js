@@ -22,8 +22,10 @@ export default withSession(async (req, res) => {
     fs.unlink(file.filepath, (err) => {if (err) console.error('delete file error:', err)})
     const jsonData = JSON.parse(data);
     let rows=await getData("select dao_id,domain,actor_name,avatar,actor_url,actor_inbox,actor_account from v_account where manager=?",[sessionUser.did])
-    let sql='INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,is_send,is_discussion,top_img,actor_inbox) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    jsonData.orderedItems.forEach( async item => {
+    const sql='INSERT INTO a_message(message_id,manager,actor_name,avatar,actor_account,actor_url,title,content,is_send,is_discussion,top_img,actor_inbox) values(?,?,?,?,?,?,?,?,?,?,?,?)';
+    for(let i=0;i<jsonData.orderedItems.length;i++)
+    {
+      let item=jsonData.orderedItems[i];
       let contentText=item.object.content;
       if(item.object.attachment && item.object.attachment.length){
         const myURL = new URL(item.actor);
@@ -38,9 +40,9 @@ export default withSession(async (req, res) => {
       }
       let paras=[item.object.id,sessionUser.did,rows[0].actor_name,rows[0].avatar,rows[0].actor_account,rows[0].actor_url,
       `mastodon ${item.object.published}`,contentText,0,0,'',rows[0].actor_inbox];
-      await execute(sql,paras)
-    })
-    
+      if(paras[0]) await execute(sql,paras)
+    }
+
     res.status(200).json({ msg: `Complete import` }); 
 
   } catch (err) {

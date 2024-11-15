@@ -77,7 +77,10 @@
     "submitText":"提交",
     "notLoginText":"未签名登录",
     "importText":"导入",
-    "selectOutboxjson":"选择从mastodon 导出的 'outbox.json' 文件"
+    "getTestEth":"获取测试ETH",
+    "selectOutboxjson":"选择从mastodon 导出的 'outbox.json' 文件",
+    "notRegisterEnki":"未注册Enki帐号",
+    "registerDomain":"登录到注册的域名({domain})才能导入"
 
 
   }

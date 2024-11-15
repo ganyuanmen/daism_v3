@@ -25,7 +25,11 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 			sctype='sc';
 			break;
 		default: //个人
-			if(parseInt(eventnum)===1) where='where send_type=0';  //首页，查本地，
+			if(parseInt(eventnum)===1) {   //首页，查本地，
+				if(account) where=`where send_type=0 or receive_account='${account}'`;
+				else where='where send_type=0';
+				
+			}
 			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'and send_type=0`; //我发布的嗯文
 			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where account='${account}')`; //我的收藏
 			else if(parseInt(eventnum)===4) where=`where receive_account='${account}'`; //我的接收嗯文

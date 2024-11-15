@@ -16,7 +16,7 @@ import { getEnv,decrypt } from '../../../lib/utils/getEnv';
 import Head from 'next/head';
 import { getOne } from '../../../lib/mysql/message';
 import { httpGet } from '../../../lib/net';
-
+import { Right,Left } from '../../../lib/jssvg/SvgCollection';
 /**
 *公共社区
  */
@@ -38,6 +38,7 @@ export default function SC({openObj, locale,env }) {
     const [hasMore, setHasMore] = useState(true);
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
+    const [big,setBig]=useState(true) //左边缩进按钮控制, 默认左边大
 
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
@@ -109,7 +110,11 @@ export default function SC({openObj, locale,env }) {
         </Head>
         <PageLayout env={env}>
             <div className={iaddStyle.clearfix}>
-                <div className={iaddStyle.scsidebar}>
+                <div className={`${iaddStyle.scsidebar} ${big?iaddStyle.scsidebarbig:iaddStyle.scsidebarsmall}`}>
+                    <button onClick={e=>{setBig(!big)}} type="button" className="btn" style={{position:'absolute',padding:'4px',top:'4px',right:'2px'}} >
+                    {big?<Left size={24} />:<Right size={24} />}
+                  </button>
+                 {big && <>
                     <div className='mb-3' >
                         {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
                         {!loginsiwe && <Loginsign user={user} tc={tc} />}
@@ -147,10 +152,10 @@ export default function SC({openObj, locale,env }) {
                                 : hasMore && <Button  onClick={()=>setDaoWhere({ ...daoWhere, currentPageNum: daoWhere.currentPageNum + 1 })}  variant='light'>fetch more ...</Button>
                             }
                     </div>
-                 
+                    </>}
                 </div>
 
-                <div className={iaddStyle.sccontent}>
+                <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
 
                     {activeTab === 0 && <Main env={env} t={t} locale={locale} path="SC" setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage env={env} actor={actor} t={t} tc={tc} currentObj={currentObj} afterEditCall={afterEditCall} />}

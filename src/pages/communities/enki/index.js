@@ -14,7 +14,7 @@ import { getEnv,decrypt } from '../../../lib/utils/getEnv';
 import { getOne } from '../../../lib/mysql/message';
 import Head from 'next/head';
 import { httpGet } from '../../../lib/net';
-
+import { Right,Left } from '../../../lib/jssvg/SvgCollection';
 // import {useRouter} from 'next/router';
 /**
  * 我的社区
@@ -35,6 +35,7 @@ export default function enki({openObj, env,locale }) {
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
     const [activeTab, setActiveTab] = useState(0);
     const [daoData, setDaoData] = useState([]) //所属个人的社区列表
+    const [big,setBig]=useState(true) //左边缩进按钮控制, 默认左边大
 
     const tc = useTranslations('Common')
     const t = useTranslations('ff')
@@ -99,7 +100,11 @@ export default function enki({openObj, env,locale }) {
         <PageLayout  env={env} >
 
             <div className="clearfix">
-                  <div className={iaddStyle.scsidebar}>
+                <div className={`${iaddStyle.scsidebar} ${big?iaddStyle.scsidebarbig:iaddStyle.scsidebarsmall}`}>
+                  <button onClick={e=>{setBig(!big)}} type="button" className="btn" style={{position:'absolute',padding:'4px',top:'4px',right:'2px'}} >
+                    {big?<Left size={24} />:<Right size={24} />}
+                  </button>
+                 {big && <>
                     <div className='mb-3' >
                         {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
                         {!loginsiwe && <Loginsign user={user} tc={tc} />}
@@ -127,9 +132,10 @@ export default function enki({openObj, env,locale }) {
                         }
                     </>
                     }
+                  </>}
                 </div>
 
-                {daoData.length > 0 && <div className={iaddStyle.sccontent}>
+                {daoData.length > 0 && <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
 
                     {activeTab === 0 && <Main env={env} locale={locale} path="enki" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage env={env} daoData={daoData} actor={actor} t={t} tc={tc} addCallBack={refreshCallBack} currentObj={currentObj} afterEditCall={afterEditCall} />}

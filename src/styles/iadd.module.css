@@ -23,15 +23,24 @@
  }
 
 .sccontent {
-  width: calc(100% - 340px); 
+  /* width: calc(100% - 340px);  */
   float: right;
   padding-left: 20px;
   padding-top: 0px;
+  
+}
+.sccontentsmall{
+  width: calc(100% - 340px);
+  /* border: 1px solid yellow; */
+}
+.sccontentbig{
+  /* border: 1px solid rgb(212, 22, 89); */
+  width: calc(100% - 40px);
 }
 
 .scsidebar {
 float: left;
-width: 340px;
+/* width: 340px; */
 height:calc(100vh - 62px);
 background-color: #f4f4f4;
 padding: 20px;
@@ -41,7 +50,18 @@ box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 position: sticky;    /*对右边的内容使用粘性定位*/
 top: 60px;
 }
+.scsidebarbig{
+  width: 340px;
+}
+.scsidebarsmall{
+  width: 40px;
+}
 
+.narrow{
+  top:0px;
+  position: absolute;
+  right: 0px;
+}
 .scsidebar ul {
 list-style: none;
 padding: 0;

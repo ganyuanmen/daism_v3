@@ -76,6 +76,9 @@
     "submitText":"Submit",
     "notLoginText":"Unsigned login",
     "importText":"Import",
-    "selectOutboxjson":"Select the 'outbox.json' file exported from mastodon"
+    "getTestEth":"Get test ETH",
+    "selectOutboxjson":"Select the 'outbox.json' file exported from mastodon",
+    "notRegisterEnki":"Unregistered Enki account",
+    "registerDomain":"Login to the registered domain({domain}) name to import"
   }
 }

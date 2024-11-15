@@ -8,7 +8,7 @@ import {setTipText,setMessageText} from '../../data/valueData'
 import { useDispatch,useSelector} from 'react-redux';
 import Loginsign from '../Loginsign';
 
-export default function User({user,loginsiwe,t,...props}) {
+export default function User({user,loginsiwe,t,domain,...props}) {
 
   const loginRef=useRef()
   const router = useRouter();
@@ -49,6 +49,9 @@ export default function User({user,loginsiwe,t,...props}) {
         case '8':
           setShow(true)
           break;
+          // case "9":
+          //   router.push(`/transfer`, { scroll: false })
+          //   break;
         case 'a':
           showTip('正在创建荣誉通证，请稍候...')
           try {
@@ -78,6 +81,13 @@ export default function User({user,loginsiwe,t,...props}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if(!actor?.actor_account && !actor.actor_account?.includes('@')){
+      return showError(t('notRegisterEnki'))
+    }
+    if(actor.actor_account.split('@')[1]!=domain) {
+      return showError(t('registerDomain',{domain}))
+    }
+
     const formData = new FormData();
     formData.append('jsonFile', file);
     showTip(t('uploadingText'))
@@ -107,6 +117,7 @@ export default function User({user,loginsiwe,t,...props}) {
         <NavDropdown.Item eventKey="2"><span className='daism-color' ><UserSvg size={24}/></span> {t('myAccount')}...</NavDropdown.Item>
         <NavDropdown.Item eventKey="3"><span className='daism-color' ><AppSvg  size={24}/></span> {t('daoGroupApprove')} </NavDropdown.Item>
         <NavDropdown.Item eventKey="4"><span className='daism-color' ><TokenSvg  size={24}/></span> {t('daoDividend')} </NavDropdown.Item>
+        {/* <NavDropdown.Item eventKey="9"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('getTestEth')} </NavDropdown.Item> */}
         <NavDropdown.Item eventKey="b"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('importText')} mastodon </NavDropdown.Item>
        {/* <NavDropdown.Item eventKey="a"><span className='daism-color' ><SwapTokenSvg size={24}/></span> 中本聪 荣誉通证 </NavDropdown.Item>  */}
        {/* {admin && <NavDropdown.Item eventKey="4"><span className='daism-color' ><MemberVerify size={24}/></span> {t('daoMemberVerify')}</NavDropdown.Item> } */}
