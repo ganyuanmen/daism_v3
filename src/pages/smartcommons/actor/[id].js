@@ -9,6 +9,7 @@ import EnkiMember from '../../../components/enki2/form/EnkiMember'
 import FollowItem0 from '../../../components/enki2/form/FollowItem0';
 import FollowItem1 from '../../../components/enki2/form/FollowItem1';
 import { getEnv } from '../../../lib/utils/getEnv';
+import { getUser } from '../../../lib/mysql/user';
 import Head from 'next/head';
 /**
  * 指定个人帐号
@@ -26,7 +27,7 @@ export default function MyActor({daoActor,actor,follow0,follow1,locale,env}) {
         <Card.Header>{t('myAccount')}</Card.Header>
         <Card.Body>
             <div className='d-flex justify-content-between align-items-center' >
-              <EnkiMember messageObj={actor} isLocal={true} />
+              <EnkiMember messageObj={actor} isLocal={true} locale={locale} />
               {actor.dao_id>0?t('groupAccount'):t('selfAccount')}
             </div>
             <hr/>
@@ -50,12 +51,12 @@ export default function MyActor({daoActor,actor,follow0,follow1,locale,env}) {
             <Tabs defaultActiveKey="follow0" className="mb-3 mt-3" >
             <Tab eventKey="follow0" title={t('followingText',{num:follow0.length})}>
               <div>
-                {follow0.map((obj)=> <FollowItem0 key={obj.id} domain={env.domain}  messageObj={obj} t={t}  />)}
+                {follow0.map((obj)=> <FollowItem0 key={obj.id} locale={locale} domain={env.domain}  messageObj={obj} t={t}  />)}
               </div>
             </Tab>
             <Tab eventKey="follow1" title={t('followedText',{num:follow1.length})}>
               <div>
-                {follow1.map((obj)=> <FollowItem1 key={obj.id} domain={env.domain} messageObj={obj} t={t} />)}
+                {follow1.map((obj)=> <FollowItem1 locale={locale} key={obj.id} domain={env.domain} messageObj={obj} t={t} />)}
               </div>
             </Tab>
           </Tabs>
@@ -66,8 +67,8 @@ export default function MyActor({daoActor,actor,follow0,follow1,locale,env}) {
 }
 
 export const getServerSideProps = withSession(async ({locale,query }) => {
-  const actor=await getJsonArray('actorbyid',[query.id],true)
-  const daoActor=await getJsonArray('daoactorbyid',[query.id])
+  const actor=await getUser('actor_account',query.id,'id,dao_id,actor_name,domain,manager,actor_account,actor_url,avatar,actor_desc')
+  const daoActor=await getJsonArray('daoactorbyid',[actor.id])
   const follow0=await getJsonArray('follow0',[actor?.actor_account])
   const follow1=await getJsonArray('follow1',[actor?.actor_account])
   

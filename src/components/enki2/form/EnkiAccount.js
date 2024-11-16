@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import EnkiMember from "./EnkiMember";
 
-export default function EnkiAccount({t})
+export default function EnkiAccount({t,locale})
 {
     const actor = useSelector((state) => state.valueData.actor)
     const target = useRef(null);
@@ -24,7 +24,7 @@ export default function EnkiAccount({t})
             { actor?.manager?  // {/*已登录 */}
             <>
                 {actor?.actor_account?  //已注册
-                    <EnkiMember messageObj={actor} hw={64} isLocal={true} />
+                    <EnkiMember messageObj={actor} locale={locale} hw={64} isLocal={true} />
                     :<div onClick={e=>{setShow(false)}} >  {/*  //未注册*/}
                         <div ref={target}> <User1Svg size={64}  /></div>
                         <Overlay show={show} target={target.current} placement="right" containerPadding={4}>

@@ -49,7 +49,7 @@ export default function EnkiMessageMember({t,messageObj,locale})
   
         <div className="d-inline-flex align-items-center" >
            
-           <EnkiMember messageObj={messageObj} isLocal={true} />
+           <EnkiMember messageObj={messageObj} locale={locale} isLocal={messageObj?.actor_id>0} />
             <div > {geneHonor()}   </div>
         </div>
    

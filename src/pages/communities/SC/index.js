@@ -116,7 +116,7 @@ export default function SC({openObj, locale,env }) {
                   </button>
                  {big && <>
                     <div className='mb-3' >
-                        {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
+                        {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} locale={locale} /> : <EnkiAccount t={t} locale={locale} />}
                         {!loginsiwe && <Loginsign user={user} tc={tc} />}
                     </div>
                  
@@ -173,8 +173,7 @@ export const getServerSideProps = async({ locale,query }) => {
     let openObj={}; 
     const env=getEnv();
     if(query.d){
-        const [id,daoid,domain]=decrypt(query.d).split(',');
-        const sctype=parseInt(daoid)>0?'sc':'';
+        const [id,sctype,domain]=decrypt(query.d).split(',');
         if(domain==env.domain){
             openObj=await getOne({id,sctype})
         }

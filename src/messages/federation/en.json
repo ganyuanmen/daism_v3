@@ -137,7 +137,8 @@
     "searchMainText":"Search" ,
     "noFounData":"No data found",
     "publishCompany":"Publish Community",
-    "moreText":"more"
+    "moreText":"more",
+    "allPostText":"Site Post"
 
   }
 }

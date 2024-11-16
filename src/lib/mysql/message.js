@@ -25,10 +25,11 @@ export async function messagePageData({pi,menutype,daoid,w,actorid,account,order
 			sctype='sc';
 			break;
 		default: //个人
-			if(parseInt(eventnum)===1) {   //首页，查本地，
-				if(account) where=`where send_type=0 or receive_account='${account}'`;
-				else where='where send_type=0';
-				
+			if(parseInt(eventnum)===5){ //全站
+				where='where send_type=0';
+			}
+			else if(parseInt(eventnum)===1) {   //首页，查本地，
+				where=`where actor_account='${account}' or receive_account='${account}'`;
 			}
 			else if(parseInt(eventnum)===2) where=`where actor_account='${account}'and send_type=0`; //我发布的嗯文
 			else if(parseInt(eventnum)===3) where=`where id in(select pid from a_bookmark where account='${account}')`; //我的收藏
@@ -62,14 +63,13 @@ export async function daoPageData({pi,w})
 	return re; 
 }
 
-//关注插入  id:自动ID ,
 //element.user_account--->receive_account
 //`https://${process.env.LOCAL_DOMAIN}/communities/${sctype}/${id}`--->linkUrl
-export async function insertMessage(id,account,message_id,pathtype)
+export async function insertMessage(account,message_id,pathtype)
 {
 	let sctype=pathtype==='me'?'':'sc';
-	let re=await getData(`SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM v_message${sctype} where id=?`
-	,[id]);
+	let re=await getData(`SELECT message_id,manager,actor_name,avatar,actor_account,actor_url,actor_inbox,title,content,top_img FROM v_message${sctype} where message_id=?`
+	,[message_id]);
 	re=re[0]
 
 	let linkUrl=`https://${process.env.LOCAL_DOMAIN}/communities/${pathtype}/${message_id}`

@@ -4,7 +4,7 @@ import EnkiEditItem from "./EnkiEditItem"
 import { useSelector } from 'react-redux';
 
 //关注内容 
-export default function ReplyItem({isEdit,t,replyObj,delCallBack,preEditCall,sctype}) {
+export default function ReplyItem({locale,isEdit,t,replyObj,delCallBack,preEditCall,sctype}) {
 
  const editCallBack=()=>{
     preEditCall(replyObj)
@@ -14,7 +14,7 @@ export default function ReplyItem({isEdit,t,replyObj,delCallBack,preEditCall,sct
     return (
         <div style={{borderBottom:'1px solid #D2D2D2'}}>
            <div className="d-flex justify-content-between align-items-center" style={{paddingLeft:"20px"}}  >
-                <EnkiMember messageObj={replyObj} isLocal={false} hw={32} />
+                <EnkiMember messageObj={replyObj} isLocal={false} hw={32} locale={locale} />
                 <div style={{paddingRight:'10px'}}  >
                     {isEdit && <EnkiEditItem  messageObj={replyObj}  t={t} delCallBack={delCallBack} preEditCall={editCallBack} type={1} sctype={sctype} />
                     } 

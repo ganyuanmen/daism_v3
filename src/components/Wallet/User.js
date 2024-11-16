@@ -113,13 +113,13 @@ export default function User({user,loginsiwe,t,domain,...props}) {
       <NavDropdown   title={
         <span className='daism-color' >{actor?.avatar?<img src={actor.avatar}  alt={actor?.actor_account} width={32} height={32} style={{borderRadius:'50%'}}/> :<AccountSvg /> }  </span>
       } >
+        {/* <NavDropdown.Item eventKey="a"><span className='daism-color' ><SwapTokenSvg size={24}/></span> 中本聪 荣誉通证 </NavDropdown.Item>  */}
         <NavDropdown.Item eventKey="1"><span className='daism-color' ><WalletSvg  size={24}/></span> {t('myWalletText')}...</NavDropdown.Item>
         <NavDropdown.Item eventKey="2"><span className='daism-color' ><UserSvg size={24}/></span> {t('myAccount')}...</NavDropdown.Item>
         <NavDropdown.Item eventKey="3"><span className='daism-color' ><AppSvg  size={24}/></span> {t('daoGroupApprove')} </NavDropdown.Item>
         <NavDropdown.Item eventKey="4"><span className='daism-color' ><TokenSvg  size={24}/></span> {t('daoDividend')} </NavDropdown.Item>
         {/* <NavDropdown.Item eventKey="9"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('getTestEth')} </NavDropdown.Item> */}
         <NavDropdown.Item eventKey="b"><span className='daism-color' ><SwapTokenSvg size={24}/></span> {t('importText')} mastodon </NavDropdown.Item>
-       {/* <NavDropdown.Item eventKey="a"><span className='daism-color' ><SwapTokenSvg size={24}/></span> 中本聪 荣誉通证 </NavDropdown.Item>  */}
        {/* {admin && <NavDropdown.Item eventKey="4"><span className='daism-color' ><MemberVerify size={24}/></span> {t('daoMemberVerify')}</NavDropdown.Item> } */}
         <NavDropdown.Divider />
       {loginsiwe?<NavDropdown.Item eventKey="5"><span className='daism-color' ><ExitSvg size={24}/></span> {t('exitText')}</NavDropdown.Item>

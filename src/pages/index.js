@@ -11,7 +11,7 @@ import usePrice from "../hooks/usePrice";
 import ShowErrorBar from "../components/ShowErrorBar";
 import { useTranslations } from 'next-intl'
 import PageLayout from '../components/PageLayout';
-import { client } from '../lib/api/client';
+// import { client } from '../lib/api/client';
 import {getEnv} from '../lib/utils/getEnv'
 
 const commulate_abi=require('../lib/contract/data/commulate.json')

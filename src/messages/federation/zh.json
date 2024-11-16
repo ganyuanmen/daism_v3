@@ -129,15 +129,16 @@
     "scHomeText":"首页",
     "createPostText":"创建嗯文",
     "myPostText":"我的嗯文",
-    "followManText0":"正在关注的嗯人",
-    "followManText1":"关注我的嗯人",
+    "followManText0":"正在关注的嗯友",
+    "followManText1":"关注我的嗯友",
     "myBookText":"我的书签",
     "myReceiveText":"我接收的嗯文",
     "noFounData":"没有找到数据",
     "searchMainText":"搜索",
     "emprtyData":"没有更多数据了",
     "publishCompany":"发布社区",
-    "moreText":"更多"
+    "moreText":"更多",
+    "allPostText":"全站动态"
 
   
 

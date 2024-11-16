@@ -10,7 +10,7 @@ import { client } from "../../../lib/api/client";
 /**
  * 我关注谁的item
  */
-export default function FollowItem0({messageObj,t,domain}) {
+export default function FollowItem0({messageObj,t,domain,locale}) {
     const [isFollow,setIsFollow]=useState(true); //默认已关注，不显示按钮
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
@@ -49,7 +49,7 @@ export default function FollowItem0({messageObj,t,domain}) {
     return (
         
             <Row className="d-flex align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:"5px 2px"}}  >
-                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} /></Col>
+                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} locale={locale} /></Col>
                 {loginsiwe && !isFollow && <Col>
                     <EnKiUnFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                 </Col>

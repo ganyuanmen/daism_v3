@@ -33,7 +33,7 @@ export default function me({openObj,env,locale }) {
         menutype: 3,
         v:0,
         order: 'reply_time', //排序
-        eventnum: 1  //0 活动 1 非活动
+        eventnum: 5  //默认 全站
     });
     
     const [currentObj, setCurrentObj] = useState(null);  //用户选择的发文对象
@@ -70,13 +70,21 @@ export default function me({openObj,env,locale }) {
         } 
     },[openObj])
 
-    useEffect(()=>{
-        if(activeTab==0 && actor?.actor_account)
-        {
-            setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: actor.actor_account }) 
-        }
-    },[activeTab,actor])
-    const homeHandle=()=>{ //首页
+    // useEffect(()=>{ //登录后跳到主页
+    //     if(activeTab==0 && actor?.actor_account)
+    //     {
+    //         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: actor.actor_account }) 
+    //     }
+    // },[activeTab,actor])
+
+    const allHandle=()=>{ //全站
+        //account: '' 从本地读取
+        removeUrlParams()
+        setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 5,account: '' })
+        setActiveTab(0);
+    }
+
+    const homeHandle=()=>{ //首页 
          //account: '' 从本地读取
          removeUrlParams()
         setFetchWhere({ ...fetchWhere, currentPageNum: 0, eventnum: 1,account: actor?.actor_account?actor.actor_account:'' })
@@ -143,12 +151,14 @@ export default function me({openObj,env,locale }) {
                     
                    {big && <>
                     <div className='mb-3' >
-                        {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} hw={64} /> : <EnkiAccount t={t} />}
+                        {actor?.actor_account ? <EnkiMember messageObj={actor} isLocal={true} locale={locale} hw={64} /> : <EnkiAccount t={t} locale={locale} />}
                         {!loginsiwe && <Loginsign user={user} tc={tc} />}
                     </div>
                     <ul >
-                        <li><a href="#" onClick={homeHandle} >{t('scHomeText')}</a></li>
+                        <li><a href="#" onClick={allHandle} >{t('allPostText')}</a></li>
+                        
                         {loginsiwe && actor?.actor_account && <>
+                            <li><a href="#" onClick={homeHandle} >{t('scHomeText')}</a></li>
                             <li><a href="#" onClick={createHandle} >{t('createPostText')}</a></li>
                             <li><a href="#" onClick={myPostHandle} >{t('myPostText')}</a></li>
                             <li><a href="#" onClick={myReceiveHandle} >{t('myReceiveText')}</a></li>
@@ -161,7 +171,7 @@ export default function me({openObj,env,locale }) {
                     {loginsiwe && actor?.actor_account?.includes('@') && env.domain===actor.actor_account.split('@')[1] && <div>
                     <SearchInput setSearObj={setSearObj} setFindErr={setFindErr} actor={actor} t={t} />
                     {searObj && <div className='mt-3' >
-                        <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} />
+                        <EnkiMember messageObj={searObj} isLocal={!!searObj.manager} locale={locale} />
                         <div className='mb-3 mt-3'>
                         {searObj.id>0?<EnKiUnFollow t={t} searObj={searObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                         :<EnKiFollow  t={t} searObj={searObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
@@ -185,7 +195,7 @@ export default function me({openObj,env,locale }) {
                     {activeTab === 2 && <MessagePage  path="enkier" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
-                    {activeTab===3 && <FollowCollection t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}
+                    {activeTab===3 && <FollowCollection locale={locale} t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}
                 </div>
             </div>
 
@@ -198,8 +208,7 @@ export const getServerSideProps = async ({ locale,query }) => {
     let openObj={}; 
     const env=getEnv();
     if(query.d){
-        const [id,daoid,domain]=decrypt(query.d).split(',');
-        const sctype=parseInt(daoid)>0?'sc':'';
+        const [id,sctype,domain]=decrypt(query.d).split(',');
         if(domain==env.domain){
             openObj=await getOne({id,sctype})
         }
@@ -208,7 +217,6 @@ export const getServerSideProps = async ({ locale,query }) => {
             let response=await httpGet(`https://${domain}/api/getData?id=${id}&sctype=${sctype}`,{'Content-Type': 'application/json',method:'getOne'})
             if(response?.message) openObj=response.message
         }
-        
     }
     return {
         props: {

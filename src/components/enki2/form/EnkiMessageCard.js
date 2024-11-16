@@ -44,6 +44,11 @@ const encrypt=(text)=>{
     return _account.split('@')[1];
   }
 
+  const geneType=()=>{
+    if(messageObj?.send_type==1) return ''; //推送的都在message
+    if(parseInt(messageObj?.dao_id)>0) return 'sc'; //sc 发表的
+    return ''; // 默认在message
+  }
     return (
    
 
@@ -53,7 +58,7 @@ const encrypt=(text)=>{
             </Card.Header>
             
         <Card.Body className="daism-click"  >
-            <a className="daism-a" href={`/${locale}/communities/${path}?d=${encrypt(`${messageObj.id},${messageObj.dao_id},${getDomain()}`)}`} >
+            <a className="daism-a" href={`/${locale}/communities/${path}?d=${encrypt(`${messageObj.id},${geneType()},${getDomain()}`)}`} >
             <div>
             {messageObj._type===1?  <div style={{position:'relative'}}>
                 {messageObj.top_img && <div style={{textAlign:'center'}} ><img src={messageObj.top_img} alt='' style={{maxHeight:'100px'}} /></div> }

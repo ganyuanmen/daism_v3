@@ -14,7 +14,7 @@ import FollowItem0 from './FollowItem0';
 import FollowItem1 from './FollowItem1';
 import EnKiRigester from './EnKiRigester';
 
-export default function ActorMember({t,tc,user,actor,domain,accountTotal}){
+export default function ActorMember({t,tc,user,locale,actor,domain,accountTotal}){
     const [show,setShow]=useState(false)
     const [register,setRegister]=useState(false)
     const daoActor = useSelector((state) => state.valueData.daoActor) 
@@ -70,7 +70,7 @@ export default function ActorMember({t,tc,user,actor,domain,accountTotal}){
     <Card.Body>
     <div className='row mb-3 ' >
         <div className='col-auto me-auto' >
-            <EnkiMember messageObj={actor} isLocal={true} />
+            <EnkiMember messageObj={actor} locale={locale} isLocal={true} />
         </div>
         <div className='col-auto' >
             {actor?.manager.toLowerCase()===user.account.toLowerCase() &&
@@ -101,12 +101,12 @@ export default function ActorMember({t,tc,user,actor,domain,accountTotal}){
         <Tabs defaultActiveKey="follow0" className="mb-3 mt-3" >
             <Tab eventKey="follow0" title={t('followingText',{num:follow0.data.length})}>
               <div>
-                {follow0.data.map((obj)=> <FollowItem0 key={obj.id} domain={domain}  messageObj={obj} t={t}  />)}
+                {follow0.data.map((obj)=> <FollowItem0 locale={locale} key={obj.id} domain={domain}  messageObj={obj} t={t}  />)}
               </div>
             </Tab>
             <Tab eventKey="follow1" title={t('followedText',{num:follow1.data.length})}>
               <div>
-                {follow1.data.map((obj)=> <FollowItem1 key={obj.id} domain={domain} messageObj={obj} t={t} />)}
+                {follow1.data.map((obj)=> <FollowItem1 locale={locale} key={obj.id} domain={domain} messageObj={obj} t={t} />)}
               </div>
             </Tab>
         </Tabs>

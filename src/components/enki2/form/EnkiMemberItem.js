@@ -33,7 +33,7 @@ export default function EnkiMemberItem({locale,t,actor,messageObj,domain,delCall
     return (
         <div className="d-flex justify-content-between align-items-center">
             {(messageObj.dao_id==0 &&messageObj.send_type==0 && messageObj?.manager)?<EnkiMessageMember t={t} messageObj={messageObj} locale={locale} />
-            :<EnkiMember messageObj={messageObj} isLocal={!messageObj?.message_id.startsWith('http')} /> }
+            :<EnkiMember locale={locale} messageObj={messageObj} isLocal={messageObj?.actor_id>0} /> }
             
             {actor?.actor_account && !isFollow && messageObj.actor_account!==actor?.actor_account && 
             <EnKiFollow t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} /> }

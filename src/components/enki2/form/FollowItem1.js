@@ -11,7 +11,7 @@ import { client } from "../../../lib/api/client";
 /**
  * 谁关注我的item  
  */
-export default function FollowItem1({messageObj,t,domain}) {
+export default function FollowItem1({messageObj,t,domain,locale}) {
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
     function closeTip(){dispatch(setTipText(''))}
@@ -57,7 +57,7 @@ export default function FollowItem1({messageObj,t,domain}) {
     return (
         
             <Row className="d-flex align-items-center" style={{borderBottom:"1px solid #D2D2D2",padding:"5px 2px"}}  >
-                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} /></Col>
+                <Col><EnkiMember messageObj={data} isLocal={false} hw={32} locale={locale} /></Col>
                 <Col>
                     {actor?.actor_account && !isFollow && <EnKiFollow  t={t} searObj={messageObj} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />
                     }

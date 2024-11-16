@@ -35,7 +35,7 @@ export default function DaoInfo({daoData,daoMember,follower,accountTotal,env,loc
                     <Domain_div record={daoData} daoActor={daoActor}  domain={env.domain} tc={tc} accountTotal={accountTotal} t={t}/>
                     <DaoInfo_div record={daoData} t={t} />
                     {daoData && member && member.length>0 &&  <Daomember_div record={member} t={t} dao_manager={daoData.dao_manager}/>}
-                    {follow && follow.length>0 &&  <Follower_div record={follow} t={t} />}
+                    {follow && follow.length>0 &&  <Follower_div record={follow} t={t} locale={locale} />}
 
                   </>
                 :<ShowErrorBar errStr={tc('noDataText')} />}   

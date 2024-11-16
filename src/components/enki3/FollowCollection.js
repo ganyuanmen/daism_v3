@@ -11,7 +11,7 @@ import FollowItem1 from '../../components/enki2/form/FollowItem1'
  * method: follow0 我关注谁，follow1 谁关注我
  */
 
-export default function FollowCollection({t,method,account,domain}) { 
+export default function FollowCollection({t,method,account,domain,locale}) { 
   
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -58,9 +58,9 @@ export default function FollowCollection({t,method,account,domain}) {
     return (
         <div className="mt-3" style={{width:'100%'}}>
             <div>
-                {method==='getFollow0' && Array.isArray(data) && data.map((obj)=> <FollowItem0 domain={domain} key={obj.id} messageObj={obj} t={t} />)}
+                {method==='getFollow0' && Array.isArray(data) && data.map((obj)=> <FollowItem0 locale={locale} domain={domain} key={obj.id} messageObj={obj} t={t} />)}
              
-                {method==='getFollow1' && Array.isArray(data) && data.map((obj)=> <FollowItem1 domain={domain} key={obj.id} messageObj={obj} t={t} />)}
+                {method==='getFollow1' && Array.isArray(data) && data.map((obj)=> <FollowItem1 locale={locale} domain={domain} key={obj.id} messageObj={obj} t={t} />)}
             </div>
 
             {footerdiv()}

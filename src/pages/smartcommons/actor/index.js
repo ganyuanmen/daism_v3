@@ -26,18 +26,18 @@ export default function MyActor({env,accountTotal,locale}) {
         <div style={{marginTop:'10px'}} >
             {user.connected!==1?<ShowErrorBar errStr={tc('noConnectText')} />
             :!loginsiwe?<Wecome />
-            :<ActorInfo t={t} tc={tc} user={user} domain={env.domain} accountTotal={accountTotal} />
+            :<ActorInfo t={t} tc={tc} user={user} domain={env.domain} accountTotal={accountTotal} locale={locale} />
             }  
         </div>
       </PageLayout></>
     );
 }
 
-function ActorInfo({t,tc,user,domain,accountTotal})
+function ActorInfo({t,tc,user,domain,accountTotal,locale})
 {
   const actor = useSelector((state) => state.valueData.actor) 
   return  <> 
-      {(actor?.actor_account)?<ActorMember actor={actor} t={t} tc={tc} user={user} domain={domain} accountTotal={accountTotal}  />
+      {(actor?.actor_account)?<ActorMember locale={locale} actor={actor} t={t} tc={tc} user={user} domain={domain} accountTotal={accountTotal}  />
         :<div>    {/* 未注册帐号  */}
           <Alert>{t('noregisterText')} </Alert>
           <EnKiRigester t={t} domain={domain} user={user} accountTotal={accountTotal} />
