@@ -189,8 +189,8 @@ export default function me({openObj,env,locale }) {
                     {activeTab === 0 && <Main env={env} locale={locale} path="enkier" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
                         fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
 
-                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle}
-                        currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} />}
+                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle} fetchWhere={fetchWhere}
+                        currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} setFetchWhere={setFetchWhere} />}
 
                     {activeTab === 2 && <MessagePage  path="enkier" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}

@@ -189,17 +189,7 @@
     top: 0px;
     left: 0px;
     }
-    .ccc{
-      width: 100%;
-      display: flex;
-      position: relative;;
-    }
 
-    .ddd{
-      flex: 1;
-     
-      height:calc(100vh - 62px);
-      overflow-y: auto;
-       border: 1px solid red; 
-      
+    .utofont{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }

@@ -12,7 +12,7 @@ import dynamic from 'next/dynamic';
 const RichTextEditor = dynamic(() => import('../../RichTextEditor'), { ssr: false });
 
 //currentObj 有值表示修改
-export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentObj,afterEditCall, addCallBack }) {
+export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentObj,afterEditCall, addCallBack,fetchWhere,setFetchWhere}) {
 
     const [showEvent, setShowEvent] = useState(false) //是否活动发文
     const [selectedDaoid, setSelectedDaoid] = useState(""); //智能公器选择值

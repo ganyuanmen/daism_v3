@@ -14,6 +14,7 @@ export async function getUser(findFiled,findValue,selectFields) {
 }
 
 
+
 export async function getActor (did) {
   const _actor=await getJsonArray('actor',[did],true)
   return _actor.manager?_actor:{manager:did,avatar:'',actor_name:'',actor_desc:'',actor_account:'',actor_url:''};

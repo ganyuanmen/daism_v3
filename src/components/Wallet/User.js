@@ -52,17 +52,17 @@ export default function User({user,loginsiwe,t,domain,...props}) {
           // case "9":
           //   router.push(`/transfer`, { scroll: false })
           //   break;
-        case 'a':
-          showTip('正在创建荣誉通证，请稍候...')
-          try {
-            await window.daismDaoapi.Unft.mint();
-            showError('荣誉通证创建成功_*_');
-          } catch (err) {
-            showError("错误："+(err.message ? err.message : err));
-          }finally{
-            closeTip()
-          }
-          break;
+        // case 'a':
+        //   showTip('正在创建荣誉通证，请稍候...')
+        //   try {
+        //     await window.daismDaoapi.Unft.mint();
+        //     showError('荣誉通证创建成功_*_');
+        //   } catch (err) {
+        //     showError("错误："+(err.message ? err.message : err));
+        //   }finally{
+        //     closeTip()
+        //   }
+        //   break;
         case 'b':
          // if (fileInputRef.current) {fileInputRef.current.click()}
          setUpshow(true)

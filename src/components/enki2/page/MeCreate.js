@@ -1,19 +1,19 @@
-import { useState,forwardRef,useEffect,useImperativeHandle } from 'react';
-import {Button,Card,Row,Col,Form,InputGroup,DropdownButton,Dropdown} from "react-bootstrap";
+// import { useState,forwardRef,useEffect,useImperativeHandle } from 'react';
+import {Button,Card} from "react-bootstrap";
 import DaismImg from '../../form/DaismImg';
 import DaismInputGroup from '../../form/DaismInputGroup';
 // import Editor from '../form/Editor';
 import { useRef } from 'react';
 import { SendSvg } from '../../../lib/jssvg/SvgCollection';
-import DateTimeItem from '../../form/DateTimeItem';
-import { useSelector,useDispatch} from 'react-redux';
+// import DateTimeItem from '../../form/DateTimeItem';
+import { useDispatch} from 'react-redux';
 import {setTipText,setMessageText} from '../../../data/valueData';
 import dynamic from 'next/dynamic';
 
 const RichTextEditor = dynamic(() => import('../../RichTextEditor'), { ssr: false });
 
 //currentObj 有值表示修改
-export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBack,setActiveTab}) {
+export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBack,setActiveTab,fetchWhere,setFetchWhere}) {
 
     const dispatch = useDispatch();
     function showTip(str){dispatch(setTipText(str))}
@@ -90,7 +90,7 @@ export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBac
         </Card.Body>
         <Card.Footer className='d-flex justify-content-center'  >
             <div>
-                <Button  onClick={()=>{setActiveTab(0)}}  variant="light">  {t('esctext')} </Button> {' '}
+                <Button  onClick={()=>{setFetchWhere({...fetchWhere,currentPageNum:0});setActiveTab(0);}}  variant="light">  {t('esctext')} </Button> {' '}
                 <Button  onClick={submit}  variant="primary"> <SendSvg size={16} /> {t('submitText')}</Button> 
             </div>
         </Card.Footer>

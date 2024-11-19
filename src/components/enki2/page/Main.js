@@ -7,7 +7,7 @@ import CommunitySerach from "../../enki3/CommunitySerach";
 import ShowErrorBar from "../../ShowErrorBar";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setCurrentObj, setActiveTab }) {
+export default function Main({env,path,locale, t,fetchWhere, setFetchWhere }) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -52,7 +52,7 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere, setC
 
   const fetchMoreData = () => {
     console.log("mess next------------>",fetchWhere)
-    setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
+    if(!isLoading && hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
   };
 
     const footerdiv=()=>{

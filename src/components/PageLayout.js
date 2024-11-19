@@ -1,20 +1,22 @@
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Navbar,Container,Nav,NavDropdown } from 'react-bootstrap'
+import { Navbar,Container,Nav,NavDropdown, Alert } from 'react-bootstrap'
 import Wallet from './Wallet'
 import Loddingwin from './Loddingwin'
 import ShowTip from './ShowTip'
+import React, { useState } from 'react';
 
 export default function PageLayout({children,env}) {
 
   const t = useTranslations('Navigation')
   const { locale, locales, route,query } = useRouter()
+  const [showAlert, setShowAlert] = useState(true);
   const otherLocale = locales?.find((cur) => cur !== locale)
   const restoredURL = `?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`;
   const path=`${route}${restoredURL.length>1?restoredURL:''}`
   const tc = useTranslations('Common')
-  
+  const handleCloseAlert=()=>{ setShowAlert(false);}
   return (
     <>
   
@@ -65,7 +67,20 @@ export default function PageLayout({children,env}) {
             <div className="fs-5">{tc('footerText')}</div>  
           
         </footer>
-}
+        }   
+
+      {showAlert && <Alert className='utofont' style={{textAlign:'center',position:'fixed',bottom:'-16px',right:'2px',zIndex:9876}} >
+          {locale==='zh'?<>
+            <span>总量1.15792x10</span><sup>69</sup><span> UTO 的 </span><strong>Satoshi UTO Fund</strong><span> 于2024年11月21日问世！</span>
+          </>:<>
+          <strong>Satoshi UTO Fund</strong><span>, with a total of 1.15792x10</span><sup >69</sup><span> UTO, was launched on October 21, 2024!</span>
+          </>}
+          {'  '}
+          <button type="button" className="close" onClick={handleCloseAlert} aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </Alert>  
+      }
         <Loddingwin />
         <ShowTip />
     </>
