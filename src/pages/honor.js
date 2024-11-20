@@ -24,7 +24,7 @@ export default function Honor({locale,env,accountAr,total,nftTotal}) {
     function closeTip(){dispatch(setTipText(''))}
    
   const click=async ()=>{
-    if(!accountAr[user.account]){
+    if(!accountAr[user.account.toLowerCase()]){
       if(!nftTotal.minttime || nftTotal.minttime<180)  return  showError(`非白名单地址，待3小时后才能mint, 还差${180-(nftTotal.minttime?nftTotal.minttime:0)}分钟`);
     }
    

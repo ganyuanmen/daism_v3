@@ -68,7 +68,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
     const [changeStrategy,setChangeStrategy]=useState(false) //change Strategy window
     const [showDel,setShowDel]=useState(false) //show del confirm
     const [showType,setShowType]=useState(false) //类型修改窗口
-    const [divdend,setDivdend] =useState('0') //可领取的分红
+    const [divdend,setDivdend] =useState('0') //可领取的奖励
     // const [logo,setLogo]=useState(record.dao_logo)
     const [ismember,setIsmember]=useState(false) //是否为成员
 
@@ -141,7 +141,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
 
     }
  
-    //修改成员分红权
+    //修改成员奖励权
     const modify=()=>{
         let _vote=parseInt(modifyVoteRef.current.getData())
         if (isNaN(_vote) || _vote <1 ) {
@@ -247,7 +247,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
     }
 
     
-    //获取分红权
+    //获取奖励权
     const getDivdend=async ()=>{
         if(parseFloat(divdend)===0)
         {
@@ -330,7 +330,7 @@ function DaoInfo({record,daoid,user,lastPro,setRefresh})
                 }
             </div>
         
-            { ismember && <div className='mb-3 p-1' style={bStyle}> {/*  当前分红 */}
+            { ismember && <div className='mb-3 p-1' style={bStyle}> {/*  当前奖励 */}
                 <b>{t('currentDividend')}:</b> {'  '}(<span>Utoken :</span> {divdend})
                 <Button  style={{marginLeft:30}} onClick={getDivdend}  variant='primary'> <EditSvg size={16} /> {t('obtainDividends')} </Button>
                 </div>

@@ -19,7 +19,7 @@ const methods={
     getMynft,//我的nft
     getDappOwner, //dapp owner
     getProsData, //已完成提案
-    getDividend, //分红记录
+    getDividend, //奖励记录
     getDappVersion, //dapp地址对应version
     messagePageData, //嗯文分页列表
     replyPageData, //获取回复

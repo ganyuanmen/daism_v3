@@ -11,7 +11,7 @@ import ShowAddress from '../../components/ShowAddress'
 import { getEnv } from "../../lib/utils/getEnv";
 import Head from 'next/head';
 /**
- * 我的分红
+ * 我的奖励
  */
 export default function Dividend({env,locale}) {
     const t = useTranslations('my')

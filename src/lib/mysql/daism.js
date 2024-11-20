@@ -13,7 +13,7 @@ export async function getIsDaoMember({did,daoid})
     return re 
 }
   
-// 分红记录
+// 奖励记录
 export async function getDividend({ps,pi,did})
 {
     let re= await getPageData('getutoken',ps,pi,'_time','desc',`dao_owner='${did}'`);
