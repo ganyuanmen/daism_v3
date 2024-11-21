@@ -15,7 +15,7 @@ import { getJsonArray } from '../lib/mysql/common';
  * IADD兑换
  */
 export default function Honor({locale,env,accountAr,total,nftTotal}) {
-   console.log("nftTotal",nftTotal)
+  //  console.log("nftTotal",nftTotal)
 
     const user = useSelector((state) => state.valueData.user) //钱包用户信息
     const dispatch = useDispatch();
@@ -51,7 +51,7 @@ export default function Honor({locale,env,accountAr,total,nftTotal}) {
         <div style={{textAlign:'center'}} className='mt-3' >
           <Wallet env={env} />
           <br/>
-         <Button onClick={click} disabled={user.connected!=1}  >中本聪 荣誉通证</Button>
+         <Button onClick={click} disabled={true}  >中本聪 荣誉通证</Button>
         
         </div>
         <Alert className='mt-3' >

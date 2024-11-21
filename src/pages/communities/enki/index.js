@@ -114,7 +114,7 @@ export default function enki({openObj, env,locale }) {
                         <ul >
                             <li><a href="#" onClick={latestHandle} >{t('latestText')}</a></li>
                             <li><a href="#" onClick={eventHandle} >{t('eventText')}</a></li>
-                            <li><a href="#" onClick={publishHandle} >{t('publishText')}</a></li>
+                           {actor?.actor_account && <li><a href="#" onClick={publishHandle} >{t('publishText')}</a></li>}
                             {daoData.map((obj, idx) => <li key={obj.dao_id} className={iaddStyle.scli}>
                                 <a href="#" onClick={e=>{
                                     removeUrlParams()

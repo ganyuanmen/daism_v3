@@ -51,7 +51,7 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere }) {
 
 
   const fetchMoreData = () => {
-    console.log("mess next------------>",fetchWhere)
+    // console.log("mess next------------>",fetchWhere)
     if(!isLoading && hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
   };
 

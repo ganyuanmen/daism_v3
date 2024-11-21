@@ -110,7 +110,7 @@ function Wallet({env}) {
                 window.daism_signer=signer
                 const network=await provider.getNetwork()
                 let tempChainId = network.chainId.toString()
-                console.info("ok",JSON.stringify(network),NET[`_${tempChainId}`],env.networkName)
+                // console.info("ok",JSON.stringify(network),NET[`_${tempChainId}`],env.networkName)
                 if(!checkNetWork(tempChainId)) return;
                 window.daismDaoapi = new DaoApi(signer,tempAccount,env)
                 window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)           

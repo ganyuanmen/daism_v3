@@ -68,7 +68,7 @@
     "imgUriText":"Image link address",
     "networkError":"Network error, try again later!",
     "rejectLogin":"You have refused to sign in. Please log in again from the user's dropdown menu",
-    "mustLoginText":"Please log in to {netName} test network!",
+    "mustLoginText":"Please log in to {netName} network!",
     "footerText":"Powered by smart commons DAism, Enki and Honor Tokens.",
     "rmenuText":"Return to Home",
     "uploadingText":"Uploading files, please wait",

@@ -14,9 +14,9 @@ export default async function handler(req, res) {
 	console.error(error)
 	}
 	// if( process.env.IS_DEBUGGER==='1') { 
-	console.info("-----------broadcast inbox post infomation-----------------------------------------------")
-	console.info(postbody)
-	console.info("----------------------------------------------------------")
+	// console.info("-----------broadcast inbox post infomation-----------------------------------------------")
+	// console.info(postbody)
+	// console.info("----------------------------------------------------------")
 	// }
 	if(typeof(postbody)!=='object' || !postbody.type) return res.status(405).json({errMsg:'broadcast body json error'})
 
