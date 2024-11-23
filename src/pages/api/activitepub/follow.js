@@ -13,8 +13,10 @@ export default async function handler(req, res) {
     try{
         let _id=uuidv4()
         let guid=_id.replaceAll('-','')
+        const myURL = new URL(req.query.url);
+        let targetDomain = myURL.hostname;
         const [userName,domain]=req.query.account.split('@');
-        if(req.query.url.includes(process.env.LOCAL_DOMAIN)){  //本地关注
+        if(targetDomain===process.env.LOCAL_DOMAIN){  //本地关注
             let actor=await getLocalInboxFromUrl(req.query.url);  //被关注
             let user=await getLocalInboxFromAccount(req.query.account); //关注人
             let re= await saveFollow({actor,user,followId:guid})  //关注他人的确认

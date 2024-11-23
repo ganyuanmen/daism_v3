@@ -7,21 +7,27 @@ import CommunitySerach from "../../enki3/CommunitySerach";
 import ShowErrorBar from "../../ShowErrorBar";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-export default function Main({env,path,locale, t,fetchWhere, setFetchWhere }) {
+export default function Main({env,path,locale, t,fetchWhere, setFetchWhere,actor }) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [pageNum, setPageNum] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [err,setErr]=useState("");
+    useEffect(()=>{
+        if(fetchWhere.currentPageNum===0) setPageNum(0);
+    },[fetchWhere])
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
+            // console.log(fetchWhere)
             if (fetchWhere.currentPageNum === 0) setData([]);
             try {
                 const res = await client.get(`/api/getData?pi=${fetchWhere.currentPageNum}&menutype=${fetchWhere.menutype}&daoid=${fetchWhere.daoid}&actorid=${fetchWhere.actorid}&w=${fetchWhere.where}&order=${fetchWhere.order}&eventnum=${fetchWhere.eventnum}&account=${fetchWhere.account}&v=${fetchWhere.v}`, 'messagePageData');
                 if(res.status===200){
                     if(Array.isArray(res.data)){
                         setHasMore(res.data.length >= 12);
+                        setPageNum((pageNum) => pageNum + 1)
                         if (fetchWhere.currentPageNum === 0) setData(res.data);
                         else setData([...data, ...res.data]);
                         setErr('');
@@ -43,16 +49,17 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere }) {
                 setIsLoading(false);
             }
         };
-
-        if(fetchWhere.menutype===3 && (fetchWhere.eventnum === 5 || fetchWhere.account))  fetchData(); //个人显示所有，或登录后显示所有
-        else if (fetchWhere.menutype===1 && fetchWhere.daoid)  fetchData(); // 有我的注册dao集，才能获取 
-        else if(fetchWhere.menutype===2) fetchData(); //公共社区直接获取
+        if(!isLoading) {
+            if(fetchWhere.menutype===3 && (fetchWhere.eventnum === 5 || fetchWhere.account))  fetchData(); //个人显示所有，或登录后显示所有
+            else if (fetchWhere.menutype===1 && fetchWhere.daoid)  fetchData(); // 有我的注册dao集，才能获取 
+            else if(fetchWhere.menutype===2) fetchData(); //公共社区直接获取
+        }
     }, [fetchWhere]);
 
 
   const fetchMoreData = () => {
     // console.log("mess next------------>",fetchWhere)
-    if(!isLoading && hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: fetchWhere.currentPageNum + 1 });
+    if(!isLoading && hasMore) setFetchWhere({ ...fetchWhere, currentPageNum: pageNum });
   };
 
     const footerdiv=()=>{
@@ -80,7 +87,7 @@ export default function Main({env,path,locale, t,fetchWhere, setFetchWhere }) {
                     // endMessage={<div style={{textAlign:'center'}} >---{t('emprtyData')}---</div>}
                 >
                     {data.map((obj, idx) => (
-                        <EnkiMessageCard env={env} path={path}  locale={locale} messageObj={obj} key={`${idx}_${obj.id}`} t={t} />
+                        <EnkiMessageCard env={env} path={path}  locale={locale} messageObj={obj} key={`${idx}_${obj.id}`} t={t} actor={actor} />
                     ))}
                 </InfiniteScroll>
             </div>

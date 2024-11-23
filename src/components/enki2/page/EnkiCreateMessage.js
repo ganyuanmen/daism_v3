@@ -8,6 +8,7 @@ import DateTimeItem from '../../form/DateTimeItem';
 import { useDispatch } from 'react-redux';
 import { setTipText, setMessageText } from '../../../data/valueData';
 import dynamic from 'next/dynamic';
+// import {transformHTML} from '../../../lib/utils';
 
 const RichTextEditor = dynamic(() => import('../../RichTextEditor'), { ssr: false });
 
@@ -44,6 +45,19 @@ export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentOb
 
     }, [daoData])
 
+    const transformHTML=(html)=> {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        let result = '';
+        const allNodes = doc.body.childNodes;  
+        allNodes.forEach(node => {
+          if(node.textContent.trim())  result += `<p>${node.textContent.trim()}</p>`;
+        });
+      
+        return result;
+    }
+
+
     //是活动，打开活动面版
     useEffect(() => { if (currentObj && currentObj.start_time) setShowEvent(true); }, [currentObj])
 
@@ -73,6 +87,9 @@ export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentOb
             }
         }
 
+        const elements5 = document.querySelectorAll('.jodit-wysiwyg');
+        let words =transformHTML(elements5[0].innerHTML); 
+
         showTip(t('submittingText'))
 
         const formData = new FormData();
@@ -93,6 +110,7 @@ export default function EnkiCreateMessage({ t, tc,env, actor, daoData, currentOb
             formData.append('eventAddress', addressRef.current.getData());
             formData.append('time_event', timeRef.current.getData());
         }
+        formData.append('textContent', words);  //推送非enki 站点
         formData.append('actorid', actor.id);
         formData.append('daoid', selectedDaoid);
         formData.append('_type', showEvent ? 1 : 0);  //活动还是普通 

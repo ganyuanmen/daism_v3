@@ -26,6 +26,18 @@ export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBac
     const discussionRef=useRef();
     const sendRef=useRef();
 
+    const transformHTML=(html)=> {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        let result = '';
+        const allNodes = doc.body.childNodes;  
+        allNodes.forEach(node => {
+          if(node.textContent.trim())  result += `<p>${node.textContent.trim()}</p>`;
+        });
+      
+        return result;
+    }
+
     const submit=async ()=>{ 
 
         const titleText=titleRef.current.getData()
@@ -38,17 +50,21 @@ export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBac
             showClipError(t('contenValidText'))
             return
         }
-
+        const elements5 = document.querySelectorAll('.jodit-wysiwyg');
+       let words =transformHTML(elements5[0].innerHTML); 
+           
         showTip(t('submittingText'))  
         const formData = new FormData();
         formData.append('id', currentObj?currentObj.id:0);  
         formData.append('account',actor.actor_account); //社交帐号
         formData.append('title', titleText);  //标题
+        formData.append('textContent', words);  //推送非enki 站点
         formData.append('content', contentText); //，内容
         formData.append('image', imgstrRef.current.getFile()); //图片
         formData.append('fileType',imgstrRef.current.getFileType()); //后缀名
         formData.append('isSend',sendRef.current.checked?1:0);
         formData.append('isDiscussion',discussionRef.current.checked?1:0);
+
      
         fetch(`/api/admin/addMessage`, {
             method: 'POST',
@@ -63,7 +79,7 @@ export default function MeCreate({t,tc,actor,currentObj,afterEditCall,addCallBac
             let _obj={...currentObj,...re} 
             afterEditCall.call(this,_obj) 
         }
-        else addCallBack.call()  //新增回调
+        else {  addCallBack.call(this);  } //新增回调
         })
         .catch(error => {
         closeTip()

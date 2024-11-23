@@ -22,7 +22,7 @@ export default withSession(async (req, res) => {
 
         const form = formidable({})
         const [fields, files] = await form.parse(req);
-        const { id, startTime, endTime, eventUrl, eventAddress, time_event, actorid, daoid, _type, account, title, content, fileType, isSend, isDiscussion } = fields
+        const { id, startTime, endTime, eventUrl, eventAddress, time_event, actorid, daoid, _type, account, title, content, fileType, isSend, isDiscussion,textContent } = fields
         const imgPath = saveImage(files, fileType[0])
         let path = imgPath ? `https://${process.env.LOCAL_DOMAIN}/${process.env.IMGDIRECTORY}/${imgPath}` : '';
         let sql = '';
@@ -52,7 +52,7 @@ export default withSession(async (req, res) => {
             if (insertId) {
                 if (parseInt(isSend[0]) === 1) {
                     if (process.env.IS_DEBUGGER === '1') console.info("message send --->", [account[0], path, insertId, title[0]])
-                    send(account[0], content[0], path, message_id, `《${title[0]}》`, path, daoid ? 'enki' : 'enkier')
+                    send(account[0],textContent[0], content[0], path, message_id, `《${title[0]}》`, path, daoid ? 'enki' : 'enkier')
                 }
 
                 setTimeout(async () => {  //生成链接卡片

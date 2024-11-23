@@ -3,10 +3,19 @@
 
 import Card from "react-bootstrap/Card";
 import EnkiMemberItem from "./EnkiMemberItem";
+import {useDispatch} from 'react-redux';
+import { setTipText, setMessageText } from '../../../data/valueData'
+
 const crypto = require('crypto');
 
 
-export default function EnkiMessageCard({env, path, locale, t,messageObj}) {
+export default function EnkiMessageCard({env, path, locale, t,messageObj,actor}) {
+    
+    const dispatch = useDispatch();
+    function showTip(str){dispatch(setTipText(str))}
+    function closeTip(){dispatch(setTipText(''))}
+    function showClipError(str){dispatch(setMessageText(str))}  
+
     const months=t('monthText').split(',')
     const getMonth=()=>{
         let m=new Date(messageObj.start_time)
@@ -53,8 +62,9 @@ const encrypt=(text)=>{
    
 
         <Card className='mb-1' style={{width:'100%',maxHeight:'360px',overflow:'hidden' }}>
-            <Card.Header>
-            <EnkiMemberItem messageObj={messageObj} t={t} isFollow={true} isEdit={false} locale={locale}  />    {/* '不检测关注' 不修改不删除 */}
+            <Card.Header> 
+            
+            <EnkiMemberItem messageObj={messageObj} t={t}  domain={env.domain} isEdit={false} locale={locale} actor={actor} showTip={showTip} closeTip={closeTip} showClipError={showClipError} />    {/* '不检测关注' 不修改不删除 */}
             </Card.Header>
             
         <Card.Body className="daism-click"  >

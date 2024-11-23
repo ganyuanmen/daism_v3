@@ -186,14 +186,14 @@ export default function me({openObj,env,locale }) {
                 </div>
 
                 <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
-                    {activeTab === 0 && <Main env={env} locale={locale} path="enkier" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
+                    {activeTab === 0 && <Main env={env} actor={actor} locale={locale} path="enkier" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab}
                         fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
 
-                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={myPostHandle} fetchWhere={fetchWhere}
+                    {activeTab === 1 && <MeCreate t={t} tc={tc} actor={actor} addCallBack={allHandle} fetchWhere={fetchWhere}
                         currentObj={currentObj} afterEditCall={afterEditCall} setActiveTab={setActiveTab} setFetchWhere={setFetchWhere} />}
 
                     {activeTab === 2 && <MessagePage  path="enkier" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
-                        currentObj={currentObj} delCallBack={myPostHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
+                        currentObj={currentObj} delCallBack={allHandle} preEditCall={preEditCall} setActiveTab={setActiveTab} />}
 
                     {activeTab===3 && <FollowCollection locale={locale} t={t} account={actor?.actor_account} method={followMethod} domain={env.domain} />}
                 </div>

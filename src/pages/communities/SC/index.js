@@ -157,7 +157,7 @@ export default function SC({openObj, locale,env }) {
 
                 <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
 
-                    {activeTab === 0 && <Main env={env} t={t} locale={locale} path="SC" setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
+                    {activeTab === 0 && <Main actor={actor} env={env} t={t} locale={locale} path="SC" setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage env={env} actor={actor} t={t} tc={tc} currentObj={currentObj} afterEditCall={afterEditCall} />}
                     {activeTab === 2 && <MessagePage  path="SC"  locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env} 
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall} setActiveTab={setActiveTab} />}

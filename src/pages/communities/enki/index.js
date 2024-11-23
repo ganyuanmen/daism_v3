@@ -137,7 +137,7 @@ export default function enki({openObj, env,locale }) {
 
                 {daoData.length > 0 && <div className={`${iaddStyle.sccontent} ${big?iaddStyle.sccontentsmall:iaddStyle.sccontentbig}`}>
 
-                    {activeTab === 0 && <Main env={env} locale={locale} path="enki" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
+                    {activeTab === 0 && <Main actor={actor} env={env} locale={locale} path="enki" t={t} setCurrentObj={setCurrentObj} setActiveTab={setActiveTab} fetchWhere={fetchWhere} setFetchWhere={setFetchWhere} />}
                     {activeTab === 1 && <EnkiCreateMessage env={env} daoData={daoData} actor={actor} t={t} tc={tc} addCallBack={refreshCallBack} currentObj={currentObj} afterEditCall={afterEditCall} />}
                     {activeTab === 2 && <MessagePage  path="enki" locale={locale} t={t} tc={tc} actor={actor} loginsiwe={loginsiwe} env={env}
                         currentObj={currentObj} delCallBack={refreshCallBack} preEditCall={preEditCall}  />}
