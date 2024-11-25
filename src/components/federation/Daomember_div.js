@@ -1,5 +1,6 @@
 import { Card } from "react-bootstrap";
 import ShowAddress from '../ShowAddress';
+import { User1Svg } from "../../lib/jssvg/SvgCollection";
 // import ShowImg from "../ShowImg";
 
 //成员列表
