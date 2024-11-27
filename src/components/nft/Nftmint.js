@@ -55,16 +55,18 @@ export default function Nftmint({closeTip,showTip,showError,t,tc,user})
 
 
     const mintsvg=()=>{
-      
+        // debugger;
         let tipar=[]
         const form=document.getElementById("nftform")
         let lok=false  //检查是否为空
       
 
         allAr.forEach(v=>{
+            
             const _temp=form['nft_svg_' + v.index].value.trim();
+            console.log("temp",_temp)
             if(!_temp ) {v.err=true;lok=true;} 
-            tipar.push(v)
+            tipar.push(_temp)
         })
         if(lok){
             setAllAr([...allAr]);

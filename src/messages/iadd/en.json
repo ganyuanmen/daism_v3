@@ -20,6 +20,7 @@
     "transactionText":"IADD Network",
     "notTipText":"Not enough to give a tip",
     "tipText":"give a tip",
+    "tipTextE2U":"Honor Token",
     "minthonorText":"mint Honor Tokens",
     "notEnoughTip":"Plus the bonus, the balance is insufficient!"
   }

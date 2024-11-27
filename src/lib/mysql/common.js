@@ -89,16 +89,16 @@ export async function getJsonArray(cid, sqlParams,object_false)
 
 
 //取mysql数据
-export async function getData(sql, sqlParams)
+export async function getData(sql, sqlParams,is_object=false)
 {
   const promisePool=getConnect()
   if(process.env.IS_DEBUGGER==='1')  console.info(`getData: ${sql}-->`+sqlParams.join())
   try {
     const [rows,] = await promisePool.query(sql,sqlParams);
-    return rows
+    return is_object?rows[0]:rows
   } catch (error) {
     console.error(error)
-    return []
+    return is_object?{}:[]
   }
   
 }

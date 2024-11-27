@@ -42,9 +42,10 @@ const TipWin = forwardRef(({setOutput,inobj,outobj}, ref) => {
     return (  
         <div className="mt-3" >
            
-                <Form.Check className='mb-3' type="switch" id="custom-switch1" checked={showTip} onChange={e=>{setShowTip(!showTip)}} label={t('tipText')} />
+                <Form.Check className='mb-3' type="switch" id="custom-switch1" checked={showTip} onChange={e=>{setShowTip(!showTip)}} 
+                label={(inobj.token_id==-2 && outobj.token_id==-1)?t('tipTextE2U'):t('tipText')} />
               
-            {showTip &&
+            {showTip && !(inobj.token_id==-2 && outobj.token_id==-1) &&
               <Row>
               <Col className='col-auto me-auto' >
                 <InputGroup >

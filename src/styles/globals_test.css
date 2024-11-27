@@ -145,8 +145,10 @@
 
 .pmenu{
     background-color: white !important;
-    padding-bottom: 8px;
+    padding-bottom: 4px;
     border-bottom: 2px solid gray;
+    position: sticky;
+    top:'0px'
   }
 
 

@@ -6,6 +6,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  *{box-sizing:border-box;}
    
   .daism-a{color:black; text-decoration: none;}
   .daism-a:hover{ cursor: pointer;}
@@ -15,7 +16,7 @@
   }
   .daism-bg{background-color: #AEAEAF;}
 
-  .daism-body{ background-color: white !important;padding: 0px !important; }
+
 
   .daism-button{ background-color: #6C6CFF !important; }
 
@@ -81,7 +82,7 @@
 .daism-click { cursor: pointer;}
 .daism-content{
   background-color: white;
-  padding: 50px 0px 0px 0px !important;
+  /* padding: 42px 0px 0px 0px !important; */
   /* border: 1px solid #E4E8EB; */
 
 }
@@ -140,11 +141,19 @@
 
 .pmenu{
     background-color: white !important;
-    padding-bottom: 8px;
-    border-bottom: 2px solid gray;
+    padding-bottom: 4px;
+    /* height: 50px; */
+    /* border: 1px solid red; */
+    border-bottom: 2px solid #D9D9E8;
+    position:fixed;
+    top:0px;
+    /* width:100%; */
+    z-index:1000;
+    /* border: 1px solid red; */
+    
   }
 
-.wlanguage{
+  .wlanguage{
     border-radius: 12px !important;
     margin-top: 6px;
     border: 1px solid gray;
@@ -193,3 +202,53 @@
     .utofont{
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    .sccontent {
+      /* float: right; */
+      /* padding-left: 20px; */
+      /* padding-top: 0px; */
+      /* padding-top:0px ; */
+      /* margin: 0px; */
+      /* width: calc(100% - 360px); */
+      flex: 1;
+      border-left:1px solid #D9D9E8;  
+      border-right: 1px solid #D9D9E8;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      max-width: 700px;
+
+      
+    }
+   
+    .scsidebar {
+      /* float: left; */
+     
+      height:calc(100vh - 60px);
+      background-color: #f4f4f4;
+      padding: 20px;
+      font-size:1.2rem;
+      overflow-y: auto;
+     overflow-x: hidden;
+      position: sticky;    /*对右边的内容使用粘性定位*/
+      top: 60px;
+      }
+
+      .scleft{
+        width: 300px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      }
+       .scright{
+        width: 255px;
+      } 
+
+      @media (max-width: 1439px) {
+        .scright {
+          display: none;
+        }
+      }
+
+      @media (max-width: 995px) {
+        .scleft {
+          display: none;
+        }
+      }

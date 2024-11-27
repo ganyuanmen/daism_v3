@@ -70,7 +70,7 @@
     "networkError":"网络错误，稍后再试!",
     "rejectLogin":"你已经拒绝了签名登录，请从用户的下拉菜单中重新登录",
     "mustLoginText":"请登录到 {netName} 网络！",
-    "footerText":"由智能公器 DAism、Enki 和 Honor Tokens 共同提供技术支持",
+    "footerText":" 由智能公器 DAism、Enki 和 Honor Tokens 共同提供技术支持",
     "rmenuText":"返回主页",
     "uploadingText":"正在上传文件，请稍候...",
     "uploadWalletText":"上传 json 文件",
@@ -81,8 +81,11 @@
     "selectOutboxjson":"选择从mastodon 导出的 'outbox.json' 文件",
     "notRegisterEnki":"未注册Enki帐号",
     "registerDomain":"登录到注册的域名({domain})才能导入",
-    "topTip":""
-
+    "foot11":"总量",
+    "foot12":"的 Satoshi UTO Fund 于2024年11月21日问世！",
+    "foot2":"价格单位",
+    "foot31":"价格原器",
+    "foot32":"缩写"
 
   }
 }

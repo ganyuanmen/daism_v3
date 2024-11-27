@@ -61,22 +61,43 @@ const SubmitButton = forwardRef(({comulate,upRef,downRef,statusRef,setUtokenBala
        
     //eth 兑换 utoken
     const eth_utoken = async (value) => {
+        
         showTip(t('walltSubmitText'));
-        window.daismDaoapi.UnitToken.swap(user.account,value).then(re => {
-            closeTip();
-            window.daismDaoapi.signer.provider.getBalance(user.account).then(e1 => {
-                const _b1 = window.daismDaoapi.ethers.formatEther(e1)
-                setEth(_b1)
-                window.daismDaoapi.UnitToken.balanceOf(user.account).then(e2 => {
-                    const _b2 = e2.utoken;
-                   setUtokenBalance(_b2)
-                   resulthandle(_b1, _b2);
+
+         if(isTip && tipRef.current.getTip()) { //mint
+            window.daismDaoapi.SingNft.mintByBurnETH(user.account,value,true).then(re => {
+                closeTip();
+                window.daismDaoapi.signer.provider.getBalance(user.account).then(e1 => {
+                    const _b1 = window.daismDaoapi.ethers.formatEther(e1)
+                    setEth(_b1)
+                    window.daismDaoapi.UnitToken.balanceOf(user.account).then(e2 => {
+                        const _b2 = e2.utoken;
+                    setUtokenBalance(_b2)
+                    resulthandle(_b1, _b2);
+                    })
                 })
-            })
-        }, err => {
-            console.error(err); closeTip();
-            showClipError(tc('errorText') + (err.message ? err.message : err));
-        });
+            }, err => {
+                console.error(err); closeTip();
+                showClipError(tc('errorText') + (err.message ? err.message : err));
+            });
+        } 
+        else {
+            window.daismDaoapi.UnitToken.swap(user.account,value).then(re => {
+                closeTip();
+                window.daismDaoapi.signer.provider.getBalance(user.account).then(e1 => {
+                    const _b1 = window.daismDaoapi.ethers.formatEther(e1)
+                    setEth(_b1)
+                    window.daismDaoapi.UnitToken.balanceOf(user.account).then(e2 => {
+                        const _b2 = e2.utoken;
+                    setUtokenBalance(_b2)
+                    resulthandle(_b1, _b2);
+                    })
+                })
+            }, err => {
+                console.error(err); closeTip();
+                showClipError(tc('errorText') + (err.message ? err.message : err));
+            });
+        }
     }
 
     const geneParas=()=>{

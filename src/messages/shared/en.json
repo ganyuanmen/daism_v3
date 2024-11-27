@@ -80,7 +80,11 @@
     "selectOutboxjson":"Select the 'outbox.json' file exported from mastodon",
     "notRegisterEnki":"Unregistered Enki account",
     "registerDomain":"Login to the registered domain({domain}) name to import",
-    "topTip":""
+    "foot11":"Satoshi UTO Fund, with a total of",
+    "foot12":", was launched on October 21, 2024!",
+    "foot2":"Price Unit",
+    "foot31":"Price Prototye",
+    "foot32":"abbreviation"
     
   }
 }

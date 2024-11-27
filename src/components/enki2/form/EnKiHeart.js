@@ -8,12 +8,12 @@ import { client } from "../../../lib/api/client";
 export default function EnKiHeart({t,tc,currentObj,actor,showTip,closeTip,showClipError,isEdit})
 {
     const [refresh,setRefresh]=useState(false)
-    const data=useGetHeartAndBook({account:actor?.actor_account,pid:currentObj?.id,refresh,table:'heart',sctype:currentObj.dao_id>0?'sc':''})
+    const data=useGetHeartAndBook({account:actor?.actor_account,pid:currentObj?.id,refresh,table:'heart',sctype:currentObj?.dao_id>0?'sc':''})
 
     const submit=async (flag)=>{ //0 取消点赞  1 点赞
         showTip(t('submittingText')) 
-        let res=await client.post('/api/postwithsession','handleHeartAndBook',{account:actor?.actor_account,pid:currentObj.id,flag,table:'heart'
-            ,sctype:currentObj.dao_id>0?'sc':''})
+        let res=await client.post('/api/postwithsession','handleHeartAndBook',{account:actor?.actor_account,pid:currentObj?.id,flag,table:'heart'
+            ,sctype:currentObj?.dao_id>0?'sc':''})
         if(res.status===200) setRefresh(!refresh) 
         else showClipError(`${tc('dataHandleErrorText')}!${res.statusText}\n ${res.data.errMsg?res.data.errMsg:''}`)
         closeTip()

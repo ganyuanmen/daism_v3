@@ -85,8 +85,9 @@ export function OpenWindowButton({user,setOutput,workIndex,token,setToken,setBal
                props.downRef.current.setBalance('0')
                props.statusRef.current.setStatus({err:'',ratio:''})
                setIsTip(false);
-           } else if((obj.token_id ===-2 && props.downRef.current.getToken().token_id===-1) 
-            || props.downRef.current.getToken().token_id===0 ) setIsTip(false); else setIsTip(true);
+           } else if(props.downRef.current.getToken().token_id===0 ) setIsTip(false); else setIsTip(true);
+
+           //(obj.token_id ===-2 && props.downRef.current.getToken().token_id===-1) || 
         
 
         }else //下窗口
@@ -97,8 +98,8 @@ export function OpenWindowButton({user,setOutput,workIndex,token,setToken,setBal
                 props.upRef.current.setBalance('0')
                 props.statusRef.current.setStatus({err:'',ratio:''})
                 setIsTip(false)
-            } else if((obj.token_id ===-1 && props.upRef.current.getToken().token_id===-2) 
-            || props.upRef.current.getToken().token_id===0) setIsTip(false); else setIsTip(true);
+            } else if(props.upRef.current.getToken().token_id===0) setIsTip(false); else setIsTip(true);
+            //(obj.token_id ===-1 && props.upRef.current.getToken().token_id===-2)             || 
         }
 
 

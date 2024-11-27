@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import ShowAddress from '../ShowAddress'
 import User from './User';
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useSelector, useDispatch } from 'react-redux';
 import {setEthBalance,setDaoActor,setActor,setUser,setTokenList,setTokenFilter,setLoginsiwe,setDaoAddress,setMessageText} from '../../data/valueData'
 import { client } from '../../lib/api/client';
@@ -15,8 +15,9 @@ import { useSyncProviders } from '../../hooks/useSyncProviders'
 /**
  * 钱包登录管理 
  */
-function Wallet({env}) {
-    const router = useRouter()
+function Wallet({env,query,route,otherLocale,tc}) {
+    // const router = useRouter()
+    // const { locale, locales, route,query } = useRouter()
     const providers = useSyncProviders()
     const [showMetaMask, setShowMetaMask] = useState(false); //没安装metMASK提示
     const [connecting,setConnecting]=useState(false); //正在登录
@@ -31,6 +32,8 @@ function Wallet({env}) {
     function showError(str){dispatch(setMessageText(str))}
   
     const NET={'_0xaa36a7':'sepolia','_0x4268':'holesky','_0x1':'mainnet','_11155111':'sepolia','_17000':'holesky',"_1":"mainnet"}
+    const restoredURL = `?${Object.keys(query).map(key => `${key}=${query[key]}`).join('&')}`;
+    const path=`${route}${restoredURL.length>1?restoredURL:''}`
 
      useEffect(() => {
         const fetchData = async () => {
@@ -100,7 +103,9 @@ function Wallet({env}) {
         providerRef.current=providerWithInfo    
         setConnecting(true);
         try{
+            console.log('ookk')
             if(providerWithInfo) { //刷新登录
+                console.log("9999999-----999999999")
                 const accounts = await providerWithInfo.provider.request({method: 'eth_requestAccounts' });
                 let tempAccount=accounts?.[0];
                 onChaidChange(providerWithInfo.provider);
@@ -116,7 +121,8 @@ function Wallet({env}) {
                 window.sessionStorage.setItem("providerinfoname", providerWithInfo.info.name)           
                 dispatch(setUser({connected:1,account:tempAccount,networkName:network.name, chainId:tempChainId}))
                 provider.getBalance(tempAccount).then(_balance=>{setEth(ethers.formatEther(_balance))})
-                if(router.pathname==='/' ) getTokens(tempAccount)
+                console.log('222222222222222',route)
+                if(route==='/' ) getTokens(tempAccount)
                 providerWithInfo.provider.on('accountsChanged', _account=>{switchDisconnect(); window.location.reload();});
             }
             window.sessionStorage.setItem("isLogin", "1")
@@ -132,7 +138,9 @@ function Wallet({env}) {
 
     function getTokens(did)
     {
+        console.log(99999999999)
         client.get(`/api/getData?did=${did}`,'getToekn').then(res =>{ 
+            console.log(res)
             if(res.status===200) {
                 dispatch(setTokenList(res.data))
                 dispatch(setTokenFilter(res.data))
@@ -157,7 +165,7 @@ function Wallet({env}) {
         window.sessionStorage.setItem("providerinfouuid", '')
         
         window.daismDaoapi=null
-        if(router.pathname==='/') getTokens('')
+        if(route==='/') getTokens('')
     }
 
      //切换
@@ -175,37 +183,43 @@ function Wallet({env}) {
 
     return (
         <>
-          <div>
-              {user.connected >0 && <User t={t} loginsiwe={loginsiwe} disconnect={onDisconnect} domain={env.domain} user={user} />}
-          </div>
-          <div  style={{marginTop:'6px',marginRight:'10px'}}  >
-            {user.connected >0?<ShowAddress  address={user.account} ></ShowAddress>
-           :providers.length > 0?
-            <Dropdown>
-                <Dropdown.Toggle style={{borderRadius:'12px !important',marginLeft:'16px !important'}} variant="primary" size="sm" disabled={connecting}  id="dropdown-basic">
-                    <img alt=""  src='/wallet.svg' width={18} height={18} /> 
-                    <span> {connecting?t('connectingText'): t('connectText')}</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-               {providers?.map((provider) => (
-                     <Dropdown.Item href="#" key={provider.info.uuid} onClick={() => connectWallet(provider)}><span className='daism-color' >
-                         <img src={provider.info.icon} alt={provider.info.name}  width={24} height={24} />
-                         </span> {provider.info.name}
-                     </Dropdown.Item>
-                 ))
-                 }
-                </Dropdown.Menu>
-            </Dropdown>
-            : <Button style={{borderRadius:'12px !important',marginLeft:'16px !important'}} variant="primary" size="sm" 
-               onClick={e=>{setShowMetaMask(true)}} >
-               <img alt="" style={{color:'red'}} src='/wallet.svg' width={18} height={18} /> {'  '}
-               {t('connectText')}
-           </Button> 
-   
+        <div className='d-flex justify-content-end align-items-center' style={{minWidth:'300px'}} > 
+            <div>
+                {user.connected >0 && <User t={t} loginsiwe={loginsiwe} disconnect={onDisconnect} domain={env.domain} user={user} />}
+            </div>
+            <div  style={{marginTop:'6px',marginRight:'10px'}}  >
+                {user.connected >0?<ShowAddress  address={user.account} ></ShowAddress>
+            :providers.length > 0?
+                <Dropdown>
+                    <Dropdown.Toggle style={{borderRadius:'12px !important',marginLeft:'16px !important'}} variant="primary" size="sm" disabled={connecting}  id="dropdown-basic">
+                        <img alt=""  src='/wallet.svg' width={18} height={18} /> 
+                        <span> {connecting?t('connectingText'): t('connectText')}</span>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                {providers?.map((provider) => (
+                        <Dropdown.Item href="#" key={provider.info.uuid} onClick={() => connectWallet(provider)}><span className='daism-color' >
+                            <img src={provider.info.icon} alt={provider.info.name}  width={24} height={24} />
+                            </span> {provider.info.name}
+                        </Dropdown.Item>
+                    ))
+                    }
+                    </Dropdown.Menu>
+                </Dropdown>
+                : <Button style={{borderRadius:'12px !important',marginLeft:'16px !important'}} variant="primary" size="sm" 
+                onClick={e=>{setShowMetaMask(true)}} >
+                <img alt="" style={{color:'red'}} src='/wallet.svg' width={18} height={18} /> {'  '}
+                {t('connectText')}
+            </Button> 
+    
 
-            }
-          </div> 
-                  
+                }
+            </div> 
+            <div className='wlanguage' >
+                <Link  href={path} locale={otherLocale}>
+                    {tc('switchLocale', { locale: otherLocale })}
+                </Link>
+            </div>
+        </div>   
           {/* 安装metmask提示窗口 */}
           <Modal centered show={showMetaMask}  onHide={e=>{setShowMetaMask(false)}}>
           <Modal.Header closeButton>

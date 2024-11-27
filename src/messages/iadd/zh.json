@@ -20,6 +20,7 @@
     "transactionText":"IADD交易网络",
     "notTipText":"不够打赏",
     "tipText":"打赏",
+    "tipTextE2U":"荣誉通证",
     "minthonorText":"mint 荣誉通证",
     "notEnoughTip":"加上打赏，余额不足!"
   }

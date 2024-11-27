@@ -6,6 +6,7 @@ const Commulate = require("./api/Commulate");
 const UnitToken = require("./api/UnitToken");
 const Dao = require("./api/Dao");
 const Mynft=require("./api/Mynft")
+const SingNft=require("./api/SingNft")
 const Domain=require("./api/Domain")
 const Register=require("./api/Register")
 const IADD_EX=require("./api/IADD_EX")
@@ -38,6 +39,15 @@ export default class  DaoApi {
                 this.daismAddress['DAismNFT']
             ); 
             return this.mynft_obj; 
+        }
+
+    get SingNft() { 
+        if (!this.SingNft_obj) 
+            this.SingNft_obj = new SingNft(
+                this.ethers,this.signer, this.account,
+                this.daismAddress['DAismSingleNFT']
+            ); 
+            return this.SingNft_obj; 
         }
 
     get Commulate() { 
